@@ -1,0 +1,47 @@
+﻿<Window x:Class="Trabalhos.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Trabalhos"
+        mc:Ignorable="d"
+        Title="Trabalhos" Height="720" Width="1280" MinHeight="720" MinWidth="1280" WindowStartupLocation="CenterScreen" FontFamily="Segoe UI Light" FontSize="18">
+    <Grid Background="#FF1B1B1B">
+        <Frame x:Name="Frm_Principal" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" NavigationUIVisibility="Hidden"/>
+        <!--<Grid x:Name="Grd_SemFicheiro" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="3" Height="500" Width="1083" Background="#FFAAAAAA">
+            <TextBlock Style="{StaticResource TextBlock}" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="WrapWithOverflow" TextAlignment="Center">
+                <Run FontSize="40" Text="O ficheiro das configurações nao existe!"/>
+                <LineBreak/>
+                <Run FontSize="30" Text="Caso seja a primeira vez a iniciar o programa, é um procedimento normal."/>
+                <LineBreak/>
+                <Run FontSize="30" Text="Caso contrário, o ficheiro ficou corrompido e não foi possivel lê-lo."/>
+                <LineBreak/>
+                <LineBreak/>
+                <Run FontSize="30" Text="Para verificar que os dados (clientes, trabalhos, serviços) não foram perdidos, carregue em &quot;Verificar Dados&quot;"/>
+            </TextBlock>
+            <Button x:Name="Btn_VerificarDados" Content="Verificar Dados" Margin="355,0,355,125" Height="100" VerticalAlignment="Bottom" Click="Btn_VerificarDados_Click"/>
+            <TextBlock x:Name="Tb_Dados" Style="{StaticResource TextBlock}" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="10,252,10,0" TextWrapping="WrapWithOverflow" TextAlignment="Left" Visibility="Hidden">
+                <Run FontSize="30" Text="Quantidade de Clientes: "/>
+                <Run FontFamily="Segoe UI SemiBold" FontSize="30" Text="{Binding QuantidadeClientes}"/>
+                <LineBreak/>
+                <Run FontSize="30" Text="Quantidade de Trabalhos: "/>
+                <Run FontFamily="Segoe UI SemiBold" FontSize="30" Text="{Binding QuantidadeTrabalhos}"/>
+                <LineBreak/>
+                <Run FontSize="30" Text="Quantidade de Serviços: "/>
+                <Run FontFamily="Segoe UI SemiBold" FontSize="30" Text="{Binding QuantidadeServicos}"/>
+                <LineBreak/>
+            </TextBlock>
+            <TextBlock x:Name="Tb_Erro" Style="{StaticResource TextBlock}" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="10,252,10,0" TextWrapping="WrapWithOverflow" TextAlignment="Center" Visibility="Hidden">
+                <Run FontFamily="Segoe UI SemiBold" FontSize="40" Text="Não foi possivel verificar os dados!"/>
+                <LineBreak/>
+                <Run FontFamily="Segoe UI SemiBold" FontSize="30" Text="Os dados podem ter sido perdidos!"/>
+                <LineBreak/>
+                <Run FontSize="30" Text="Caso tenha uma cópia de segurança coloque no local da base de dados!"/>
+                <LineBreak/>
+            </TextBlock>
+            <Button x:Name="Btn_EditarConfiguracao" Content="Editar Configuração" Margin="552,0,355,10" HorizontalAlignment="Center" Width="176" Height="75" VerticalAlignment="Bottom" Click="Btn_EditarConfiguracao_Click"/>
+            <Button x:Name="Btn_FecharPrograma" Content="Fechar Programa" Margin="355,0,552,10" HorizontalAlignment="Center" Width="176" Height="75" VerticalAlignment="Bottom" Click="Btn_FecharPrograma_Click"/>
+        </Grid>-->
+        <!--<Button x:Name="Btn_Query" Content="Button" HorizontalAlignment="Center" Height="65" Margin="518,312" VerticalAlignment="Center" Width="236" Click="Btn_Query_Click"/>-->
+    </Grid>
+</Window>

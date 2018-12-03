@@ -1,0 +1,171 @@
+﻿<Page x:Class="Trabalhos.PaginaPrincipal"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:gif="http://wpfanimatedgif.codeplex.com"
+      xmlns:local="clr-namespace:Trabalhos"
+      mc:Ignorable="d"
+      d:DesignHeight="689" d:DesignWidth="1272"
+      Title="PaginaPrincipal" FontFamily="Segoe UI Light" FontSize="16">
+
+    <Grid Background="#FF1B1B1B">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" Content="Trabalhos concluidos" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="10,10,10,0"/>
+        <ListBox x:Name="Lst_TrabalhosConcluidos" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="10,49,10,10" VerticalAlignment="Stretch">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Content="{Binding Cliente}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Padding="5"/>
+                        <Rectangle Grid.Column="1" Width="1" HorizontalAlignment="Left">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                    <GradientStop Color="#00000000" Offset="0"/>
+                                    <GradientStop Color="#00000000" Offset="1"/>
+                                    <GradientStop Color="White" Offset="0.4"/>
+                                    <GradientStop Color="White" Offset="0.6"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Label Grid.Column="1" Content="{Binding Trabalho}" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"/>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Label Grid.Row="0" Grid.Column="1" Content="Trabalhos não concluidos" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="10,10,10,0"/>
+        <ListBox x:Name="Lst_TrabalhosNaoConcluidos" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="10,49,10,10" VerticalAlignment="Stretch">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Content="{Binding Cliente}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Padding="5"/>
+                        <Rectangle Grid.Column="1" Width="1" HorizontalAlignment="Left">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                    <GradientStop Color="#00000000" Offset="0"/>
+                                    <GradientStop Color="#00000000" Offset="1"/>
+                                    <GradientStop Color="White" Offset="0.4"/>
+                                    <GradientStop Color="White" Offset="0.6"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Label Grid.Column="1" Content="{Binding Trabalho}" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"/>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Label Grid.Row="1" Grid.Column="0" Content="Trabalhos concluidos e pagos" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="10,10,10,0"/>
+        <ListBox x:Name="Lst_TrabalhosPagos" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="10,49,10,10" VerticalAlignment="Stretch">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Content="{Binding Cliente}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Padding="5"/>
+                        <Rectangle Grid.Column="1" Width="1" HorizontalAlignment="Left">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                    <GradientStop Color="#00000000" Offset="0"/>
+                                    <GradientStop Color="#00000000" Offset="1"/>
+                                    <GradientStop Color="White" Offset="0.4"/>
+                                    <GradientStop Color="White" Offset="0.6"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Label Grid.Column="1" Content="{Binding Trabalho}" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"/>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Label Grid.Row="1" Grid.Column="1" Content="Trabalhos concluidos e não pagos" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="10,10,10,0"/>
+        <ListBox x:Name="Lst_TrabalhosNaoPagos" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="10,49,10,10" VerticalAlignment="Stretch">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Content="{Binding Cliente}" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Padding="5"/>
+                        <Rectangle Grid.Column="1" Width="1" HorizontalAlignment="Left">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                    <GradientStop Color="#00000000" Offset="0"/>
+                                    <GradientStop Color="#00000000" Offset="1"/>
+                                    <GradientStop Color="White" Offset="0.4"/>
+                                    <GradientStop Color="White" Offset="0.6"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Label Grid.Column="1" Content="{Binding Trabalho}" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"/>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Rectangle Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Width="1" HorizontalAlignment="Left">
+            <Rectangle.Fill>
+                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                    <GradientStop Color="#00000000" Offset="0"/>
+                    <GradientStop Color="#00000000" Offset="1"/>
+                    <GradientStop Color="White" Offset="0.4"/>
+                    <GradientStop Color="White" Offset="0.6"/>
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Label Grid.Row="0" Grid.Column="2" Content="Trabalhos concluidos este mês:" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="10,10,10,0"/>
+        <Label Grid.Row="0" Grid.Column="2" Content="Trabalhos por concluir:" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="10,46,10,0"/>
+        <Label Grid.Row="0" Grid.Column="2" Content="Ganhos do mês atual:" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="10,82,10,0"/>
+        <Label Grid.Row="0" Grid.Column="2" Content="Total por receber:" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="10,118,10,0"/>
+        <Label Grid.Row="0" Grid.Column="3" Content="0" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="10,10,10,0"/>
+        <Label Grid.Row="0" Grid.Column="3" Content="0" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="10,46,10,0"/>
+        <Label Grid.Row="0" Grid.Column="3" Content="0.00€" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="10,82,10,0"/>
+        <Label Grid.Row="0" Grid.Column="3" Content="0.00€" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="10,118,10,0"/>
+        <Button x:Name="Btn_Estatisticas" Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2" Content="Mais Estatisticas" Height="100" Margin="10,0,10,10" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"/>
+
+        <Rectangle Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2" Height="1" VerticalAlignment="Bottom">
+            <Rectangle.Fill>
+                <LinearGradientBrush EndPoint="0,0.5" StartPoint="1,0.5">
+                    <GradientStop Color="#00000000" Offset="0"/>
+                    <GradientStop Color="#00000000" Offset="1"/>
+                    <GradientStop Color="White" Offset="0.4"/>
+                    <GradientStop Color="White" Offset="0.6"/>
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+        <WrapPanel Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Orientation="Vertical" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <WrapPanel Orientation="Vertical" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Button x:Name="Btn_GerirClientes" Content="Gerir Clientes" Margin="10,10,10,5" Height="100" Width="250" Click="Btn_GerirClientes_Click"/>
+                <Button x:Name="Btn_GerirTrabalhos" Content="Gerir Trabalhos" Margin="10,5,10,5" Height="100" Width="250"/>
+                <Button x:Name="Btn_GerirServicos" Content="Gerir Serviços" Margin="10,5,10,10" Height="100" Width="250"/>
+            </WrapPanel>
+            <WrapPanel Orientation="Vertical" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Button x:Name="BOTAOPORDEFENIR" Content="BOTAO POR DEFINIR" Margin="10,10,10,5" Height="100" Width="250"/>
+                <Button x:Name="Btn_Pesquisar" Content="Pesquisar" Margin="10,5,10,5" Height="100" Width="250"/>
+                <Button x:Name="Btn_Definicoes" Content="Definições" Margin="10,5,10,10" Height="100" Width="250" Click="Btn_Definicoes_Click"/>
+            </WrapPanel>
+        </WrapPanel>
+    </Grid>
+</Page>
