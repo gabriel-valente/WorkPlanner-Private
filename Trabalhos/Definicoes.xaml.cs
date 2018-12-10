@@ -23,8 +23,6 @@ namespace Trabalhos
     /// </summary>
     public partial class Definicoes : Page
     {
-        List<string> configs = new List<string>(); //Index tempo cópia, Local cópia, Idade minima, Index contacto preferivel
-
         bool TempoCopiaValido = false;
         bool LocalCopiaValido = false;
         bool IdadeMinimaValido = false;
@@ -36,20 +34,10 @@ namespace Trabalhos
 
             LerConfigs();
 
-            try
-            {
-                Cmb_TempoCopia.SelectedIndex = Convert.ToInt32(configs[0]);
-                Tb_Localbackup.Text = configs[1];
-                Tb_IdadeMinima.Text = configs[2];
-                Cmb_Contacto.SelectedIndex = Convert.ToByte(configs[3]);
-            }
-            catch (Exception)
-            {
-                Cmb_TempoCopia.SelectedIndex = -1;
-                Tb_Localbackup.Text = null;
-                Tb_IdadeMinima.Text = null;
-                Cmb_Contacto.SelectedIndex = -1;
-            }
+            Cmb_TempoCopia.SelectedIndex = Configuracoes.TempoCopia;
+            Tb_Localbackup.Text = Configuracoes.LocalCopia;
+            Tb_IdadeMinima.Text = Convert.ToString(Configuracoes.IdadeMinima);
+            Cmb_Contacto.SelectedIndex = Configuracoes.ContactoPreferivel;
 
             AtivarButao();
         }
@@ -160,7 +148,14 @@ namespace Trabalhos
 
             LerConfigs();
 
-            ((MainWindow)Application.Current.MainWindow).Frm_Principal.GoBack();
+            try
+            {
+                ((MainWindow)Application.Current.MainWindow).Frm_Principal.GoBack();
+            }
+            catch (Exception)
+            {
+                ((MainWindow)Application.Current.MainWindow).Frm_Principal.Content = new PaginaPrincipal();
+            }
         }
 
         //Botão voltar menu anterior
@@ -172,17 +167,22 @@ namespace Trabalhos
         //Função ler as configurações guardadas
         void LerConfigs()
         {
-            foreach (string chave in ConfigurationManager.AppSettings)
+            try
             {
-                string valor = ConfigurationManager.AppSettings[chave];
-                configs.Add(valor);
+                Configuracoes.TempoCopia = Convert.ToInt32(ConfigurationManager.AppSettings["CopiaSeguranca"]);
+                Configuracoes.LocalCopia = ConfigurationManager.AppSettings["LocalCopiaSeguranca"];
+                Configuracoes.IdadeMinima = Convert.ToInt32(ConfigurationManager.AppSettings["IdadeMinima"]);
+                Configuracoes.ContactoPreferivel = Convert.ToInt32(ConfigurationManager.AppSettings["ContactoPreferivel"]);
+            }
+            catch (Exception)
+            {
+
             }
         }
 
         //Função ativar butão
         void AtivarButao()
         {
-            Console.WriteLine(TempoCopiaValido + " " + LocalCopiaValido + " " + IdadeMinimaValido + " " + ContactoValido);
             if (TempoCopiaValido && LocalCopiaValido && IdadeMinimaValido && ContactoValido)
             {
                 Btn_Guardar.IsEnabled = true;

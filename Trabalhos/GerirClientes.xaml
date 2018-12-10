@@ -39,7 +39,7 @@
                                 </LinearGradientBrush>
                             </Rectangle.Fill>
                         </Rectangle>
-                        <Label Grid.Column="1" Content="{Binding Telemovel}" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"/>
+                        <Label Grid.Column="1" Content="{Binding Contacto}" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"/>
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
@@ -61,7 +61,7 @@
         <TextBox x:Name="Tb_NomeCliente" Grid.Row="0" Grid.Column="2"  HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="10,50,10,0" Height="21" FontSize="16" TextWrapping="WrapWithOverflow" MaxLength="50" IsReadOnly="True" TextChanged="Tb_NomeCliente_TextChanged" LostFocus="Tb_NomeCliente_LostFocus"/>
         <Label Grid.Row="0" Grid.Column="1" Content="Data de nascimento:" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="10,82,10,0" Height="31"/>
         <Label x:Name="Lbl_Nascimento" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="10,82,10,0" Height="31"/>
-        <DatePicker x:Name="Dp_Nascimento" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,88,0,0" FontSize="16" Height="21" Width="230" IsTodayHighlighted="False" SelectedDateFormat="Short" BorderThickness="0" Padding="0" BorderBrush="{x:Null}" IsTabStop="True" Visibility="Hidden" SelectedDateChanged="Dp_Nascimento_SelectedDateChanged">
+        <DatePicker x:Name="Dp_Nascimento" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,88,0,0" FontSize="16" Height="21" Width="230" IsTodayHighlighted="False" SelectedDateFormat="Short" BorderThickness="0" Padding="0" BorderBrush="{x:Null}" IsTabStop="True" Visibility="Hidden" SelectedDateChanged="Dp_Nascimento_SelectedDateChanged" CalendarOpened="Dp_Nascimento_CalendarOpened">
             <DatePicker.Resources>
                 <Style TargetType="{x:Type DatePickerTextBox}">
                     <Setter Property="Control.Template">
@@ -74,6 +74,7 @@
                 </Style>
             </DatePicker.Resources>
         </DatePicker>
+        <Button x:Name="Btn_LimparData" Grid.Row="0" Grid.Column="2" Content="Limpar Data de Nascimento" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="245,86,0,0" Width="200" Visibility="Hidden" Click="Btn_LimparData_Click"/>
         <Label Grid.Row="0" Grid.Column="1" Content="Genero:" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="10,118,10,0" Height="31"/>
         <Label x:Name="Lbl_Sexo" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="10,118,10,0" Height="31"/>
         <RadioButton x:Name="RdB_Feminino" Grid.Row="0" Grid.Column="2" Style="{StaticResource TextBlock}" Content="Feminino" GroupName="Sexo" HorizontalAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Center" Margin="10,124,0,0" Height="20" Width="80" Visibility="Hidden"/>

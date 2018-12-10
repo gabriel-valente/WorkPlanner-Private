@@ -44,6 +44,7 @@ namespace Trabalhos
         public string Email { get; set; }
         public long Telemovel { get; set; }
         public long Telefone { get; set; }
+        public string Contacto { get; set; }
     }
 
     public class CodigoPostal

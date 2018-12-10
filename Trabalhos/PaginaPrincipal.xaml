@@ -13,8 +13,8 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="4*"/>
             <ColumnDefinition Width="4*"/>
-            <ColumnDefinition Width="3*"/>
-            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -155,17 +155,13 @@
                 </LinearGradientBrush>
             </Rectangle.Fill>
         </Rectangle>
-        <WrapPanel Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Orientation="Vertical" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <WrapPanel Orientation="Vertical" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <WrapPanel Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Orientation="Vertical" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Center" VerticalAlignment="Center" Height="340" Width="540">
                 <Button x:Name="Btn_GerirClientes" Content="Gerir Clientes" Margin="10,10,10,5" Height="100" Width="250" Click="Btn_GerirClientes_Click"/>
                 <Button x:Name="Btn_GerirTrabalhos" Content="Gerir Trabalhos" Margin="10,5,10,5" Height="100" Width="250"/>
                 <Button x:Name="Btn_GerirServicos" Content="Gerir Serviços" Margin="10,5,10,10" Height="100" Width="250"/>
-            </WrapPanel>
-            <WrapPanel Orientation="Vertical" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Button x:Name="BOTAOPORDEFENIR" Content="BOTAO POR DEFINIR" Margin="10,10,10,5" Height="100" Width="250"/>
                 <Button x:Name="Btn_Pesquisar" Content="Pesquisar" Margin="10,5,10,5" Height="100" Width="250"/>
                 <Button x:Name="Btn_Definicoes" Content="Definições" Margin="10,5,10,10" Height="100" Width="250" Click="Btn_Definicoes_Click"/>
-            </WrapPanel>
         </WrapPanel>
     </Grid>
 </Page>

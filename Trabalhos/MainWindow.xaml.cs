@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,7 +30,30 @@ namespace Trabalhos
         {
             InitializeComponent();
 
-            Frm_Principal.Content = new PaginaPrincipal();
+            try
+            {
+                Configuracoes.TempoCopia = Convert.ToInt32(ConfigurationManager.AppSettings["CopiaSeguranca"]);
+                Configuracoes.LocalCopia = ConfigurationManager.AppSettings["LocalCopiaSeguranca"];
+                Configuracoes.IdadeMinima = Convert.ToInt32(ConfigurationManager.AppSettings["IdadeMinima"]);
+                Configuracoes.ContactoPreferivel = Convert.ToInt32(ConfigurationManager.AppSettings["ContactoPreferivel"]);
+
+                Frm_Principal.Content = new PaginaPrincipal();
+            }
+            catch (Exception)
+            {
+                Grd_PrimeiroLogin.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void Btn_EditarConfiguracao_Click(object sender, RoutedEventArgs e)
+        {
+            Grd_PrimeiroLogin.Visibility = Visibility.Hidden;
+            Frm_Principal.Content = new Definicoes();
+        }
+
+        private void Btn_FecharPrograma_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
 
         private void Btn_Query_Click(object sender, RoutedEventArgs e)
@@ -96,77 +120,5 @@ namespace Trabalhos
             //System.Diagnostics.Debug.WriteLine("Supostamente Inseriu Tudo!");
             //conexao.Close();
         }
-
-        //private void Btn_VerificarDados_Click(object sender, RoutedEventArgs e)
-        //{
-        //    SqlConnection conexao;
-        //    string stringConexao = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|Trabalhos.mdf; Integrated Security=True";
-        //    SqlCommand queryContarClientes = new SqlCommand("SELECT COUNT(Key_Cliente) AS 'Clientes' FROM Cliente");
-        //    SqlCommand queryContarTrabalhos = new SqlCommand("SELECT COUNT(Key_Trabalho) AS 'Trabalhos' FROM Trabalho");
-        //    SqlCommand queryContarServicos = new SqlCommand("SELECT COUNT(Key_Servico) AS 'Servicos' FROM Servico");
-        //    SqlDataReader Reader;
-
-        //    ContagemBaseDados quantidades = new ContagemBaseDados();
-
-        //    Btn_VerificarDados.Visibility = Visibility.Hidden;
-
-        //    try
-        //    {
-        //        conexao = new SqlConnection(stringConexao);
-
-        //        conexao.Open();
-        //        queryContarClientes.Connection = conexao;
-        //        Reader = queryContarClientes.ExecuteReader();
-
-        //        Reader.Read();
-        //        quantidades.QuantidadeClientes = Convert.ToInt32(Reader["Clientes"].ToString());
-
-        //        Reader.Close();
-
-        //        queryContarTrabalhos.Connection = conexao;
-        //        Reader = queryContarTrabalhos.ExecuteReader();
-
-        //        Reader.Read();
-        //        quantidades.QuantidadeTrabalhos = Convert.ToInt32(Reader["Trabalhos"].ToString());
-
-        //        Reader.Close();
-
-        //        queryContarServicos.Connection = conexao;
-        //        Reader = queryContarServicos.ExecuteReader();
-
-        //        Reader.Read();
-        //        quantidades.QuantidadeServicos = Convert.ToInt32(Reader["Servicos"].ToString());
-
-        //        Reader.Close();
-        //        conexao.Close();
-
-        //        Tb_Dados.Visibility = Visibility.Visible;
-
-        //        Tb_Dados.DataContext = quantidades;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        System.Diagnostics.Debug.WriteLine(ex.ToString());
-        //        Tb_Erro.Visibility = Visibility.Visible;
-        //    }
-        //}
-
-        //private void Btn_EditarConfiguracao_Click(object sender, RoutedEventArgs e)
-        //{
-        //    Frm_Principal.Content = new Definicoes();
-        //    Grd_SemFicheiro.Visibility = Visibility.Hidden;
-        //}
-
-        //private void Btn_FecharPrograma_Click(object sender, RoutedEventArgs e)
-        //{
-        //    this.Close();
-        //}
-    }
-
-    public class ContagemBaseDados
-    {
-        public int QuantidadeClientes { get; set; }
-        public int QuantidadeTrabalhos { get; set; }
-        public int QuantidadeServicos { get; set; }
     }
 }
