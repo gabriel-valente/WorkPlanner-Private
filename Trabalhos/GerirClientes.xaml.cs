@@ -54,6 +54,8 @@ namespace Trabalhos
         bool TelefoneValido = true;
         bool CPDirNulo = false;
 
+        bool Adicionar = false;
+
         //Iniciação
         public GerirClientes()
         {
@@ -72,7 +74,60 @@ namespace Trabalhos
         //Butao adicionar novo cliente
         private void Btn_AdicionarCliente_Click(object sender, RoutedEventArgs e)
         {
+            Adicionar = true;
+
+            string[] codigopostal = { null, null };
+
             LimparCampos();
+
+            Lbl_CodigoCliente.Content = EditarClienteCampos.ChaveCliente;
+            Tb_NomeCliente.Text = EditarClienteCampos.Nome;
+
+            if (EditarClienteCampos.DataNascimento.ToString() != "01/01/0001 00:00:00")
+            {
+                Dp_Nascimento.SelectedDate = EditarClienteCampos.DataNascimento;
+            }
+
+            if (EditarClienteCampos.Sexo == "F")
+            {
+                RdB_Feminino.IsChecked = true;
+            }
+            else if (EditarClienteCampos.Sexo == "M")
+            {
+                RdB_Masculino.IsChecked = true;
+            }
+            else
+            {
+                RdB_Indefinido.IsChecked = true;
+            }
+
+            Tb_Morada.Text = EditarClienteCampos.Morada;
+
+            if (string.IsNullOrEmpty(EditarClienteCampos.CodigoPostal))
+            {
+                codigopostal[0] = null;
+                codigopostal[1] = null;
+            }
+            else
+            {
+                codigopostal = EditarClienteCampos.CodigoPostal.Split('-').ToArray();
+
+                Tb_CodPostalEsquerda.Text = codigopostal[0];
+                Tb_CodPostalDireita.Text = codigopostal[1];
+            }
+
+            Tb_Localidade.Text = EditarClienteCampos.Localidade;
+            Tb_Email.Text = EditarClienteCampos.Email;
+
+            if (EditarClienteCampos.Telemovel != 0)
+            {
+                Tb_Telemovel.Text = EditarClienteCampos.Telemovel.ToString();
+            }
+
+            if (EditarClienteCampos.Telefone != 0)
+            {
+                Tb_Telefone.Text = EditarClienteCampos.Telefone.ToString();
+            }
 
             try
             {
@@ -96,6 +151,7 @@ namespace Trabalhos
             Tb_NomeCliente.IsReadOnly = false;
             Lbl_Nascimento.Visibility = Visibility.Hidden;
             Dp_Nascimento.Visibility = Visibility.Visible;
+            Btn_LimparData.Visibility = Visibility.Visible;
             Lbl_Sexo.Visibility = Visibility.Hidden;
             RdB_Feminino.Visibility = Visibility.Visible;
             RdB_Indefinido.Visibility = Visibility.Visible;
@@ -152,6 +208,7 @@ namespace Trabalhos
             Tb_NomeCliente.IsReadOnly = false;
             Lbl_Nascimento.Visibility = Visibility.Hidden;
             Dp_Nascimento.Visibility = Visibility.Visible;
+            Btn_LimparData.Visibility = Visibility.Visible;
             Lbl_Sexo.Visibility = Visibility.Hidden;
             RdB_Feminino.Visibility = Visibility.Visible;
             RdB_Indefinido.Visibility = Visibility.Visible;
@@ -337,6 +394,7 @@ namespace Trabalhos
                         Tb_NomeCliente.IsReadOnly = true;
                         Lbl_Nascimento.Visibility = Visibility.Visible;
                         Dp_Nascimento.Visibility = Visibility.Hidden;
+                        Btn_LimparData.Visibility = Visibility.Hidden;
                         Lbl_Sexo.Visibility = Visibility.Visible;
                         RdB_Feminino.Visibility = Visibility.Hidden;
                         RdB_Indefinido.Visibility = Visibility.Hidden;
@@ -365,7 +423,9 @@ namespace Trabalhos
             else
             {
                 Lbl_PesquisaCodigo.Content = "Codigo Postal com formato incorreto!";
-            }        
+            }
+
+            Adicionar = false;
         }
 
         //Botao guardar alteraçoes no cliente
@@ -514,6 +574,7 @@ namespace Trabalhos
                         Tb_NomeCliente.IsReadOnly = true;
                         Lbl_Nascimento.Visibility = Visibility.Visible;
                         Dp_Nascimento.Visibility = Visibility.Hidden;
+                        Btn_LimparData.Visibility = Visibility.Hidden;
                         Lbl_Sexo.Visibility = Visibility.Visible;
                         RdB_Feminino.Visibility = Visibility.Hidden;
                         RdB_Indefinido.Visibility = Visibility.Hidden;
@@ -563,7 +624,7 @@ namespace Trabalhos
                 }
                 else
                 {
-                    dataNascimento = clientes[Lst_Clientes.SelectedIndex].DataNascimento.ToString();
+                    dataNascimento = clientes[Lst_Clientes.SelectedIndex].DataNascimento.ToShortDateString().ToString();
                 }
 
                 if (clientes[Lst_Clientes.SelectedIndex].Sexo == "F")
@@ -678,6 +739,7 @@ namespace Trabalhos
             Tb_NomeCliente.IsReadOnly = true;
             Lbl_Nascimento.Visibility = Visibility.Visible;
             Dp_Nascimento.Visibility = Visibility.Hidden;
+            Btn_LimparData.Visibility = Visibility.Hidden;
             Lbl_Sexo.Visibility = Visibility.Visible;
             RdB_Feminino.Visibility = Visibility.Hidden;
             RdB_Indefinido.Visibility = Visibility.Hidden;
@@ -734,6 +796,51 @@ namespace Trabalhos
         //Botao voltar para o menu principal
         private void Btn_Voltar_Click(object sender, RoutedEventArgs e)
         {
+            if (Adicionar)
+            {
+                DateTime? data = Dp_Nascimento.SelectedDate;
+                char sexo = 'I';
+                long telemovel = 0;
+                long telefone = 0;
+
+                if (Dp_Nascimento.Text == null)
+                {
+                    data = Convert.ToDateTime("01/01/0001 00:00:00");
+                }
+
+                if (RdB_Feminino.IsChecked.Value)
+                {
+                    sexo = 'F';
+                }
+                else if (RdB_Masculino.IsChecked.Value)
+                {
+                    sexo = 'M';
+                }
+
+                EditarClienteCampos.ChaveCliente = Convert.ToInt64(Lbl_CodigoCliente.Content);
+                EditarClienteCampos.Nome = Tb_NomeCliente.Text;
+                EditarClienteCampos.DataNascimento = data;
+                EditarClienteCampos.Sexo = sexo.ToString();
+                EditarClienteCampos.Morada = Tb_Morada.Text;
+                EditarClienteCampos.CodigoPostal = Tb_CodPostalEsquerda.Text + "-" + Tb_CodPostalDireita.Text;
+                EditarClienteCampos.Localidade = Tb_Localidade.Text;
+                EditarClienteCampos.Email = Tb_Email.Text;
+
+                if (Tb_Telemovel.Text.Length > 0)
+                {
+                    telemovel = Convert.ToInt64(Tb_Telemovel.Text);
+                }
+
+                EditarClienteCampos.Telemovel = telemovel;
+
+                if (Tb_Telefone.Text.Length > 0)
+                {
+                    telefone = Convert.ToInt64(Tb_Telefone.Text);
+                }
+
+                EditarClienteCampos.Telefone = telefone;
+            }
+
             ((MainWindow)Application.Current.MainWindow).Frm_Principal.GoBack();
         }
 
@@ -1094,7 +1201,7 @@ namespace Trabalhos
             Tb_NomeCliente.Text = null;
             Lbl_Nascimento.Content = null;
             Dp_Nascimento.SelectedDate = null;
-            Dp_Nascimento.DisplayDate = DateTime.Today;
+            Dp_Nascimento.DisplayDate = DateTime.Today.AddYears(-Configuracoes.IdadeMinima);
             Lbl_Sexo.Content = null;
             RdB_Feminino.IsChecked = false;
             RdB_Indefinido.IsChecked = true;

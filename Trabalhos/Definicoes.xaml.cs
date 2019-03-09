@@ -60,10 +60,17 @@ namespace Trabalhos
         //Abrir Folder Dialog
         private void Btn_LocalBackup_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new CommonOpenFileDialog();
-            dialog.IsFolderPicker = true;
-            CommonFileDialogResult result = dialog.ShowDialog();
-            Tb_Localbackup.Text = dialog.FileName.ToString();
+            try
+            {
+                var dialog = new CommonOpenFileDialog();
+                dialog.IsFolderPicker = true;
+                CommonFileDialogResult result = dialog.ShowDialog();
+                Tb_Localbackup.Text = dialog.FileName.ToString();
+            }
+            catch (Exception)
+            {
+                LocalCopiaValido = false;
+            }
         }
 
         //Validar local backup

@@ -15,7 +15,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>F:\Workplan\</PublishUrl>
+    <PublishUrl>E:\PAP\teste\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -25,8 +25,8 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>2</ApplicationRevision>
+    <TargetCulture>pt-PT</TargetCulture>
+    <ApplicationRevision>3</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -133,11 +133,24 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="TrabalhosDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TrabalhosDataSet.xsd</DependentUpon>
+    </Compile>
     <Page Include="Definicoes.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="GerirClientes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GerirServicos.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GerirTrabalhos.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -155,6 +168,12 @@
     </Compile>
     <Compile Include="GerirClientes.xaml.cs">
       <DependentUpon>GerirClientes.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GerirServicos.xaml.cs">
+      <DependentUpon>GerirServicos.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GerirTrabalhos.xaml.cs">
+      <DependentUpon>GerirTrabalhos.xaml</DependentUpon>
     </Compile>
     <Compile Include="GlobalVariables.cs" />
     <Compile Include="MainWindow.xaml.cs">
@@ -191,6 +210,17 @@
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="TrabalhosDataSet.xsc">
+      <DependentUpon>TrabalhosDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="TrabalhosDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>TrabalhosDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="TrabalhosDataSet.xss">
+      <DependentUpon>TrabalhosDataSet.xsd</DependentUpon>
     </None>
     <None Include="Trabalhos_TemporaryKey.pfx" />
   </ItemGroup>

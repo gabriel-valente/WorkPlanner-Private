@@ -10,7 +10,7 @@ namespace Trabalhos
     {
         public string ChaveTrabalho { get; set; }
         public long ChaveCliente { get; set; }
-        public string NomeTrabalho { get; set; }
+        public string Nome { get; set; }
         public string Descricao { get; set; }
     }
 
@@ -28,7 +28,7 @@ namespace Trabalhos
     public class Servico
     {
         public int ChaveServico { get; set; }
-        public string NomeServico { get; set; }
+        public string Nome { get; set; }
         public decimal Preco { get; set; }
     }
 
