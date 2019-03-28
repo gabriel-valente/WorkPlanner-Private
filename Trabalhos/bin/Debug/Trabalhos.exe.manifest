@@ -15,14 +15,14 @@
       <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
         <!--
           UAC Manifest Options
-          If you want to change the Windows User Account Control level replace the 
+          If you want to change the Windows User Account Control level replace the
           requestedExecutionLevel node with one of the following.
 
         <requestedExecutionLevel  level="asInvoker" uiAccess="false" />
         <requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
         <requestedExecutionLevel  level="highestAvailable" uiAccess="false" />
 
-         If you want to utilize File and Registry Virtualization for backward 
+         If you want to utilize File and Registry Virtualization for backward
          compatibility then delete the requestedExecutionLevel node.
     -->
         <requestedExecutionLevel level="asInvoker" uiAccess="false" />
@@ -102,14 +102,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Trabalhos.exe" size="84392">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Trabalhos.exe" size="99240">
       <assemblyIdentity name="Trabalhos" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>SomqjX1Dr+jTh0YEpI2PKKf8etfy9z7UuRv/g61kE0M=</dsig:DigestValue>
+        <dsig:DigestValue>9LGK0CyMzwpRZh1wJk2Pke/mGIFH6xrj7BRV/pOGWmQ=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -119,7 +119,7 @@
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>D4gRLsnUM3PIm7A9kIkYwz6W5Wxs57w+IFtiyF+djzk=</dsig:DigestValue>
+      <dsig:DigestValue>ybc71UCR4TjgeSiQvzIAT3541cxbuDhtK7+MwuZCpLY=</dsig:DigestValue>
     </hash>
   </file>
   <file name="Trabalhos.exe.config" size="2708">

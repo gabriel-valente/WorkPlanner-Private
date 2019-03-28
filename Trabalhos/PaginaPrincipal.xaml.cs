@@ -53,6 +53,11 @@ namespace Trabalhos
         {
             ((MainWindow)Application.Current.MainWindow).Frm_Principal.Content = new Definicoes();
         }
+
+        private void Btn_GerirServicos_Click(object sender, RoutedEventArgs e)
+        {
+            ((MainWindow)Application.Current.MainWindow).Frm_Principal.Content = new GerirServicos();
+        }
     }
 
     public class Conteudo2

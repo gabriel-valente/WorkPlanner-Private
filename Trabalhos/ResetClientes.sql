@@ -1,2 +1,2 @@
-﻿DELETE FROM Cliente;
-DBCC CHECKIDENT('Cliente', RESEED, 0)
+﻿DELETE FROM Servico;
+DBCC CHECKIDENT('Servico', RESEED, 0)

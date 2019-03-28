@@ -133,11 +133,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="TrabalhosDataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>TrabalhosDataSet.xsd</DependentUpon>
-    </Compile>
     <Page Include="Definicoes.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -210,17 +205,6 @@
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <None Include="TrabalhosDataSet.xsc">
-      <DependentUpon>TrabalhosDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="TrabalhosDataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>TrabalhosDataSet.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="TrabalhosDataSet.xss">
-      <DependentUpon>TrabalhosDataSet.xsd</DependentUpon>
     </None>
     <None Include="Trabalhos_TemporaryKey.pfx" />
   </ItemGroup>

@@ -38,3 +38,5 @@ E:\PAP\Trabalhos\Trabalhos\obj\Debug\Trabalhos.pdb
 E:\PAP\Trabalhos\Trabalhos\obj\Debug\Trabalhos_Content.g.cs
 E:\PAP\Trabalhos\Trabalhos\obj\Debug\GerirServicos.g.cs
 E:\PAP\Trabalhos\Trabalhos\obj\Debug\GerirTrabalhos.g.cs
+E:\PAP\Trabalhos\Trabalhos\obj\Debug\GerirTrabalhos.baml
+E:\PAP\Trabalhos\Trabalhos\obj\Debug\GerirServicos.baml

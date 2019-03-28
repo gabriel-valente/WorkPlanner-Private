@@ -27,8 +27,6 @@ namespace Trabalhos
     /// </summary>
     public partial class GerirClientes : Page
     {
-        SqlConnection conexao;
-        string stringConexao = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|Trabalhos.mdf; Integrated Security=True";
         SqlCommand queryTodosClientes = new SqlCommand("SELECT Key_Cliente, Nome, DataNascimento, Sexo, Morada, CodigoPostal.CodPostal , Cliente.Localidade, Email, Telemovel, Telefone FROM Cliente LEFT JOIN CodigoPostal ON CodigoPostal.Key_CodPostal=Cliente.Key_CodPostal");
         SqlCommand queryIndexCliente = new SqlCommand("SELECT IDENT_CURRENT('Cliente') AS 'Index'");
         SqlCommand queryInserirCliente = new SqlCommand("INSERT INTO Cliente (Nome, DataNascimento, Sexo, Morada, Key_CodPostal, Localidade, Email, Telemovel, Telefone) VALUES (@Nome, @DataNascimento, @Sexo, @Morada, @CodPostal, @Localidade, @Email, @Telemovel, @Telefone)");
@@ -131,8 +129,8 @@ namespace Trabalhos
 
             try
             {
-                conexao.Open();
-                queryIndexCliente.Connection = conexao;
+                DataBase.conexao.Open();
+                queryIndexCliente.Connection = DataBase.conexao;
 
                 Reader = queryIndexCliente.ExecuteReader();
 
@@ -141,7 +139,7 @@ namespace Trabalhos
                 Lbl_CodigoCliente.Content = Convert.ToInt64(Reader["Index"].ToString()) + 1;
 
                 Reader.Close();
-                conexao.Close();
+                DataBase.conexao.Close();
             }
             catch (Exception ex)
             {
@@ -241,15 +239,15 @@ namespace Trabalhos
         {
             try
             {
-                conexao.Open();
-                queryApagarCliente.Connection = conexao;
+                DataBase.conexao.Open();
+                queryApagarCliente.Connection = DataBase.conexao;
                 queryApagarCliente.Parameters.AddWithValue("@Key_Cliente", clientes[Lst_Clientes.SelectedIndex].ChaveCliente);
 
                 Reader = queryApagarCliente.ExecuteReader();
                 queryApagarCliente.Parameters.Clear();
 
                 Reader.Close();
-                conexao.Close();
+                DataBase.conexao.Close();
 
                 clientes.RemoveAt(Lst_Clientes.SelectedIndex);
                 Lst_Clientes.Items.Refresh();
@@ -334,10 +332,8 @@ namespace Trabalhos
                             keyCodigo = ProcurarCodigoPostal(codigo);
                         }
 
-                        conexao = new SqlConnection(stringConexao);
-
-                        conexao.Open();
-                        queryInserirCliente.Connection = conexao;
+                        DataBase.conexao.Open();
+                        queryInserirCliente.Connection = DataBase.conexao;
                         queryInserirCliente.Parameters.AddWithValue("@Nome", Tb_NomeCliente.Text.Trim());
 
                         if (Dp_Nascimento.SelectedDate.HasValue)
@@ -369,7 +365,7 @@ namespace Trabalhos
                         queryInserirCliente.ExecuteNonQuery();
                         queryInserirCliente.Parameters.Clear();
 
-                        conexao.Close();
+                        DataBase.conexao.Close();
 
                         string contacto = ContactoVisivel(Tb_Email.Text.Trim(), telemovel, telefone);
                         DateTime? dataNascimento = Convert.ToDateTime(null);
@@ -495,10 +491,8 @@ namespace Trabalhos
 
                     try
                     {
-                        conexao = new SqlConnection(stringConexao);
-
-                        conexao.Open();
-                        queryAtualizarCliente.Connection = conexao;
+                        DataBase.conexao.Open();
+                        queryAtualizarCliente.Connection = DataBase.conexao;
                         queryAtualizarCliente.Parameters.AddWithValue("@Nome", Tb_NomeCliente.Text.Trim());
 
                         if (Dp_Nascimento.SelectedDate.HasValue)
@@ -533,7 +527,7 @@ namespace Trabalhos
                         queryAtualizarCliente.ExecuteNonQuery();
                         queryAtualizarCliente.Parameters.Clear();
 
-                        conexao.Close();
+                        DataBase.conexao.Close();
 
                         clientes[Lst_Clientes.SelectedIndex].Nome = Convert.ToString(Tb_NomeCliente.Text.Trim());
 
@@ -687,8 +681,8 @@ namespace Trabalhos
 
                 try
                 {
-                    conexao.Open();
-                    queryProcurarTrabalhosCliente.Connection = conexao;
+                    DataBase.conexao.Open();
+                    queryProcurarTrabalhosCliente.Connection = DataBase.conexao;
                     queryProcurarTrabalhosCliente.Parameters.AddWithValue("@Key_Cliente", clientes[Lst_Clientes.SelectedIndex].ChaveCliente);
 
                     Reader = queryProcurarTrabalhosCliente.ExecuteReader();
@@ -715,7 +709,7 @@ namespace Trabalhos
                     }
 
                     Reader.Close();
-                    conexao.Close();
+                    DataBase.conexao.Close();
                 }
                 catch (Exception ex)
                 {
@@ -1170,10 +1164,10 @@ namespace Trabalhos
         {
             try
             {
-                conexao = new SqlConnection(stringConexao);
+                DataBase.conexao = new SqlConnection(DataBase.stringConexao);
 
-                conexao.Open();
-                queryTodosClientes.Connection = conexao;
+                DataBase.conexao.Open();
+                queryTodosClientes.Connection = DataBase.conexao;
                 Reader = queryTodosClientes.ExecuteReader();
 
                 while (Reader.Read())
@@ -1184,7 +1178,7 @@ namespace Trabalhos
                 }
 
                 Reader.Close();
-                conexao.Close();
+                DataBase.conexao.Close();
             }
             catch (Exception ex)
             {
@@ -1340,8 +1334,8 @@ namespace Trabalhos
 
             try
             {
-                conexao.Open();
-                queryProcurarCodigoPostal.Connection = conexao;
+                DataBase.conexao.Open();
+                queryProcurarCodigoPostal.Connection = DataBase.conexao;
                 queryProcurarCodigoPostal.Parameters.AddWithValue("@CodPostal", codigo);
 
                 Reader = queryProcurarCodigoPostal.ExecuteReader();
@@ -1382,7 +1376,7 @@ namespace Trabalhos
                 }
 
                 Reader.Close();
-                conexao.Close();
+                DataBase.conexao.Close();
             }
             catch (Exception ex)
             {
@@ -1437,8 +1431,8 @@ namespace Trabalhos
             {
                 try
                 {
-                    conexao.Open();
-                    queryProcurarCliente.Connection = conexao;
+                    DataBase.conexao.Open();
+                    queryProcurarCliente.Connection = DataBase.conexao;
                     queryProcurarCliente.Parameters.AddWithValue("@nome", nome);
 
                     Reader = queryProcurarCliente.ExecuteReader();
@@ -1466,7 +1460,7 @@ namespace Trabalhos
                     }
 
                     Reader.Close();
-                    conexao.Close();
+                    DataBase.conexao.Close();
                 }
                 catch (Exception ex)
                 {
@@ -1487,8 +1481,8 @@ namespace Trabalhos
         //{
         //    string nome = Tb_NomeCliente.Text;
 
-        //    conexao.Open();
-        //    queryProcurarCliente.Connection = conexao;
+        //    DataBase.conexao.Open();
+        //    queryProcurarCliente.Connection = DataBase.conexao;
         //    queryProcurarCliente.Parameters.AddWithValue("@nome", "%" + nome + "%");
 
         //    Reader = queryProcurarCliente.ExecuteReader();
@@ -1507,7 +1501,7 @@ namespace Trabalhos
         //    }
 
         //    Reader.Close();
-        //    conexao.Close();
+        //    DataBase.conexao.Close();
         //}
     }
 }

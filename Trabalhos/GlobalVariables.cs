@@ -3,9 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.SqlClient;
 
 namespace Trabalhos
 {
+    public static class DataBase
+    {
+        public static SqlConnection conexao;
+        public static string stringConexao = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|Trabalhos.mdf; Integrated Security=True";
+    }
+
     public static class Configuracoes
     {
         public static int TempoCopia;
@@ -26,5 +33,12 @@ namespace Trabalhos
         public static string Email;
         public static long Telemovel;
         public static long Telefone;
+    }
+
+    public static class EditarServicoCampos
+    {
+        public static long ChaveServico;
+        public static string Nome;
+        public static decimal Preco;
     }
 }

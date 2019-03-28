@@ -20,7 +20,7 @@
         </Grid.RowDefinitions>
 
         <Label Grid.Row="0" Grid.Column="0" Content="Serviços atuais" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="10,10,10,0" Height="31"/>
-        <ListBox x:Name="Lst_Servicos" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="10,49,10,10" VerticalAlignment="Stretch" SelectionChanged="Lst_Clientes_SelectionChanged">
+        <ListBox x:Name="Lst_Servicos" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="10,49,10,10" VerticalAlignment="Stretch">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -58,9 +58,9 @@
         <Label Grid.Row="0" Grid.Column="1" Content="Codigo Serviço:" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="9,10,9,0" Height="31"/>
         <Label x:Name="Lbl_CodigoServico" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="11,10,10,0" Height="31"/>
         <Label Grid.Row="0" Grid.Column="1" Content="Serviço:" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="9,46,9,0" Height="31"/>
-        <TextBox x:Name="Tb_Servico" Grid.Row="0" Grid.Column="2"  HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="11,50,10,0" Height="21" FontSize="16" TextWrapping="WrapWithOverflow" MaxLength="50" IsReadOnly="True"/>
+        <TextBox x:Name="Tb_Servico" Grid.Row="0" Grid.Column="2"  HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="11,50,10,0" Height="21" FontSize="16" TextWrapping="WrapWithOverflow" MaxLength="30" IsReadOnly="True"/>
         <Label Grid.Row="0" Grid.Column="1" Content="Preço Hora:" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="9,82,9,0" Height="31"/>
-        <TextBox x:Name="Tb_Preco" Grid.Row="0" Grid.Column="2"  HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="11,86,10,0" Height="21" FontSize="16" TextWrapping="WrapWithOverflow" MaxLength="50" IsReadOnly="True"/>
+        <TextBox x:Name="Tb_Preco" Grid.Row="0" Grid.Column="2"  HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="11,86,0,0" Height="21" FontSize="16" TextWrapping="WrapWithOverflow" MaxLength="6" IsReadOnly="True" Width="90"/>
 
         <Rectangle Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Height="1" VerticalAlignment="Bottom">
             <Rectangle.Fill>
@@ -72,9 +72,12 @@
                 </LinearGradientBrush>
             </Rectangle.Fill>
         </Rectangle>
-        <Button x:Name="Btn_AdicionarServico" Grid.Row="1" Grid.Column="2" Content="Adicionar Novo Serviço" Margin="10,10,0,0" Width="250" HorizontalAlignment="Left" Height="90" VerticalAlignment="Top"/>
-        <Button x:Name="Btn_AtualizarServico" Grid.Row="1" Grid.Column="2" Content="Editar Serviço Selecionado" Margin="10,114,0,114" Width="250" Height="90" HorizontalAlignment="Left" IsEnabled="False"/>
-        <Button x:Name="Btn_ApagarServico" Grid.Row="1" Grid.Column="2" Content="Apagar Serviço Selecionado" Margin="10,0,0,10" Width="250" Height="90" HorizontalAlignment="Left" IsEnabled="False" VerticalAlignment="Bottom"/>
+        <Button x:Name="Btn_AdicionarServico" Grid.Row="1" Grid.Column="2" Content="Adicionar Novo Servico" Margin="10,10,0,0" Width="250" HorizontalAlignment="Left" Height="90" VerticalAlignment="Top" Click="Btn_AdicionarServico_Click"/>
+        <Button x:Name="Btn_AtualizarServico" Grid.Row="1" Grid.Column="2" Content="Editar Servico Selecionado" Margin="10,10,0,10" Width="250" Height="90" HorizontalAlignment="Left" IsEnabled="False" Click="Btn_AtualizarServico_Click"/>
+        <Button x:Name="Btn_ApagarServico" Grid.Row="1" Grid.Column="2" Content="Apagar Servico Selecionado" Margin="10,0,0,10" Width="250" Height="90" HorizontalAlignment="Left" IsEnabled="False" VerticalAlignment="Bottom" Click="Btn_ApagarServico_Click"/>
+        <Button x:Name="Btn_CancelarServico" Grid.Row="1" Grid.Column="2" Content="Cancelar" Margin="10,0,0,10" Width="250" HorizontalAlignment="Left" Height="90" VerticalAlignment="Bottom" Visibility="Hidden"/>
+        <Button x:Name="Btn_GuardarServico" Grid.Row="1" Grid.Column="2" Content="Guardar Servico" Margin="10,10,0,0" Height="90" Width="250" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Hidden" IsEnabled="False"/>
+        <Button x:Name="Btn_GuardarAlteracoes" Grid.Row="1" Grid.Column="2" Content="Guardar Alterações" Margin="10,10,0,0" Height="90" Width="250" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Hidden" IsEnabled="True"/>
         <Button x:Name="Btn_Voltar" Grid.Row="1" Grid.Column="2" Content="Voltar" Margin="0,0,10,10" HorizontalAlignment="Right" Width="100" Height="50" VerticalAlignment="Bottom"/>
         <ScrollViewer Grid.Row="1" Grid.Column="2" Margin="265,10,10,65" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Auto">
             <TextBlock x:Name="Lbl_Erros" Style="{StaticResource TextBlock}" TextWrapping="WrapWithOverflow" TextAlignment="Left"/>
@@ -83,14 +86,14 @@
         <Border x:Name="BloquearFundo" Grid.ColumnSpan="3" Grid.RowSpan="2" Background="#99000000" Visibility="Hidden"/>
         <Grid x:Name="Grd_ValidarApagar" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="3" Height="500" Width="1083" Background="#FFAAAAAA" Visibility="Hidden">
             <TextBlock Style="{StaticResource TextBlock}" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="WrapWithOverflow" TextAlignment="Center">
-                <Run FontSize="40" Text="Tem a certeza que pretende eliminar este cliente?"/>
+                <Run FontSize="40" Text="Tem a certeza que pretende eliminar este serviço?"/>
                 <LineBreak/>
-                <Run FontSize="30" Text="Esta ação só é possivel pois o cliente não tem trabalhos associados!"/>
+                <Run FontSize="30" Text="Esta ação só é possivel pois o serviço não tem trabalhos associados!"/>
             </TextBlock>
             <TextBlock Style="{StaticResource TextBlock}" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="10,10,10,10" TextWrapping="WrapWithOverflow" TextAlignment="Center">
                 <Run FontFamily="Segoe UI Semibold" FontSize="70" Text="Esta ação é irreversivel!"/>
             </TextBlock>
-            <Button x:Name="Btn_ConfirmarApagar" Content="Apagar Cliente" Margin="200,0,0,50" HorizontalAlignment="Center" Width="175" Height="75" VerticalAlignment="Bottom" Click="Btn_ConfirmarApagar_Click"/>
+            <Button x:Name="Btn_ConfirmarApagar" Content="Apagar Serviço" Margin="200,0,0,50" HorizontalAlignment="Center" Width="175" Height="75" VerticalAlignment="Bottom" Click="Btn_ConfirmarApagar_Click"/>
             <Button x:Name="Btn_CancelarApagar" Content="Cancelar" Margin="-200,0,0,50" HorizontalAlignment="Center" Width="175" Height="75" VerticalAlignment="Bottom" Click="Btn_CancelarApagar_Click"/>
         </Grid>
     </Grid>
