@@ -36,6 +36,7 @@ namespace Trabalhos
                 Configuracoes.LocalCopia = ConfigurationManager.AppSettings["LocalCopiaSeguranca"];
                 Configuracoes.IdadeMinima = Convert.ToInt32(ConfigurationManager.AppSettings["IdadeMinima"]);
                 Configuracoes.ContactoPreferivel = Convert.ToInt32(ConfigurationManager.AppSettings["ContactoPreferivel"]);
+                Configuracoes.ServicoPrecoMinimo = Convert.ToDecimal(ConfigurationManager.AppSettings["ServicoPrecoMinimo"]);
 
                 Frm_Principal.Content = new PaginaPrincipal();
             }

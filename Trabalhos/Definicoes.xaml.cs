@@ -27,6 +27,7 @@ namespace Trabalhos
         bool LocalCopiaValido = false;
         bool IdadeMinimaValido = false;
         bool ContactoValido = false;
+        bool ServicoPrecoMinimoValido = false;
 
         public Definicoes()
         {
@@ -38,6 +39,7 @@ namespace Trabalhos
             Tb_Localbackup.Text = Configuracoes.LocalCopia;
             Tb_IdadeMinima.Text = Convert.ToString(Configuracoes.IdadeMinima);
             Cmb_Contacto.SelectedIndex = Configuracoes.ContactoPreferivel;
+            Tb_ServicoPrecoMinimo.Text = Convert.ToString(Configuracoes.ServicoPrecoMinimo);
 
             AtivarButao();
         }
@@ -134,6 +136,54 @@ namespace Trabalhos
             AtivarButao();
         }
 
+        //Validar aviso de preço minimo nos servicos
+        private void Tb_ServicoPrecoMinimo_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Tb_ServicoPrecoMinimo.Text = Tb_ServicoPrecoMinimo.Text.TrimStart();
+            char[] preco = Tb_ServicoPrecoMinimo.Text.ToCharArray();
+
+            bool comma = false;
+
+            for (int i = 0; i < preco.Length; i++)
+            {
+                if (comma == false && (preco[i] == ',' || preco[i] == '.'))
+                {
+                    comma = true;
+                    preco[i] = ',';
+                    Tb_ServicoPrecoMinimo.Text = preco.ToString();
+                }
+                else if (comma == true && (preco[i] == ',' || preco[i] == '.'))
+                {
+                    Tb_ServicoPrecoMinimo.Text = Tb_ServicoPrecoMinimo.Text.Remove(i, 1);
+                    Array.Clear(preco, 0, preco.Length);
+                    preco = Tb_ServicoPrecoMinimo.Text.TrimStart().ToCharArray();
+                    Tb_ServicoPrecoMinimo.SelectionStart = i;
+                }
+            }
+
+            for (int i = 0; i < preco.Length; i++)
+            {
+                if (!char.IsDigit(preco[i]) && preco[i] != ',')
+                {
+                    Tb_ServicoPrecoMinimo.Text = Tb_ServicoPrecoMinimo.Text.Remove(i, 1);
+                    Array.Clear(preco, 0, preco.Length);
+                    preco = Tb_ServicoPrecoMinimo.Text.TrimStart().ToCharArray();
+                    Tb_ServicoPrecoMinimo.SelectionStart = i;
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(Tb_ServicoPrecoMinimo.Text) || Convert.ToDecimal(Tb_ServicoPrecoMinimo.Text) < 0)
+            {
+                ServicoPrecoMinimoValido = false;
+            }
+            else
+            {
+                ServicoPrecoMinimoValido = true;
+            }
+
+            AtivarButao();
+        }
+
         //Botão guardar e voltar ao menu anterior
         private void Btn_Guardar_Click(object sender, RoutedEventArgs e)
         {
@@ -143,11 +193,13 @@ namespace Trabalhos
             config.AppSettings.Settings.Remove("LocalCopiaSeguranca");
             config.AppSettings.Settings.Remove("IdadeMinima");
             config.AppSettings.Settings.Remove("ContactoPreferivel");
+            config.AppSettings.Settings.Remove("ServicoPrecoMinimo");
 
             config.AppSettings.Settings.Add("CopiaSeguranca", Cmb_TempoCopia.SelectedIndex.ToString());
             config.AppSettings.Settings.Add("LocalCopiaSeguranca", Tb_Localbackup.Text.Trim());
             config.AppSettings.Settings.Add("IdadeMinima", Tb_IdadeMinima.Text);
             config.AppSettings.Settings.Add("ContactoPreferivel", Cmb_Contacto.SelectedIndex.ToString());
+            config.AppSettings.Settings.Add("ServicoPrecoMinimo", Tb_ServicoPrecoMinimo.Text.Trim());
 
             config.Save(ConfigurationSaveMode.Minimal);
 
@@ -180,6 +232,7 @@ namespace Trabalhos
                 Configuracoes.LocalCopia = ConfigurationManager.AppSettings["LocalCopiaSeguranca"];
                 Configuracoes.IdadeMinima = Convert.ToInt32(ConfigurationManager.AppSettings["IdadeMinima"]);
                 Configuracoes.ContactoPreferivel = Convert.ToInt32(ConfigurationManager.AppSettings["ContactoPreferivel"]);
+                Configuracoes.ServicoPrecoMinimo = Convert.ToDecimal(ConfigurationManager.AppSettings["ServicoPrecoMinimo"]);
             }
             catch (Exception)
             {
@@ -190,7 +243,7 @@ namespace Trabalhos
         //Função ativar butão
         void AtivarButao()
         {
-            if (TempoCopiaValido && LocalCopiaValido && IdadeMinimaValido && ContactoValido)
+            if (TempoCopiaValido && LocalCopiaValido && IdadeMinimaValido && ContactoValido && ServicoPrecoMinimoValido)
             {
                 Btn_Guardar.IsEnabled = true;
             }

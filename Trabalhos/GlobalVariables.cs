@@ -19,6 +19,7 @@ namespace Trabalhos
         public static string LocalCopia;
         public static int IdadeMinima;
         public static int ContactoPreferivel;
+        public static decimal ServicoPrecoMinimo;
     }
 
     public static class EditarClienteCampos
@@ -39,6 +40,6 @@ namespace Trabalhos
     {
         public static long ChaveServico;
         public static string Nome;
-        public static decimal Preco;
+        public static decimal? Preco;
     }
 }

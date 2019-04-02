@@ -161,6 +161,114 @@ namespace Trabalhos
             LimparCampos();
         }
 
+        //Botao voltar para o menu principal
+        private void Btn_Voltar_Click(object sender, RoutedEventArgs e)
+        {
+            if (Adicionar)
+            {
+                Decimal? preco = Convert.ToDecimal(Tb_Preco.Text);
+
+                EditarServicoCampos.ChaveServico = Convert.ToInt64(Lbl_CodigoServico.Content);
+                EditarServicoCampos.Nome = Tb_Servico.Text;
+                EditarServicoCampos.Preco = preco;
+            }
+
+            ((MainWindow)Application.Current.MainWindow).Frm_Principal.GoBack();
+        }
+
+        //Funçoes de validação
+        //Validar servico
+        private void Tb_Servico_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            temporizador.Stop();
+
+            Tb_Servico.Text = Tb_Servico.Text.TrimStart();
+            char[] servico = Tb_Servico.Text.ToCharArray();
+
+            if (!string.IsNullOrEmpty(Tb_Servico.Text.TrimStart()) && !char.IsUpper(servico[0]))
+            {
+                servico[0] = char.ToUpper(servico[0]);
+                Tb_Servico.Text = new string(servico);
+                Tb_Servico.SelectionStart = Tb_Servico.Text.Length;
+            }
+
+            for (int i = 0; i < servico.Length; i++)
+            {
+
+                if (i >= 1 && char.IsWhiteSpace(servico[i]) & char.IsWhiteSpace(servico[i - 1]))
+                {
+                    Tb_Servico.Text = Tb_Servico.Text.Remove(i, 1);
+                    Array.Clear(servico, 0, servico.Length);
+                    servico = Tb_Servico.Text.TrimStart().ToCharArray();
+                    Tb_Servico.SelectionStart = i;
+                }
+            }
+
+            NomeValido = false;
+
+            temporizador.Start();
+
+            AtualizarBotoes();
+        }
+
+        //Chama função para validar o servico quando sai do TextBox
+        private void Tb_Servico_LostFocus(object sender, RoutedEventArgs e)
+        {
+            temporizador.Stop();
+
+            VerificarServico();
+        }
+
+        //Validar Preco
+        private void Tb_Preco_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Tb_Preco.Text = Tb_Preco.Text.TrimStart();
+            char[] preco = Tb_Preco.Text.ToCharArray();
+
+            bool comma = false;
+
+            for (int i = 0; i < preco.Length; i++)
+            {
+                if (comma == false && (preco[i] == ',' || preco[i] == '.'))
+                {
+                    comma = true;
+                    preco[i] = ',';
+                    Tb_Preco.Text = preco.ToString();
+                }
+                else if (comma == true && (preco[i] == ',' || preco[i] == '.'))
+                {
+                    Tb_Preco.Text = Tb_Preco.Text.Remove(i, 1);
+                    Array.Clear(preco, 0, preco.Length);
+                    preco = Tb_Preco.Text.TrimStart().ToCharArray();
+                    Tb_Preco.SelectionStart = i;
+                }
+            }
+
+            for (int i = 0; i < preco.Length; i++)
+            {
+                if (!char.IsDigit(preco[i]) && preco[i] != ',')
+                {
+                    Tb_Preco.Text = Tb_Preco.Text.Remove(i, 1);
+                    Array.Clear(preco, 0, preco.Length);
+                    preco = Tb_Preco.Text.TrimStart().ToCharArray();
+                    Tb_Preco.SelectionStart = i;
+                }
+            }
+
+            if (Tb_Preco.Text.Length > 0 && Convert.ToDecimal(Tb_Preco.Text) < Configuracoes.ServicoPrecoMinimo)
+            {
+                Lbl_AvisoPreco.Visibility = Visibility.Visible;
+            }
+            else if (Tb_Preco.Text.Length > 0 && Convert.ToDecimal(Tb_Preco.Text) >= Configuracoes.ServicoPrecoMinimo)
+            {
+                Lbl_AvisoPreco.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                Lbl_AvisoPreco.Visibility = Visibility.Visible;
+            }
+        }
+
         //Funçoes gerais
         //Ligar com base de dados e ler todos os servicos
         void LigarBaseDados()
