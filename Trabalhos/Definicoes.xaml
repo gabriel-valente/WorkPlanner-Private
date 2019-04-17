@@ -1,4 +1,4 @@
-﻿ <Page x:Class="Trabalhos.Definicoes"
+﻿<Page x:Class="Trabalhos.Definicoes"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -80,7 +80,7 @@
         <ScrollViewer Grid.Row="1" Grid.Column="0" Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Auto">
             <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="10,10,10,10">
                 <Label Content="Cópia de Segurança" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,0,0"/>
-                <ComboBox x:Name="Cmb_TempoCopia" VerticalAlignment="Top" Margin="150,0,0,0" IsTextSearchEnabled="False" Height="31" IsReadOnly="True" ToolTip="Caso o programa seja aberto e já tenha passado a quantidade de dias selecionados, será feita a cópia de segurança.&#x0a;Caso Seja selecionado um local de cópia." SelectionChanged="Cmb_TempoCopia_SelectionChanged">
+                <ComboBox x:Name="Cmb_TempoCopia" VerticalAlignment="Top" Margin="150,0,0,0" Height="31" ToolTip="Caso o programa seja aberto e já tenha passado a quantidade de dias selecionados, será feita a cópia de segurança.&#x0a;Caso Seja selecionado um local de cópia." SelectionChanged="Cmb_TempoCopia_SelectionChanged">
                     <ComboBoxItem Content="1 Dia"/>
                     <ComboBoxItem Content="2 Dias"/>
                     <ComboBoxItem Content="3 Dias"/>
@@ -105,7 +105,7 @@
                 <TextBox x:Name="Tb_IdadeMinima" VerticalAlignment="Top" Margin="106,0,0,0" VerticalContentAlignment="Center" Height="31" MaxLength="2" MaxLines="1" ToolTip="Valor de 0 significa que não há idade mínima." TextChanged="Tb_IdadeMinima_TextChanged"/>
 
                 <Label Content="Contacto Preferivel" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,36,0,0"/>
-                <ComboBox x:Name="Cmb_Contacto" VerticalAlignment="Top" Margin="142,36,0,0" IsTextSearchEnabled="False" Height="31" IsReadOnly="True" ToolTip="A ordem de preferencia dos contactos é a seguinte:&#x0a;Nenhum: Email, Telemovel, Telefone.&#x0a;Email: Email, Telemovel, Telefone.&#x0a;Telemovel: Telemovel, Email, Telefone.&#x0a;Telefone: Telefone, Email, Telemovel." SelectionChanged="Cmb_Contacto_SelectionChanged">
+                <ComboBox x:Name="Cmb_Contacto" VerticalAlignment="Top" Margin="142,36,0,0" IsTextSearchEnabled="False" Height="31" ToolTip="A ordem de preferencia dos contactos é a seguinte:&#x0a;Nenhum: Email, Telemovel, Telefone.&#x0a;Email: Email, Telemovel, Telefone.&#x0a;Telemovel: Telemovel, Email, Telefone.&#x0a;Telefone: Telefone, Email, Telemovel." SelectionChanged="Cmb_Contacto_SelectionChanged">
                     <ComboBoxItem Content="Nenhum"/>
                     <ComboBoxItem Content="Email"/>
                     <ComboBoxItem Content="Telemovel"/>
@@ -116,7 +116,7 @@
 
         <ScrollViewer Grid.Row="1" Grid.Column="2" Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Auto">
             <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="10,10,10,10">
-                
+
             </Grid>
         </ScrollViewer>
 

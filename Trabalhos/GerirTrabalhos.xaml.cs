@@ -23,6 +23,20 @@ namespace Trabalhos
         public GerirTrabalhos()
         {
             InitializeComponent();
+
+            List<Tarefa> tarefas = new List<Tarefa>();
+
+            tarefas.Add(new Tarefa { ChaveTarefa = "asdfasd", ChaveTrabalho = "fdsgfdgsdff", ChaveServico = 21, DataInicio = DateTime.Now.AddHours(-1), DataFim = DateTime.Now, TempoDecorrido = TimeSpan.FromHours(1.50), Desconto = Convert.ToDecimal(0.3), Preco = Convert.ToDecimal(3.2) });
+            tarefas.Add(new Tarefa { ChaveTarefa = "asdfasd", ChaveTrabalho = "fdsgfdgsdff", ChaveServico = 21, DataInicio = DateTime.Now.AddHours(-1), DataFim = DateTime.Now, TempoDecorrido = TimeSpan.FromHours(1.50), Desconto = Convert.ToDecimal(0.3), Preco = Convert.ToDecimal(3.2) });
+            tarefas.Add(new Tarefa { ChaveTarefa = "asdfasd", ChaveTrabalho = "fdsgfdgsdff", ChaveServico = 21, DataInicio = DateTime.Now.AddHours(-1), DataFim = DateTime.Now, TempoDecorrido = TimeSpan.FromHours(1.50), Desconto = Convert.ToDecimal(0.3), Preco = Convert.ToDecimal(3.2) });
+            tarefas.Add(new Tarefa { ChaveTarefa = "asdfasd", ChaveTrabalho = "fdsgfdgsdff", ChaveServico = 21, DataInicio = DateTime.Now.AddHours(-1), DataFim = DateTime.Now, TempoDecorrido = TimeSpan.FromHours(1.50), Desconto = Convert.ToDecimal(0.3), Preco = Convert.ToDecimal(3.2) });
+            tarefas.Add(new Tarefa { ChaveTarefa = "asdfasd", ChaveTrabalho = "fdsgfdgsdff", ChaveServico = 21, DataInicio = DateTime.Now.AddHours(-1), DataFim = DateTime.Now, TempoDecorrido = TimeSpan.FromHours(1.50), Desconto = Convert.ToDecimal(0.3), Preco = Convert.ToDecimal(3.2) });
+            tarefas.Add(new Tarefa { ChaveTarefa = "asdfasd", ChaveTrabalho = "fdsgfdgsdff", ChaveServico = 21, DataInicio = DateTime.Now.AddHours(-1), DataFim = DateTime.Now, TempoDecorrido = TimeSpan.FromHours(1.50), Desconto = Convert.ToDecimal(0.3), Preco = Convert.ToDecimal(3.2) });
+            tarefas.Add(new Tarefa { ChaveTarefa = "asdfasd", ChaveTrabalho = "fdsgfdgsdff", ChaveServico = 21, DataInicio = DateTime.Now.AddHours(-1), DataFim = DateTime.Now, TempoDecorrido = TimeSpan.FromHours(1.50), Desconto = Convert.ToDecimal(0.3), Preco = Convert.ToDecimal(3.2) });
+            tarefas.Add(new Tarefa { ChaveTarefa = "asdfasd", ChaveTrabalho = "fdsgfdgsdff", ChaveServico = 21, DataInicio = DateTime.Now.AddHours(-1), DataFim = DateTime.Now, TempoDecorrido = TimeSpan.FromHours(1.50), Desconto = Convert.ToDecimal(0.3), Preco = Convert.ToDecimal(3.2) });
+            tarefas.Add(new Tarefa { ChaveTarefa = "asdfasd", ChaveTrabalho = "fdsgfdgsdff", ChaveServico = 21, DataInicio = DateTime.Now.AddHours(-1), DataFim = DateTime.Now, TempoDecorrido = TimeSpan.FromHours(1.50), Desconto = Convert.ToDecimal(0.3), Preco = Convert.ToDecimal(3.2) });
+
+            Lst_Tarefas.ItemsSource = tarefas;
         }
     }
 }

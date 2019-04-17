@@ -590,7 +590,7 @@ namespace Trabalhos
                     }
                     catch (Exception ex)
                     {
-                        Lbl_Erros.Text = "Cena Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
+                        Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
                     }
                 }
             }

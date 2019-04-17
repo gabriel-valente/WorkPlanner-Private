@@ -102,14 +102,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Trabalhos.exe" size="102824">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Trabalhos.exe" size="117160">
       <assemblyIdentity name="Trabalhos" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>qcxIeLDeqT8ONgAcBziATyIA/rNCNIs8iqOd/SvsU7w=</dsig:DigestValue>
+        <dsig:DigestValue>8jpUTJxobadgF0eC+x2+2GpITFV32c4lafAyev51iSM=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

@@ -14,8 +14,9 @@ namespace Trabalhos
         public string Descricao { get; set; }
     }
 
-    public class Tempo
+    public class Tarefa
     {
+        public string ChaveTarefa { get; set; }
         public string ChaveTrabalho { get; set; }
         public int ChaveServico { get; set; }
         public DateTime DataInicio { get; set; }
@@ -53,13 +54,5 @@ namespace Trabalhos
         public string CodPostal { get; set; }
         public string Localidade { get; set; }
         public string Rua { get; set; }
-    }
-
-    public class Tarefa
-    {
-        public long ChaveTarefa { get; set; }
-        public string ChaveTrabalho { get; set; }
-        public string Nome { get; set; }
-        public bool Estado { get; set; }
     }
 }

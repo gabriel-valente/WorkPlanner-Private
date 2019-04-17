@@ -20,7 +20,7 @@
         </Grid.RowDefinitions>
 
         <Label Grid.Row="0" Grid.Column="0" Content="Serviços atuais" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="10,10,10,0" Height="31"/>
-        <ListBox x:Name="Lst_Servicos" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="10,49,10,10" VerticalAlignment="Stretch">
+        <ListBox x:Name="Lst_Servicos" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="10,49,10,10" VerticalAlignment="Stretch" SelectionChanged="Lst_Servicos_SelectionChanged">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -73,14 +73,14 @@
                 </LinearGradientBrush>
             </Rectangle.Fill>
         </Rectangle>
-        <Button x:Name="Btn_AdicionarServico" Grid.Row="1" Grid.Column="2" Content="Adicionar Novo Servico" Margin="10,10,0,0" Width="250" HorizontalAlignment="Left" Height="90" VerticalAlignment="Top" Click="Btn_AdicionarServico_Click"/>
-        <Button x:Name="Btn_AtualizarServico" Grid.Row="1" Grid.Column="2" Content="Editar Servico Selecionado" Margin="10,10,0,10" Width="250" Height="90" HorizontalAlignment="Left" IsEnabled="False" Click="Btn_AtualizarServico_Click"/>
-        <Button x:Name="Btn_ApagarServico" Grid.Row="1" Grid.Column="2" Content="Apagar Servico Selecionado" Margin="10,0,0,10" Width="250" Height="90" HorizontalAlignment="Left" IsEnabled="False" VerticalAlignment="Bottom" Click="Btn_ApagarServico_Click"/>
-        <Button x:Name="Btn_CancelarServico" Grid.Row="1" Grid.Column="2" Content="Cancelar" Margin="10,0,0,10" Width="250" HorizontalAlignment="Left" Height="90" VerticalAlignment="Bottom" Visibility="Hidden"/>
-        <Button x:Name="Btn_GuardarServico" Grid.Row="1" Grid.Column="2" Content="Guardar Servico" Margin="10,10,0,0" Height="90" Width="250" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Hidden" IsEnabled="False"/>
-        <Button x:Name="Btn_GuardarAlteracoes" Grid.Row="1" Grid.Column="2" Content="Guardar Alterações" Margin="10,10,0,0" Height="90" Width="250" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Hidden" IsEnabled="True"/>
+        <Button x:Name="Btn_AdicionarServico" Grid.Row="1" Grid.Column="1" Content="Adicionar Novo Servico" Margin="10,10,0,0" Width="250" HorizontalAlignment="Left" Height="90" VerticalAlignment="Top" Click="Btn_AdicionarServico_Click" Grid.ColumnSpan="2"/>
+        <Button x:Name="Btn_AtualizarServico" Grid.Row="1" Grid.Column="1" Content="Editar Servico Selecionado" Margin="10,114,0,114" Width="250" Height="90" HorizontalAlignment="Left" IsEnabled="False" Click="Btn_AtualizarServico_Click" Grid.ColumnSpan="2"/>
+        <Button x:Name="Btn_ApagarServico" Grid.Row="1" Grid.Column="1" Content="Apagar Servico Selecionado" Margin="10,0,0,10" Width="250" Height="90" HorizontalAlignment="Left" IsEnabled="False" VerticalAlignment="Bottom" Click="Btn_ApagarServico_Click" Grid.ColumnSpan="2"/>
+        <Button x:Name="Btn_CancelarServico" Grid.Row="1" Grid.Column="1" Content="Cancelar" Margin="10,0,0,10" Width="250" HorizontalAlignment="Left" Height="90" VerticalAlignment="Bottom" Click="Btn_CancelarServico_Click" Grid.ColumnSpan="2" Visibility="Hidden"/>
+        <Button x:Name="Btn_GuardarServico" Grid.Row="1" Grid.Column="1" Content="Guardar Servico" Margin="10,10,0,0" Height="90" Width="250" VerticalAlignment="Top" HorizontalAlignment="Left" IsEnabled="False" Click="Btn_GuardarServico_Click" Grid.ColumnSpan="2" Visibility="Hidden"/>
+        <Button x:Name="Btn_GuardarAlteracoes" Grid.Row="1" Grid.Column="1" Content="Guardar Alterações" Margin="10,10,0,0" Height="90" Width="250" VerticalAlignment="Top" HorizontalAlignment="Left" IsEnabled="True" Click="Btn_GuardarAlteracoes_Click" Grid.ColumnSpan="2" Visibility="Hidden"/>
         <Button x:Name="Btn_Voltar" Grid.Row="1" Grid.Column="2" Content="Voltar" Margin="0,0,10,10" HorizontalAlignment="Right" Width="100" Height="50" VerticalAlignment="Bottom" Click="Btn_Voltar_Click"/>
-        <ScrollViewer Grid.Row="1" Grid.Column="2" Margin="265,10,10,65" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Row="1" Grid.Column="2" Margin="131,10,10,65" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Auto">
             <TextBlock x:Name="Lbl_Erros" Style="{StaticResource TextBlock}" TextWrapping="WrapWithOverflow" TextAlignment="Left"/>
         </ScrollViewer>
 

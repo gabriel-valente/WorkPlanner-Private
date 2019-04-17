@@ -27,6 +27,7 @@ namespace Trabalhos
         SqlCommand queryInserirServico = new SqlCommand("INSERT INTO Servico (Nome, Preco) VALUES (@Nome, @Preco)");
         SqlCommand queryAtualizarServico = new SqlCommand("UPDATE Servico SET Nome = @Nome, Preco = @Preco WHERE Key_Servico = @Key_Servico");
         SqlCommand queryProcurarServico = new SqlCommand("SELECT * FROM Servico WHERE Nome = @Nome");
+        SqlCommand queryProcurarTrabalhosServico = new SqlCommand("SELECT COUNT(Key_Tempo) AS 'Contagem' FROM Tempo WHERE Key_Servico = @Key_Servico");
         SqlCommand queryApagarServico = new SqlCommand("DELETE FROM Servico WHERE Key_Servico = @Key_Servico");
 
         SqlDataReader Reader;
@@ -35,8 +36,8 @@ namespace Trabalhos
 
         List<Servico> servicos = new List<Servico>();
 
-        bool NomeValido = true;
-        bool PrecoValido = true;
+        bool NomeValido = false;
+        bool PrecoValido = false;
 
         bool Adicionar = false;
 
@@ -161,12 +162,180 @@ namespace Trabalhos
             LimparCampos();
         }
 
+        //Botao guardar novo servico
+        private void Btn_GuardarServico_Click(object sender, RoutedEventArgs e)
+        {
+            if (NomeValido && PrecoValido)
+            {
+                try
+                {
+                    DataBase.conexao.Open();
+                    queryInserirServico.Connection = DataBase.conexao;
+                    queryInserirServico.Parameters.AddWithValue("@Nome", Tb_Servico.Text.Trim());
+                    queryInserirServico.Parameters.AddWithValue("@Preco", Tb_Preco.Text.Trim());
+
+                    queryInserirServico.ExecuteNonQuery();
+                    queryInserirServico.Parameters.Clear();
+
+                    DataBase.conexao.Close();
+
+                    servicos.Add(new Servico { ChaveServico = Convert.ToInt32(Lbl_CodigoServico.Content), Nome = Convert.ToString(Tb_Servico.Text.Trim()), Preco = Convert.ToDecimal(Tb_Preco.Text.Trim()) });
+
+                    Lst_Servicos.Items.Refresh();
+
+                    LimparCampos();
+
+                    Tb_Servico.IsReadOnly = true;
+                    Tb_Preco.IsReadOnly = true;
+                    Lst_Servicos.IsEnabled = true;
+                    Btn_GuardarServico.Visibility = Visibility.Hidden;
+                    Btn_CancelarServico.Visibility = Visibility.Hidden;
+                    Btn_AdicionarServico.Visibility = Visibility.Visible;
+                    Btn_AtualizarServico.Visibility = Visibility.Visible;
+                    Btn_ApagarServico.Visibility = Visibility.Visible;
+                }
+                catch (Exception ex)
+                {
+                    Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
+                }
+            }
+
+            Adicionar = false;
+        }
+
+        //Botao guardar alteraçoes no servico
+        private void Btn_GuardarAlteracoes_Click(object sender, RoutedEventArgs e)
+        {
+            long keyServico = Convert.ToInt64(Lbl_CodigoServico.Content.ToString());
+
+            if (NomeValido && PrecoValido)
+            {
+                try
+                {
+                    DataBase.conexao.Open();
+                    queryAtualizarServico.Connection = DataBase.conexao;
+                    queryAtualizarServico.Parameters.AddWithValue("@Nome", Tb_Servico.Text.Trim());
+                    queryAtualizarServico.Parameters.AddWithValue("@Preco", Tb_Preco.Text.Trim());
+                    queryAtualizarServico.Parameters.AddWithValue("@Key_Servico", keyServico);
+
+                    queryAtualizarServico.ExecuteNonQuery();
+                    queryAtualizarServico.Parameters.Clear();
+
+                    DataBase.conexao.Close();
+
+                    servicos[Lst_Servicos.SelectedIndex].Nome = Convert.ToString(Tb_Servico.Text.Trim());
+                    servicos[Lst_Servicos.SelectedIndex].Preco = Convert.ToDecimal(Tb_Preco.Text.Trim());
+
+                    Lst_Servicos.Items.Refresh();
+
+                    LimparCampos();
+
+                    Tb_Servico.IsReadOnly = true;
+                    Tb_Preco.IsReadOnly = true;
+                    Lst_Servicos.IsEnabled = true;
+                    Btn_GuardarServico.Visibility = Visibility.Hidden;
+                    Btn_CancelarServico.Visibility = Visibility.Hidden;
+                    Btn_AdicionarServico.Visibility = Visibility.Visible;
+                    Btn_AtualizarServico.Visibility = Visibility.Visible;
+                    Btn_ApagarServico.Visibility = Visibility.Visible;
+                }
+                catch (Exception ex)
+                {
+                    Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
+                }
+            }
+        }
+
+        //Lista servicos
+        private void Lst_Servicos_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            long trabalhosServico;
+
+            if (Lst_Servicos.SelectedIndex >= 0)
+            {
+                Lbl_CodigoServico.Content = servicos[Lst_Servicos.SelectedIndex].ChaveServico;
+                Tb_Servico.Text = servicos[Lst_Servicos.SelectedIndex].Nome;
+                Tb_Preco.Text = servicos[Lst_Servicos.SelectedIndex].Preco.ToString();
+
+                Btn_AtualizarServico.IsEnabled = true;
+
+                try
+                {
+                    DataBase.conexao.Open();
+                    queryProcurarTrabalhosServico.Connection = DataBase.conexao;
+                    queryProcurarTrabalhosServico.Parameters.AddWithValue("@Key_Servico", servicos[Lst_Servicos.SelectedIndex].ChaveServico);
+
+                    Reader = queryProcurarTrabalhosServico.ExecuteReader();
+                    queryProcurarTrabalhosServico.Parameters.Clear();
+
+                    if (Reader.HasRows)
+                    {
+                        Reader.Read();
+
+                        trabalhosServico = Convert.ToInt64(Reader["Contagem"].ToString());
+
+                        if (trabalhosServico > 0)
+                        {
+                            Btn_ApagarServico.IsEnabled = false;
+                        }
+                        else if (trabalhosServico == 0)
+                        {
+                            Btn_ApagarServico.IsEnabled = true;
+                        }
+                    }
+                    else
+                    {
+                        Btn_ApagarServico.IsEnabled = true;
+                    }
+
+                    Reader.Close();
+                    DataBase.conexao.Close();
+                }
+                catch (Exception ex)
+                {
+                    Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
+                }
+            }
+            else if (Lst_Servicos.SelectedIndex == -1)
+            {
+                Btn_AtualizarServico.IsEnabled = false;
+                Btn_ApagarServico.IsEnabled = false;
+            }
+        }
+
+        //Botao cancelar novo servico
+        private void Btn_CancelarServico_Click(object sender, RoutedEventArgs e)
+        {
+            LimparCampos();
+
+            NomeValido = false;
+            PrecoValido = false;
+            Tb_Servico.IsReadOnly = true;
+            Tb_Preco.IsReadOnly = true;
+            Lst_Servicos.IsEnabled = true;
+            Btn_GuardarServico.Visibility = Visibility.Hidden;
+            Btn_GuardarAlteracoes.Visibility = Visibility.Hidden;
+            Btn_AdicionarServico.Visibility = Visibility.Visible;
+            Btn_AtualizarServico.Visibility = Visibility.Visible;
+            Btn_ApagarServico.Visibility = Visibility.Visible;
+            Btn_CancelarServico.Visibility = Visibility.Hidden;
+        }
+
         //Botao voltar para o menu principal
         private void Btn_Voltar_Click(object sender, RoutedEventArgs e)
         {
             if (Adicionar)
             {
-                Decimal? preco = Convert.ToDecimal(Tb_Preco.Text);
+                decimal? preco;
+
+                try
+                {
+                    preco = Convert.ToDecimal(Tb_Preco.Text);
+                }
+                catch (Exception)
+                {
+                    preco = null;
+                }
 
                 EditarServicoCampos.ChaveServico = Convert.ToInt64(Lbl_CodigoServico.Content);
                 EditarServicoCampos.Nome = Tb_Servico.Text;
@@ -226,6 +395,7 @@ namespace Trabalhos
             char[] preco = Tb_Preco.Text.ToCharArray();
 
             bool comma = false;
+            byte pos = Convert.ToByte(Tb_Preco.SelectionStart);
 
             for (int i = 0; i < preco.Length; i++)
             {
@@ -233,15 +403,24 @@ namespace Trabalhos
                 {
                     comma = true;
                     preco[i] = ',';
-                    Tb_Preco.Text = preco.ToString();
+                    Tb_Preco.Text = new string(preco);
+                    Tb_Preco.SelectionStart = pos;
                 }
                 else if (comma == true && (preco[i] == ',' || preco[i] == '.'))
                 {
                     Tb_Preco.Text = Tb_Preco.Text.Remove(i, 1);
                     Array.Clear(preco, 0, preco.Length);
                     preco = Tb_Preco.Text.TrimStart().ToCharArray();
-                    Tb_Preco.SelectionStart = i;
+                    Tb_Preco.SelectionStart = pos;
                 }
+            }
+
+            if (Tb_Preco.Text.Length > 0 && preco[0] == ',')
+            {
+                Tb_Preco.Text = Tb_Preco.Text.Remove(0, 1);
+                Array.Clear(preco, 0, preco.Length);
+                preco = Tb_Preco.Text.TrimStart().ToCharArray();
+                Tb_Preco.SelectionStart = pos;
             }
 
             for (int i = 0; i < preco.Length; i++)
@@ -267,6 +446,17 @@ namespace Trabalhos
             {
                 Lbl_AvisoPreco.Visibility = Visibility.Visible;
             }
+
+            if (Tb_Preco.Text.Length <= 0 || Convert.ToDecimal(Tb_Preco.Text) == 0)
+            {
+                PrecoValido = false;
+            }
+            else
+            {
+                PrecoValido = true;
+            }
+
+            AtualizarBotoes();
         }
 
         //Funçoes gerais
