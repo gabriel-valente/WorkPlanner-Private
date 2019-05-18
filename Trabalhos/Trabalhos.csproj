@@ -145,6 +145,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="GerirTarefas.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="GerirTrabalhos.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -166,6 +170,9 @@
     </Compile>
     <Compile Include="GerirServicos.xaml.cs">
       <DependentUpon>GerirServicos.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GerirTarefas.xaml.cs">
+      <DependentUpon>GerirTarefas.xaml</DependentUpon>
     </Compile>
     <Compile Include="GerirTrabalhos.xaml.cs">
       <DependentUpon>GerirTrabalhos.xaml</DependentUpon>
@@ -230,6 +237,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ResetClientes.sql" />
+    <Content Include="Trabalhos.mdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Trabalhos_log.ldf">
+      <DependentUpon>Trabalhos.mdf</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

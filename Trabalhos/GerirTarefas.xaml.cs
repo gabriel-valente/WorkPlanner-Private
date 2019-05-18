@@ -168,7 +168,7 @@ namespace Trabalhos
             Grd_ValidarApagar.Visibility = Visibility.Visible;
         }
 
-        //Botao confirmar apagar cliente
+        //Botao confirmar apagar tarefa
         private void Btn_ConfirmarApagar_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -207,7 +207,7 @@ namespace Trabalhos
         }
 
         //Funçoes gerais
-        //Ligar com base de dados e ler todos os servicos
+        //Ligar com base de dados e ler todos os dados
         void LigarBaseDados()
         {
             try

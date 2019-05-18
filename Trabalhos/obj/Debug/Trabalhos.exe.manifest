@@ -102,14 +102,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Trabalhos.exe" size="117160">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Trabalhos.exe" size="142248">
       <assemblyIdentity name="Trabalhos" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>8jpUTJxobadgF0eC+x2+2GpITFV32c4lafAyev51iSM=</dsig:DigestValue>
+        <dsig:DigestValue>FEAJ1PZJ3NV8cgNOajGpEXFBzF35FUqHeVwt9l/i3kA=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -129,6 +129,24 @@
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
       <dsig:DigestValue>0c+MOfUab/Toc29NL5gntXBmIzzcHddnG30I7k/jWIU=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Trabalhos.mdf" size="39256064" writeableType="applicationData">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>3/TIiHFqm07vhs6dHYSa5j8EJg7AoG/MhT5K1V06hc4=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Trabalhos_log.ldf" size="8388608" writeableType="applicationData">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>1LRK6So73VoXmZ8zgyfCGxvywjMvEAuv9R4cPXOuiGQ=</dsig:DigestValue>
     </hash>
   </file>
 </asmv1:assembly>

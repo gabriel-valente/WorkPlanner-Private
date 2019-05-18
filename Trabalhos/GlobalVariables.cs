@@ -7,6 +7,11 @@ using System.Data.SqlClient;
 
 namespace Trabalhos
 {
+    public static class InterPages
+    {
+        public static string KeyTrabalho;
+    }
+
     public static class DataBase
     {
         public static SqlConnection conexao;

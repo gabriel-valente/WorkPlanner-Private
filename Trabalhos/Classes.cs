@@ -14,6 +14,14 @@ namespace Trabalhos
         public string Descricao { get; set; }
     }
 
+    public class Tempo
+    {
+        public string ChaveTempo { get; set; }
+        public string ChaveTarefa { get; set; }
+        public DateTime DataInicio { get; set; }
+        public DateTime DataFim { get; set; }
+    }
+
     public class Tarefa
     {
         public string ChaveTarefa { get; set; }

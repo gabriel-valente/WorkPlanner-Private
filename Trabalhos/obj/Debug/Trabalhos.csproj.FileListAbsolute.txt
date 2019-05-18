@@ -4,7 +4,6 @@ E:\PAP\Trabalhos\Trabalhos\obj\Debug\App.g.cs
 E:\PAP\Trabalhos\Trabalhos\obj\Debug\MainWindow.baml
 E:\PAP\Trabalhos\Trabalhos\obj\Debug\Trabalhos.csproj.GenerateResource.cache
 E:\PAP\Trabalhos\Trabalhos\obj\Debug\Trabalhos.csproj.CoreCompileInputs.cache
-E:\PAP\Trabalhos\Trabalhos\bin\Debug\Google.Protobuf.dll
 E:\PAP\Trabalhos\Trabalhos\bin\Debug\Google.Protobuf.xml
 E:\PAP\Trabalhos\Trabalhos\obj\Debug\Trabalhos.csproj.CopyComplete
 E:\PAP\Trabalhos\Trabalhos\obj\Debug\PaginaPrincipal.g.cs
@@ -14,12 +13,8 @@ E:\PAP\Trabalhos\Trabalhos\obj\Debug\GerirClientes.baml
 E:\PAP\Trabalhos\Trabalhos\obj\Debug\App.baml
 E:\PAP\Trabalhos\Trabalhos\obj\Debug\Definicoes.g.cs
 E:\PAP\Trabalhos\Trabalhos\obj\Debug\Definicoes.baml
-E:\PAP\Trabalhos\Trabalhos\bin\Debug\Microsoft.WindowsAPICodePack.dll
-E:\PAP\Trabalhos\Trabalhos\bin\Debug\Microsoft.WindowsAPICodePack.Shell.dll
 E:\PAP\Trabalhos\Trabalhos\bin\Debug\Microsoft.WindowsAPICodePack.xml
 E:\PAP\Trabalhos\Trabalhos\bin\Debug\Microsoft.WindowsAPICodePack.Shell.xml
-E:\PAP\Trabalhos\Trabalhos\bin\Debug\EntityFramework.dll
-E:\PAP\Trabalhos\Trabalhos\bin\Debug\EntityFramework.SqlServer.dll
 E:\PAP\Trabalhos\Trabalhos\bin\Debug\EntityFramework.xml
 E:\PAP\Trabalhos\Trabalhos\bin\Debug\EntityFramework.SqlServer.xml
 E:\PAP\Trabalhos\Trabalhos\bin\Debug\Trabalhos.exe.config
@@ -40,3 +35,12 @@ E:\PAP\Trabalhos\Trabalhos\obj\Debug\GerirServicos.g.cs
 E:\PAP\Trabalhos\Trabalhos\obj\Debug\GerirTrabalhos.g.cs
 E:\PAP\Trabalhos\Trabalhos\obj\Debug\GerirTrabalhos.baml
 E:\PAP\Trabalhos\Trabalhos\obj\Debug\GerirServicos.baml
+E:\PAP\Trabalhos\Trabalhos\obj\Debug\GerirTarefas.g.cs
+E:\PAP\Trabalhos\Trabalhos\bin\Debug\Trabalhos.mdf
+E:\PAP\Trabalhos\Trabalhos\bin\Debug\Trabalhos_log.ldf
+E:\PAP\Trabalhos\Trabalhos\bin\Debug\EntityFramework.dll
+E:\PAP\Trabalhos\Trabalhos\bin\Debug\EntityFramework.SqlServer.dll
+E:\PAP\Trabalhos\Trabalhos\bin\Debug\Google.Protobuf.dll
+E:\PAP\Trabalhos\Trabalhos\bin\Debug\Microsoft.WindowsAPICodePack.dll
+E:\PAP\Trabalhos\Trabalhos\bin\Debug\Microsoft.WindowsAPICodePack.Shell.dll
+E:\PAP\Trabalhos\Trabalhos\obj\Debug\GerirTarefas.baml
