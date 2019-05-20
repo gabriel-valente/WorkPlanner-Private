@@ -27,11 +27,7 @@ namespace Trabalhos
         public string ChaveTarefa { get; set; }
         public string ChaveTrabalho { get; set; }
         public int ChaveServico { get; set; }
-        public DateTime DataInicio { get; set; }
-        public DateTime DataFim { get; set; }
-        public TimeSpan TempoDecorrido { get; set; }
         public decimal Desconto { get; set; }
-        public decimal Preco { get; set; }
     }
 
     public class Servico
