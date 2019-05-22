@@ -19,8 +19,8 @@
             <RowDefinition Height="4*"/>
         </Grid.RowDefinitions>
 
-        <Label Grid.Row="0" Grid.Column="0" Content="Tarefas do trabalho " HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="10,10,10,0" Height="31"/>
-        <ListBox x:Name="Lst_Tarefas" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="10,49,10,10" VerticalAlignment="Stretch">
+        <Label x:Name="Lbl_Trabalho" Grid.Row="0" Grid.Column="0" Content="Tarefas do trabalho " HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="10,10,10,0" Height="31"/>
+        <ListBox x:Name="Lst_Tarefas" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="10,49,10,10" VerticalAlignment="Stretch" SelectionChanged="Lst_Tarefas_SelectionChanged">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
