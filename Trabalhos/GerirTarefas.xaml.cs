@@ -54,6 +54,7 @@ namespace Trabalhos
 
         bool KeyValido = false;
         bool ServicoValido = false;
+        bool TempoValido = false;
         bool DataInicioValido = false;
         bool DataFimValido = false;
 
@@ -281,102 +282,72 @@ namespace Trabalhos
                 Lbl_Desconto.Content = ("{0} %", Sld_Desconto.Value);
                 Lbl_Preco.Content = ("{0} €", preco);
 
-                Btn_AtualizarCliente.IsEnabled = true;
-
-                try
-                {
-                    DataBase.conexao.Open();
-                    queryProcurarTrabalhosCliente.Connection = DataBase.conexao;
-                    queryProcurarTrabalhosCliente.Parameters.AddWithValue("@Key_Cliente", clientes[Lst_Clientes.SelectedIndex].ChaveCliente);
-
-                    Reader = queryProcurarTrabalhosCliente.ExecuteReader();
-                    queryProcurarTrabalhosCliente.Parameters.Clear();
-
-                    if (Reader.HasRows)
-                    {
-                        Reader.Read();
-
-                        trabalhosCliente = Convert.ToInt64(Reader["Contagem"].ToString());
-
-                        if (trabalhosCliente > 0)
-                        {
-                            Btn_ApagarCliente.IsEnabled = false;
-                        }
-                        else if (trabalhosCliente == 0)
-                        {
-                            Btn_ApagarCliente.IsEnabled = true;
-                        }
-                    }
-                    else
-                    {
-                        Btn_ApagarCliente.IsEnabled = true;
-                    }
-
-                    Reader.Close();
-                    DataBase.conexao.Close();
-                }
-                catch (Exception ex)
-                {
-                    Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
-                }
+                Btn_AtualizarTarefa.IsEnabled = true;
+                Btn_ApagarTarefa.IsEnabled = true;
             }
-            else if (Lst_Clientes.SelectedIndex == -1)
+            else if (Lst_Tarefas.SelectedIndex == -1)
             {
-                Btn_AtualizarCliente.IsEnabled = false;
-                Btn_ApagarCliente.IsEnabled = false;
+                Btn_AtualizarTarefa.IsEnabled = false;
+                Btn_ApagarTarefa.IsEnabled = false;
             }
         }
 
         //Funçoes de validação
-        //Validar nome do cliente
-        private void Tb_NomeCliente_TextChanged(object sender, TextChangedEventArgs e)
+        //Validar servico
+        private void Cb_Servico_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            temporizador.Stop();
-
-            Tb_NomeCliente.Text = Tb_NomeCliente.Text.TrimStart();
-            char[] nome = Tb_NomeCliente.Text.ToCharArray();
-
-            if (!string.IsNullOrEmpty(Tb_NomeCliente.Text.TrimStart()) && !char.IsUpper(nome[0]))
+            if (Cb_Servico.SelectedIndex == -1)
             {
-                nome[0] = char.ToUpper(nome[0]);
-                Tb_NomeCliente.Text = new string(nome);
-                Tb_NomeCliente.SelectionStart = Tb_NomeCliente.Text.Length;
+                ServicoValido = false;
             }
-
-            for (int i = 0; i < nome.Length; i++)
+            else
             {
-
-                if (!ValidarNome.IsMatch(nome[i].ToString()) | (i >= 1 && char.IsWhiteSpace(nome[i]) & char.IsWhiteSpace(nome[i - 1])))
-                {
-                    Tb_NomeCliente.Text = Tb_NomeCliente.Text.Remove(i, 1);
-                    Array.Clear(nome, 0, nome.Length);
-                    nome = Tb_NomeCliente.Text.TrimStart().ToCharArray();
-                    Tb_NomeCliente.SelectionStart = i;
-                }
+                ServicoValido = true;
             }
-
-            for (int i = 0; i < nome.Length; i++)
-            {
-                if (i > 0 && char.IsWhiteSpace(nome[i - 1]) && !char.IsUpper(nome[i]))
-                {
-                    nome[i] = char.ToUpper(nome[i]);
-                    Tb_NomeCliente.Text = new string(nome);
-                    Tb_NomeCliente.SelectionStart = i + 1;
-                }
-
-                if (i > 0 && char.IsLetter(nome[i - 1]) && char.IsUpper(nome[i]))
-                {
-                    nome[i] = char.ToLower(nome[i]);
-                    Tb_NomeCliente.Text = new string(nome);
-                    Tb_NomeCliente.SelectionStart = i + 1;
-                }
-            }
-
-            NomeValido = false;
-
-            temporizador.Start();
 
             AtualizarBotoes();
+        }
+
+        //Validar conteudo de lista de tempo
+        private void Lst_Tempo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!Lst_Tempo.HasItems)
+            {
+                TempoValido = false;
+            }
+            else
+            {
+                TempoValido = true;
+            }
+
+            AtualizarBotoes();
+        }
+
+        //Validar Data inicio
+        private void Dp_DataInicio_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (Dp_DataInicio.SelectedDate > DateTime.Now)
+            {
+                Dp_DataInicio.SelectedDate = null;
+                Dp_DataInicio.DisplayDate = DateTime.Now;
+                Lbl_Erros.Text = "A data de inicio não pode ser após a este momento!";
+            }
+            else if (Dp_DataInicio.SelectedDate == Convert.ToDateTime(null))
+            {
+                Dp_DataInicio.SelectedDate = null;
+                Dp_DataInicio.DisplayDate = DateTime.Now;
+                Lbl_Erros.Text = "A data de inicio tem de ter um valor.";
+            }
+            else if (Dp_DataInicio.SelectedDate >= Dp_DataFim.SelectedDate)
+            {
+                Dp_DataInicio.SelectedDate = null;
+                Dp_DataInicio.DisplayDate = DateTime.Now;
+                Lbl_Erros.Text = "A data de inicio não pode ser após a data de fim";
+            }
+            else
+            {
+                Lbl_Erros.Text = null;
+            }
         }
 
         //Funçoes gerais
@@ -504,6 +475,10 @@ namespace Trabalhos
             //VerificarServico();
         }
 
+        private void Dp_DataInicio_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 
     class ListaTarefas

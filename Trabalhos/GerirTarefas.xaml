@@ -59,7 +59,7 @@
         <Label x:Name="Lbl_CodigoTarefa" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="11,10,10,0" Height="31"/>
         <Label Grid.Row="0" Grid.Column="1" Content="Serviço:" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="9,46,9,0" Height="31"/>
         <Label x:Name="Lbl_Servico" Grid.Row="0" Grid.Column="2"  HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="11,53,10,0" Height="21" FontSize="16"/>
-        <ComboBox x:Name="Cb_Servico" Grid.Row="0" Grid.Column="2"  HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="11,53,10,0" Height="21" FontSize="16" Visibility="Hidden"/>
+        <ComboBox x:Name="Cb_Servico" Grid.Row="0" Grid.Column="2"  HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="11,53,10,0" Height="21" FontSize="16" Visibility="Hidden" SelectionChanged="Cb_Servico_SelectionChanged"/>
         <Rectangle Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Height="1" VerticalAlignment="Top" Margin="0,79,0,0">
             <Rectangle.Fill>
                 <LinearGradientBrush EndPoint="0,0.5" StartPoint="1,0.5">
@@ -71,7 +71,7 @@
             </Rectangle.Fill>
         </Rectangle>
         <Label Grid.Row="0" Grid.Column="1" Content="Tempo:" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="9,82,9,0" Height="31"/>
-        <ListBox x:Name ="Lst_Tempo" Grid.Column="2" Height="102" Margin="10,82,115,0" VerticalAlignment="Top" SnapsToDevicePixels="True" Foreground="#FFEEEEEE" IsEnabled="False">
+        <ListBox x:Name ="Lst_Tempo" Grid.Column="2" Height="102" Margin="10,82,115,0" VerticalAlignment="Top" SnapsToDevicePixels="True" Foreground="#FFEEEEEE" IsEnabled="False" SelectionChanged="Lst_Tempo_SelectionChanged">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Horizontal" />
@@ -156,7 +156,7 @@
         <Button x:Name="Btn_ApagarTempo" Grid.Row="0" Grid.Column="2" Content="Apagar" Margin="0,136,10,0" HorizontalAlignment="Right" Width="100" Height="48" VerticalAlignment="Top" IsEnabled="False"/>
         <Label Grid.Row="0" Grid.Column="1" Content="Data/hora de inicio:" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="10,189,10,0" Height="31"/>
         <Label x:Name="Lbl_DataInicio" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="10,189,10,0" Height="31"/>
-        <DatePicker x:Name="Dp_DataInicio" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,195,0,0" FontSize="16" Height="21" Width="230" IsTodayHighlighted="False" SelectedDateFormat="Short" BorderThickness="0" Padding="0" BorderBrush="{x:Null}" IsTabStop="True" Visibility="Visible">
+        <DatePicker x:Name="Dp_DataInicio" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,195,0,0" FontSize="16" Height="21" Width="230" IsTodayHighlighted="False" SelectedDateFormat="Short" BorderThickness="0" Padding="0" BorderBrush="{x:Null}" IsTabStop="True" Visibility="Visible" SelectedDateChanged="Dp_DataInicio_SelectedDateChanged">
             <DatePicker.Resources>
                 <Style TargetType="{x:Type DatePickerTextBox}">
                     <Setter Property="Control.Template">
