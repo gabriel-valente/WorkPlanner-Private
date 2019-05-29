@@ -83,6 +83,14 @@ namespace Trabalhos
             Lst_Tarefas.ItemsSource = listaTarefa;
             Lst_Tarefas.Items.Refresh();
 
+            foreach (Servico item in servicos)
+            {
+                if (listaTarefa.Find(lst => lst.Servico == item.Nome) != null)
+                {
+                    servicos.Remove(item);
+                }
+            }
+
             Cb_Servico.ItemsSource = servicos;
             Cb_Servico.Items.Refresh();
         }
@@ -281,103 +289,15 @@ namespace Trabalhos
                 Lbl_Desconto.Content = ("{0} %", Sld_Desconto.Value);
                 Lbl_Preco.Content = ("{0} €", preco);
 
-                Btn_AtualizarCliente.IsEnabled = true;
-
-                try
-                {
-                    DataBase.conexao.Open();
-                    queryProcurarTrabalhosCliente.Connection = DataBase.conexao;
-                    queryProcurarTrabalhosCliente.Parameters.AddWithValue("@Key_Cliente", clientes[Lst_Clientes.SelectedIndex].ChaveCliente);
-
-                    Reader = queryProcurarTrabalhosCliente.ExecuteReader();
-                    queryProcurarTrabalhosCliente.Parameters.Clear();
-
-                    if (Reader.HasRows)
-                    {
-                        Reader.Read();
-
-                        trabalhosCliente = Convert.ToInt64(Reader["Contagem"].ToString());
-
-                        if (trabalhosCliente > 0)
-                        {
-                            Btn_ApagarCliente.IsEnabled = false;
-                        }
-                        else if (trabalhosCliente == 0)
-                        {
-                            Btn_ApagarCliente.IsEnabled = true;
-                        }
-                    }
-                    else
-                    {
-                        Btn_ApagarCliente.IsEnabled = true;
-                    }
-
-                    Reader.Close();
-                    DataBase.conexao.Close();
-                }
-                catch (Exception ex)
-                {
-                    Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
-                }
+                Btn_AtualizarTarefa.IsEnabled = true;
+                Btn_ApagarTarefa.IsEnabled = true;
             }
-            else if (Lst_Clientes.SelectedIndex == -1)
+            else if (Lst_Tarefas.SelectedIndex == -1)
             {
-                Btn_AtualizarCliente.IsEnabled = false;
-                Btn_ApagarCliente.IsEnabled = false;
+                Btn_AtualizarTarefa.IsEnabled = false;
+                Btn_ApagarTarefa.IsEnabled = false;
             }
-        }
-
-        //Funçoes de validação
-        //Validar nome do cliente
-        private void Tb_NomeCliente_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            temporizador.Stop();
-
-            Tb_NomeCliente.Text = Tb_NomeCliente.Text.TrimStart();
-            char[] nome = Tb_NomeCliente.Text.ToCharArray();
-
-            if (!string.IsNullOrEmpty(Tb_NomeCliente.Text.TrimStart()) && !char.IsUpper(nome[0]))
-            {
-                nome[0] = char.ToUpper(nome[0]);
-                Tb_NomeCliente.Text = new string(nome);
-                Tb_NomeCliente.SelectionStart = Tb_NomeCliente.Text.Length;
-            }
-
-            for (int i = 0; i < nome.Length; i++)
-            {
-
-                if (!ValidarNome.IsMatch(nome[i].ToString()) | (i >= 1 && char.IsWhiteSpace(nome[i]) & char.IsWhiteSpace(nome[i - 1])))
-                {
-                    Tb_NomeCliente.Text = Tb_NomeCliente.Text.Remove(i, 1);
-                    Array.Clear(nome, 0, nome.Length);
-                    nome = Tb_NomeCliente.Text.TrimStart().ToCharArray();
-                    Tb_NomeCliente.SelectionStart = i;
-                }
-            }
-
-            for (int i = 0; i < nome.Length; i++)
-            {
-                if (i > 0 && char.IsWhiteSpace(nome[i - 1]) && !char.IsUpper(nome[i]))
-                {
-                    nome[i] = char.ToUpper(nome[i]);
-                    Tb_NomeCliente.Text = new string(nome);
-                    Tb_NomeCliente.SelectionStart = i + 1;
-                }
-
-                if (i > 0 && char.IsLetter(nome[i - 1]) && char.IsUpper(nome[i]))
-                {
-                    nome[i] = char.ToLower(nome[i]);
-                    Tb_NomeCliente.Text = new string(nome);
-                    Tb_NomeCliente.SelectionStart = i + 1;
-                }
-            }
-
-            NomeValido = false;
-
-            temporizador.Start();
-
-            AtualizarBotoes();
-        }
+        }        
 
         //Funçoes gerais
         //Ligar com base de dados e ler todos os dados
