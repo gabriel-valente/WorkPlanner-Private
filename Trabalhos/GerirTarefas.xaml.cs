@@ -31,7 +31,8 @@ namespace Trabalhos
         SqlCommand queryInserirTempo = new SqlCommand("INSERT INTO Tempo (Key_Tempo, Key_Tarefa, DataInicio, DataFim) VALUES (@KeyTempo, @KeyTarefa, @DataInicio, @DataFim)");
         SqlCommand queryAtualizarTarefa = new SqlCommand("UPDATE Tarefa SET Key_Servico = @KeyServico, Desconto = @Desconto WHERE Key_Tarefa = @KeyTarefa");
         SqlCommand queryApagarTarefa = new SqlCommand("DELETE FROM Tarefa WHERE Key_Tarefa = @KeyTarefa");
-        SqlCommand queryApagarTempo = new SqlCommand("DELETE FROM Tempo WHERE Key_Tarefa = @KeyTarefa");
+        SqlCommand queryApagarTodosTempos = new SqlCommand("DELETE FROM Tempo WHERE Key_Tarefa = @KeyTarefa");
+        SqlCommand queryApagarTempo = new SqlCommand("DELETE FROM Tempo WHERE Key_Tempo = @Key_Tempo");
 
         SqlDataReader Reader;
 
@@ -332,6 +333,35 @@ namespace Trabalhos
                 Dp_DataInicio.SelectedDate = null;
                 Dp_DataInicio.DisplayDate = DateTime.Today;
             }
+        }
+
+        //Botao colocar data atual
+        private void Btn_AtualDataInicio_Click(object sender, RoutedEventArgs e)
+        {
+            Dp_DataInicio.SelectedDate = DateTime.Now;
+            Dp_DataInicio.DisplayDate = DateTime.Now;
+        }
+
+        //Botao voltar á data anterior ou limpar data
+        private void Btn_LimparDataFim_Click(object sender, RoutedEventArgs e)
+        {
+            if (DataFim != null)
+            {
+                Dp_DataFim.SelectedDate = DataFim;
+                Dp_DataFim.DisplayDate = DataFim;
+            }
+            else
+            {
+                Dp_DataFim.SelectedDate = null;
+                Dp_DataFim.DisplayDate = DateTime.Today;
+            }
+        }
+
+        //Botao colocar data atual
+        private void Btn_AtualDataFim_Click(object sender, RoutedEventArgs e)
+        {
+            Dp_DataFim.SelectedDate = DateTime.Now;
+            Dp_DataFim.DisplayDate = DateTime.Now;
         }
 
         //Funçoes de validação
