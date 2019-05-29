@@ -116,7 +116,7 @@ namespace Trabalhos {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Trabalhos;component/definicoes.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/WorkPlanner;component/definicoes.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\Definicoes.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
