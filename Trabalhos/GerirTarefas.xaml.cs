@@ -31,7 +31,8 @@ namespace Trabalhos
         SqlCommand queryInserirTempo = new SqlCommand("INSERT INTO Tempo (Key_Tempo, Key_Tarefa, DataInicio, DataFim) VALUES (@KeyTempo, @KeyTarefa, @DataInicio, @DataFim)");
         SqlCommand queryAtualizarTarefa = new SqlCommand("UPDATE Tarefa SET Key_Servico = @KeyServico, Desconto = @Desconto WHERE Key_Tarefa = @KeyTarefa");
         SqlCommand queryApagarTarefa = new SqlCommand("DELETE FROM Tarefa WHERE Key_Tarefa = @KeyTarefa");
-        SqlCommand queryApagarTempo = new SqlCommand("DELETE FROM Tempo WHERE Key_Tarefa = @KeyTarefa");
+        SqlCommand queryApagarTodosTempos = new SqlCommand("DELETE FROM Tempo WHERE Key_Tarefa = @KeyTarefa");
+        SqlCommand queryApagarTempo = new SqlCommand("DELETE FROM Tempo WHERE Key_Tempo = @Key_Tempo");
 
         SqlDataReader Reader;
 
@@ -52,8 +53,12 @@ namespace Trabalhos
             return new string(Enumerable.Range(1, length).Select(_ => chars[random.Next(chars.Length)]).ToArray());
         }
 
+        DateTime DataInicio;
+        DateTime DataFim;
+
         bool KeyValido = false;
         bool ServicoValido = false;
+        bool TempoValido = false;
         bool DataInicioValido = false;
         bool DataFimValido = false;
 
@@ -62,7 +67,12 @@ namespace Trabalhos
         {
             InitializeComponent();
 
-            Lbl_Trabalho.Content = ("Tarefas do trabalho {0}", InterPages.KeyTrabalho);
+              ////////////////////
+             /// REMOVER ISTO ///
+            ////////////////////
+            InterPages.KeyTrabalho = "abc";
+
+            Lbl_Trabalho.Content = "Tarefas do trabalho " + InterPages.KeyTrabalho;
 
             LigarBaseDados();
 
@@ -83,15 +93,8 @@ namespace Trabalhos
             Lst_Tarefas.ItemsSource = listaTarefa;
             Lst_Tarefas.Items.Refresh();
 
-            foreach (Servico item in servicos)
-            {
-                if (listaTarefa.Find(lst => lst.Servico == item.Nome) != null)
-                {
-                    servicos.Remove(item);
-                }
-            }
-
             Cb_Servico.ItemsSource = servicos;
+            Cb_Servico.DisplayMemberPath = "Nome";
             Cb_Servico.Items.Refresh();
         }
 
@@ -297,7 +300,133 @@ namespace Trabalhos
                 Btn_AtualizarTarefa.IsEnabled = false;
                 Btn_ApagarTarefa.IsEnabled = false;
             }
-        }        
+        }
+
+        //Lista Tempo e Validar
+        private void Lst_Tempo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DataInicio = tempos[Lst_Tempo.SelectedIndex].DataInicio;
+            DataFim = tempos[Lst_Tempo.SelectedIndex].DataFim;
+
+            if (!Lst_Tempo.HasItems)
+            {
+                TempoValido = false;
+            }
+            else
+            {
+                TempoValido = true;
+            }
+
+            AtualizarBotoes();
+        }
+
+        //Botao voltar á data anterior ou limpar data
+        private void Btn_LimparDataInicio_Click(object sender, RoutedEventArgs e)
+        {
+            if (DataInicio != null)
+            {
+                Dp_DataInicio.SelectedDate = DataInicio;
+                Dp_DataInicio.DisplayDate = DataInicio;
+            }
+            else
+            {
+                Dp_DataInicio.SelectedDate = null;
+                Dp_DataInicio.DisplayDate = DateTime.Today;
+            }
+        }
+
+        //Botao colocar data atual
+        private void Btn_AtualDataInicio_Click(object sender, RoutedEventArgs e)
+        {
+            Dp_DataInicio.SelectedDate = DateTime.Now;
+            Dp_DataInicio.DisplayDate = DateTime.Now;
+        }
+
+        //Botao voltar á data anterior ou limpar data
+        private void Btn_LimparDataFim_Click(object sender, RoutedEventArgs e)
+        {
+            if (DataFim != null)
+            {
+                Dp_DataFim.SelectedDate = DataFim;
+                Dp_DataFim.DisplayDate = DataFim;
+            }
+            else
+            {
+                Dp_DataFim.SelectedDate = null;
+                Dp_DataFim.DisplayDate = DateTime.Today;
+            }
+        }
+
+        //Botao colocar data atual
+        private void Btn_AtualDataFim_Click(object sender, RoutedEventArgs e)
+        {
+            Dp_DataFim.SelectedDate = DateTime.Now;
+            Dp_DataFim.DisplayDate = DateTime.Now;
+        }
+
+        //Funçoes de validação
+        //Validar servico
+        private void Cb_Servico_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (Cb_Servico.SelectedIndex == -1)
+            {
+                ServicoValido = false;
+            }
+            else
+            {
+                ServicoValido = true;
+            }
+
+            AtualizarBotoes();
+        }
+
+        //Validar Data inicio
+        private void Dp_DataInicio_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (Dp_DataInicio.SelectedDate > DateTime.Now)
+            {
+                Dp_DataInicio.SelectedDate = null;
+                Dp_DataInicio.DisplayDate = DateTime.Now;
+                Lbl_Erros.Text = "A data de inicio não pode ser após a este momento!";
+            }
+            else if (Dp_DataInicio.SelectedDate == Convert.ToDateTime(null))
+            {
+                Dp_DataInicio.SelectedDate = null;
+                Dp_DataInicio.DisplayDate = DateTime.Now;
+                Lbl_Erros.Text = "A data de inicio tem de ter um valor.";
+            }
+            else if (Dp_DataInicio.SelectedDate >= Dp_DataFim.SelectedDate)
+            {
+                Dp_DataInicio.SelectedDate = null;
+                Dp_DataInicio.DisplayDate = DateTime.Now;
+                Lbl_Erros.Text = "A data de inicio não pode ser após a data de fim";
+            }
+            else
+            {
+                Lbl_Erros.Text = null;
+            }
+        }
+
+        //Validar Data fim
+        private void Dp_DataFim_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (Dp_DataFim.SelectedDate > DateTime.Now)
+            {
+                Dp_DataInicio.SelectedDate = null;
+                Dp_DataInicio.DisplayDate = DateTime.Now;
+                Lbl_Erros.Text = "A data de fim não pode ser após a este momento!";
+            }
+            else if (Dp_DataInicio.SelectedDate >= Dp_DataFim.SelectedDate)
+            {
+                Dp_DataInicio.SelectedDate = null;
+                Dp_DataInicio.DisplayDate = DateTime.Now;
+                Lbl_Erros.Text = "A data de fim não pode ser antes da data de inicio!";
+            }
+            else
+            {
+                Lbl_Erros.Text = null;
+            }
+        }
 
         //Funçoes gerais
         //Ligar com base de dados e ler todos os dados
@@ -326,6 +455,9 @@ namespace Trabalhos
                 {
                     servicos.Add(new Servico { ChaveServico = Convert.ToInt32(Reader["Key_Servico"].ToString()), Nome = Convert.ToString(Reader["Nome"].ToString()), Preco = Convert.ToDecimal(Reader["Preco"].ToString()) });
                 }
+
+                Reader.Close();
+                DataBase.conexao.Close();
             }
             catch (Exception ex)
             {
@@ -333,9 +465,6 @@ namespace Trabalhos
                 Btn_AdicionarTarefa.IsEnabled = false;
                 Btn_AtualizarTarefa.IsEnabled = false;
             }
-
-            Reader.Close();
-            DataBase.conexao.Close();
         }
 
         //Limpar todos os campos que estao indroduzidos
@@ -389,8 +518,8 @@ namespace Trabalhos
                 {
                     key = RandomString(20);
                     queryIndexTarefa.Connection = DataBase.conexao;
-                    queryTodasTarefas.Parameters.AddWithValue("@KeyTarefa", key);
-                    Reader = queryTodasTarefas.ExecuteReader();
+                    queryIndexTarefa.Parameters.AddWithValue("@KeyTarefa", key);
+                    Reader = queryIndexTarefa.ExecuteReader();
 
                     if (!Reader.HasRows)
                     {
@@ -423,7 +552,6 @@ namespace Trabalhos
 
             //VerificarServico();
         }
-
     }
 
     class ListaTarefas

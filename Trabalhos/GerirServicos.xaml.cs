@@ -564,6 +564,7 @@ namespace Trabalhos
                 catch (Exception ex)
                 {
                     Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
+                    Console.WriteLine(ex.ToString());
                     NomeValido = false;
                 }
             }

@@ -140,7 +140,7 @@ namespace Trabalhos {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Trabalhos;component/paginaprincipal.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/WorkPlanner;component/paginaprincipal.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\PaginaPrincipal.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

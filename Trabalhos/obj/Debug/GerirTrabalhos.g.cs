@@ -204,7 +204,7 @@ namespace Trabalhos {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Trabalhos;component/gerirtrabalhos.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/WorkPlanner;component/gerirtrabalhos.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\GerirTrabalhos.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
