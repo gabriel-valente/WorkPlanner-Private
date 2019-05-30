@@ -62,6 +62,8 @@ namespace Trabalhos
         bool DataInicioValido = false;
         bool DataFimValido = false;
 
+        bool Adicionar = false;
+
         //Iniciação
         public GerirTarefas()
         {
@@ -102,9 +104,47 @@ namespace Trabalhos
         //Butao adicionar nova tarefa
         private void Btn_AdicionarTarefa_Click(object sender, RoutedEventArgs e)
         {
+            decimal preco = 0;
+
+            Adicionar = true;
+
             LimparCampos();
 
-            Lbl_CodigoTarefa.Content = ReservarChave("Tarefa");
+            if (EditarTarefaCampos.ChaveTarefa == null)
+            {
+                Lbl_CodigoTarefa.Content = ReservarChave("Tarefa");
+            }
+            else
+            {
+                Lbl_CodigoTarefa.Content = EditarTarefaCampos.ChaveTarefa;
+            }
+
+            Cb_Servico.SelectedItem = EditarTarefaCampos.Servico;
+
+            listaTempo.Clear();
+
+            foreach (Tempo item in EditarTarefaCampos.tempos)
+            {
+                TimeSpan tempoDecorrido;
+
+                try
+                {
+                    tempoDecorrido = item.DataFim - item.DataInicio;
+                    preco += servicos.Find(lst => lst.ChaveServico == tarefas.Find(lstt => lstt.ChaveTarefa == item.ChaveTarefa).ChaveServico).Preco;
+                }
+                catch (Exception)
+                {
+                    tempoDecorrido = new TimeSpan(0, 0, 0);
+                }
+
+                listaTempo.Add(new ListaTempo { ChaveTempo = item.ChaveTempo, DataInicio = item.DataInicio, DataFim = item.DataFim, TempoDecorrido = tempoDecorrido });
+            }
+
+            Lst_Tempo.ItemsSource = listaTempo;
+            Lst_Tempo.Items.Refresh();
+
+            Sld_Desconto.Value = EditarTarefaCampos.Desconto;
+            Lbl_Preco.Content = Convert.ToDouble(preco) * (1 - Sld_Desconto.Value); ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             Lbl_Servico.Visibility = Visibility.Hidden;
             Cb_Servico.Visibility = Visibility.Visible;
@@ -364,6 +404,43 @@ namespace Trabalhos
             Dp_DataFim.DisplayDate = DateTime.Now;
         }
 
+        //Botao voltar para o menu principal
+        private void Btn_Voltar_Click(object sender, RoutedEventArgs e)
+        {
+            if (Adicionar)
+            {
+                
+                DateTime? dataInicio = Dp_DataInicio.SelectedDate;
+                DateTime? dataFim = Dp_DataFim.SelectedDate;
+
+                if (Dp_DataInicio.Text == null)
+                {
+                    dataInicio = Convert.ToDateTime("01/01/0001 00:00:00");
+                }
+
+                if (Dp_DataFim.Text == null)
+                {
+                    dataFim = Convert.ToDateTime("01/01/0001 00:00:00");
+                }
+
+                EditarTarefaCampos.ChaveTarefa = Convert.ToString(Lbl_CodigoTarefa.Content);
+                EditarTarefaCampos.Servico = Cb_Servico.Text;
+
+                EditarTarefaCampos.tempos.Clear();
+
+                foreach (ListaTempo item in listaTempo)
+                {
+                    EditarTarefaCampos.tempos.Add(new Tempo { ChaveTempo = item.ChaveTempo, ChaveTarefa = null, DataInicio = item.DataInicio, DataFim = item.DataFim });
+                }
+
+                EditarTarefaCampos.DataInicio = dataInicio;
+                EditarTarefaCampos.DataFim = dataFim;
+                EditarTarefaCampos.Desconto = Sld_Desconto.Value;
+            }
+
+            ((MainWindow)Application.Current.MainWindow).Frm_Principal.GoBack();
+        }
+
         //Funçoes de validação
         //Validar servico
         private void Cb_Servico_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -395,7 +472,7 @@ namespace Trabalhos
                 Dp_DataInicio.DisplayDate = DateTime.Now;
                 Lbl_Erros.Text = "A data de inicio tem de ter um valor.";
             }
-            else if (Dp_DataInicio.SelectedDate >= Dp_DataFim.SelectedDate)
+            else if (Dp_DataInicio.SelectedDate >= Dp_DataFim.SelectedDate && Dp_DataFim.SelectedDate != Convert.ToDateTime(null))
             {
                 Dp_DataInicio.SelectedDate = null;
                 Dp_DataInicio.DisplayDate = DateTime.Now;
@@ -426,6 +503,12 @@ namespace Trabalhos
             {
                 Lbl_Erros.Text = null;
             }
+        }
+
+        //Atribuir valor do slider ao label
+        private void Sld_Desconto_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            Lbl_Desconto.Content = Math.Round(Sld_Desconto.Value, 2) + "%";
         }
 
         //Funçoes gerais

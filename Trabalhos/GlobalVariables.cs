@@ -47,4 +47,14 @@ namespace Trabalhos
         public static string Nome;
         public static decimal? Preco;
     }
+
+    public static class EditarTarefaCampos
+    {
+        public static string ChaveTarefa;
+        public static string Servico;
+        public static List<Tempo> tempos;
+        public static DateTime? DataInicio;
+        public static DateTime? DataFim;
+        public static double Desconto;
+    }
 }
