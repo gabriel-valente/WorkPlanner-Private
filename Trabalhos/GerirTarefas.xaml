@@ -203,7 +203,7 @@
         <Slider x:Name="Sld_Desconto" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="10,287,93,0" ValueChanged="Sld_Desconto_ValueChanged" Maximum="100" IsEnabled="False" IsSnapToTickEnabled="True" TickFrequency="0.01"/>
         <Label x:Name="Lbl_Desconto" Grid.Row="0" Grid.Column="2" VerticalAlignment="Top" HorizontalContentAlignment="Center" Margin="0,287,6,0" Height="20" FontSize="16" HorizontalAlignment="Right" Width="87" Content="" Padding="0" VerticalContentAlignment="Center"/>
         <Label Grid.Row="0" Grid.Column="1" Content="Preço:" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="5,313,10,0" Height="30"/>
-        <Label x:Name="Lbl_Preco" Grid.Row="0" Grid.Column="2"  HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="10,317,0,0" Height="22" FontSize="16" Width="149"/>
+        <Label x:Name="Lbl_Preco" Grid.Row="0" Grid.Column="2"  HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="10,318,0,0" Height="19" FontSize="16" Width="149" Content="" Padding="0"/>
 
         <Rectangle Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Height="1" VerticalAlignment="Bottom">
             <Rectangle.Fill>
@@ -218,9 +218,9 @@
         <Button x:Name="Btn_AdicionarTarefa" Grid.Row="1" Grid.Column="1" Content="Adicionar Nova Tarefa" Margin="10,10,0,0" Width="250" HorizontalAlignment="Left" Height="73" VerticalAlignment="Top" Click="Btn_AdicionarTarefa_Click" Grid.ColumnSpan="2"/>
         <Button x:Name="Btn_AtualizarTarefa" Grid.Row="1" Grid.Column="1" Content="Editar Tarefa Selecionada" Margin="10,89,0,89" Width="250" Height="73" HorizontalAlignment="Left" IsEnabled="False" Click="Btn_AtualizarTarefa_Click" Grid.ColumnSpan="2"/>
         <Button x:Name="Btn_ApagarTarefa" Grid.Row="1" Grid.Column="1" Content="Apagar Tarefa Selecionada" Margin="10,0,0,10" Width="250" Height="73" HorizontalAlignment="Left" IsEnabled="False" VerticalAlignment="Bottom" Click="Btn_ApagarTarefa_Click" Grid.ColumnSpan="2"/>
-        <Button x:Name="Btn_CancelarTarefa" Grid.Row="1" Grid.Column="2" Content="Cancelar" Margin="10,0,0,10" Width="250" HorizontalAlignment="Left" Height="90" VerticalAlignment="Bottom" Visibility="Hidden"/>
-        <Button x:Name="Btn_GuardarTarefa" Grid.Row="1" Grid.Column="2" Content="Guardar Tarefa" Margin="10,10,0,0" Height="90" Width="250" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Hidden" IsEnabled="False"/>
-        <Button x:Name="Btn_GuardarAlteracoes" Grid.Row="1" Grid.Column="2" Content="Guardar Alterações" Margin="10,10,0,0" Height="90" Width="250" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Hidden" IsEnabled="True"/>
+        <Button x:Name="Btn_CancelarTarefa" Grid.Row="1" Grid.Column="1" Content="Cancelar" Margin="10,0,0,10" Width="250" HorizontalAlignment="Left" Height="73" VerticalAlignment="Bottom" Grid.ColumnSpan="2" Visibility="Hidden"/>
+        <Button x:Name="Btn_GuardarTarefa" Grid.Row="1" Grid.Column="1" Content="Guardar Tarefa" Margin="10,10,0,0" Height="73" Width="250" VerticalAlignment="Top" HorizontalAlignment="Left" IsEnabled="False" Grid.ColumnSpan="2" Visibility="Hidden"/>
+        <Button x:Name="Btn_GuardarAlteracoes" Grid.Row="1" Grid.Column="1" Content="Guardar Alterações" Margin="9,10,0,0" Height="73" Width="251" VerticalAlignment="Top" HorizontalAlignment="Left" IsEnabled="True" Grid.ColumnSpan="2" Visibility="Hidden"/>
         <Button x:Name="Btn_Voltar" Grid.Row="1" Grid.Column="2" Content="Voltar" Margin="0,0,10,10" HorizontalAlignment="Right" Width="100" Height="50" VerticalAlignment="Bottom" Click="Btn_Voltar_Click"/>
         <ScrollViewer Grid.Row="1" Grid.Column="2" Margin="103,10,10,65" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Auto">
             <TextBlock x:Name="Lbl_Erros" Style="{StaticResource TextBlock}" TextWrapping="WrapWithOverflow" TextAlignment="Left"/>

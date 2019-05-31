@@ -37,6 +37,7 @@ namespace Trabalhos
         SqlDataReader Reader;
 
         DispatcherTimer temporizador = new DispatcherTimer();
+        DispatcherTimer sliderTemp = new DispatcherTimer();
 
         List<Servico> servicos = new List<Servico>();
         List<Tarefa> tarefas = new List<Tarefa>();
@@ -92,6 +93,9 @@ namespace Trabalhos
             temporizador.Interval = new TimeSpan(0, 0, 1);
             temporizador.Tick += new EventHandler(Timer_Tick);
 
+            sliderTemp.Interval = new TimeSpan(0, 0, 0, 0, 300);
+            sliderTemp.Tick += new EventHandler(Slider_Tick);
+
             Lst_Tarefas.ItemsSource = listaTarefa;
             Lst_Tarefas.Items.Refresh();
 
@@ -144,7 +148,7 @@ namespace Trabalhos
             Lst_Tempo.Items.Refresh();
 
             Sld_Desconto.Value = EditarTarefaCampos.Desconto;
-            Lbl_Preco.Content = Convert.ToDouble(preco) * (1 - Sld_Desconto.Value); ////////////////////////////////////////////////////////////////////////////////////////////////////////
+            Lbl_Preco.Content = preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))) + " €";
 
             Lbl_Servico.Visibility = Visibility.Hidden;
             Cb_Servico.Visibility = Visibility.Visible;
@@ -329,8 +333,8 @@ namespace Trabalhos
                 Lst_Tempo.Items.Refresh();
 
                 Sld_Desconto.Value = Convert.ToDouble(tarefas[Lst_Tarefas.SelectedIndex].Desconto);
-                Lbl_Desconto.Content = ("{0} %", Sld_Desconto.Value);
-                Lbl_Preco.Content = ("{0} €", preco);
+                Lbl_Desconto.Content = Math.Round(Sld_Desconto.Value, 2) + "%";
+                Lbl_Preco.Content = preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))) + " €";
 
                 Btn_AtualizarTarefa.IsEnabled = true;
                 Btn_ApagarTarefa.IsEnabled = true;
@@ -482,6 +486,19 @@ namespace Trabalhos
             {
                 Lbl_Erros.Text = null;
             }
+
+            DateTime value;
+
+            if (DateTime.TryParse(Dp_DataInicio.Text, out value))
+            {
+                DataInicioValido = true;
+            }
+            else
+            {
+                DataInicioValido = false;
+            }
+
+            AtualizarBotoes();
         }
 
         //Validar Data fim
@@ -503,12 +520,33 @@ namespace Trabalhos
             {
                 Lbl_Erros.Text = null;
             }
+
+            DateTime value;
+
+            if (Dp_DataFim.Text == null)
+            {
+                DataFimValido = true;
+            }
+            else if (DateTime.TryParse(Dp_DataFim.Text, out value))
+            {
+                DataFimValido = true;
+            }
+            else
+            {
+                DataFimValido = false;
+            }
+
+            AtualizarBotoes();
         }
 
         //Atribuir valor do slider ao label
         private void Sld_Desconto_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
+            sliderTemp.Stop();
+
             Lbl_Desconto.Content = Math.Round(Sld_Desconto.Value, 2) + "%";
+
+            sliderTemp.Start();
         }
 
         //Funçoes gerais
@@ -575,16 +613,23 @@ namespace Trabalhos
         //Atualiza os botoes caso os campos estejam incorretos ou corretos
         void AtualizarBotoes()
         {
-            //if (!NomeValido || !PrecoValido)
-            //{
-            //    Btn_GuardarServico.IsEnabled = false;
-            //    Btn_GuardarAlteracoes.IsEnabled = false;
-            //}
-            //else if (NomeValido && PrecoValido)
-            //{
-            //    Btn_GuardarServico.IsEnabled = true;
-            //    Btn_GuardarAlteracoes.IsEnabled = true;
-            //}
+            if (!DataInicioValido || !DataFimValido)
+            {
+                Btn_AdicionarTempo.IsEnabled = false;
+            }
+            else if (DataInicioValido && DataFimValido)
+            {
+                Btn_AdicionarTempo.IsEnabled = true;
+            }
+
+            if (!KeyValido || !ServicoValido || !TempoValido)
+            {
+                Btn_AdicionarTarefa.IsEnabled = false;
+            }
+            else if (KeyValido && ServicoValido && TempoValido)
+            {
+                Btn_AdicionarTarefa.IsEnabled = true;
+            }
         }
 
         //Verificar se chave existe na base de dados (Tabela: Tarefa, Tempo)
@@ -634,6 +679,21 @@ namespace Trabalhos
             temporizador.Stop();
 
             //VerificarServico();
+        }
+
+        //Chama função para atualizar o preço ao fim de 300ms
+        private void Slider_Tick(object sender, EventArgs e)
+        {
+            sliderTemp.Stop();
+
+            decimal preco = 0;
+
+            foreach (Tempo item in EditarTarefaCampos.tempos)
+            {
+                preco += servicos.Find(lst => lst.ChaveServico == tarefas.Find(lstt => lstt.ChaveTarefa == item.ChaveTarefa).ChaveServico).Preco;
+            }
+
+            Lbl_Preco.Content = preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))) + " €";
         }
     }
 
