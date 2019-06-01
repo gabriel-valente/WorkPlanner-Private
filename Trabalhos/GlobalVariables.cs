@@ -7,6 +7,14 @@ using System.Data.SqlClient;
 
 namespace Trabalhos
 {
+    public static class Functions
+    {
+        public static decimal Clamp(decimal value, decimal max = 100, decimal clampMax = 1)
+        {
+            return value * clampMax / max;
+        }
+    }
+
     public static class InterPages
     {
         public static string KeyTrabalho;
@@ -46,5 +54,15 @@ namespace Trabalhos
         public static long ChaveServico;
         public static string Nome;
         public static decimal? Preco;
+    }
+
+    public static class EditarTarefaCampos
+    {
+        public static string ChaveTarefa;
+        public static string Servico;
+        public static List<Tempo> tempos = new List<Tempo>();
+        public static DateTime? DataInicio;
+        public static DateTime? DataFim;
+        public static double Desconto;
     }
 }
