@@ -18,7 +18,7 @@
                 <LineBreak/>
                 <Run FontSize="30" Text="Depois disso aconcelho que adiciones serviços antes de tudo, depois podes adicionar os teus clientes e trabalhos."/>
                 <LineBreak/>
-                <Run FontSize="30" Text="Com o resto nao tens de te preocupar! &#x1f604;"/>
+                <Run FontSize="30" Text="Com o resto não tens de te preocupar! &#x1f604;"/>
             </TextBlock>
             <Button x:Name="Btn_EditarConfiguracao" Content="Editar Configuração" Margin="552,0,355,10" HorizontalAlignment="Center" Width="176" Height="75" VerticalAlignment="Bottom" Click="Btn_EditarConfiguracao_Click"/>
             <Button x:Name="Btn_FecharPrograma" Content="Fechar Programa" Margin="355,0,552,10" HorizontalAlignment="Center" Width="176" Height="75" VerticalAlignment="Bottom" Click="Btn_FecharPrograma_Click"/>

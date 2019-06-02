@@ -23,7 +23,7 @@ namespace Trabalhos
     public static class DataBase
     {
         public static SqlConnection conexao;
-        public static string stringConexao = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|Trabalhos.mdf; Integrated Security=True";
+        public static string stringConexao = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|WorkPlanner.mdf; Integrated Security=True";
     }
 
     public static class Configuracoes
