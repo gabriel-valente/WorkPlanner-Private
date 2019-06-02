@@ -37,7 +37,6 @@ namespace Trabalhos
         SqlDataReader Reader;
 
         DispatcherTimer temporizador = new DispatcherTimer();
-        DispatcherTimer sliderTemp = new DispatcherTimer();
 
         List<Servico> servicos = new List<Servico>();
         List<Tarefa> tarefas = new List<Tarefa>();
@@ -57,6 +56,7 @@ namespace Trabalhos
         DateTime DataInicio;
         DateTime DataFim;
 
+        decimal preco = 0;
         bool KeyValido = false;
         bool ServicoValido = false;
         bool TempoValido = false;
@@ -93,9 +93,6 @@ namespace Trabalhos
             temporizador.Interval = new TimeSpan(0, 0, 1);
             temporizador.Tick += new EventHandler(Timer_Tick);
 
-            sliderTemp.Interval = new TimeSpan(0, 0, 0, 0, 300);
-            sliderTemp.Tick += new EventHandler(Slider_Tick);
-
             Lst_Tarefas.ItemsSource = listaTarefa;
             Lst_Tarefas.Items.Refresh();
 
@@ -108,8 +105,6 @@ namespace Trabalhos
         //Butao adicionar nova tarefa
         private void Btn_AdicionarTarefa_Click(object sender, RoutedEventArgs e)
         {
-            decimal preco = 0;
-
             Adicionar = true;
 
             LimparCampos();
@@ -127,6 +122,8 @@ namespace Trabalhos
 
             listaTempo.Clear();
 
+            decimal valor = servicos.Find(lst => lst.Nome == EditarTarefaCampos.Servico).Preco;
+            preco = 0;
             foreach (Tempo item in EditarTarefaCampos.tempos)
             {
                 TimeSpan tempoDecorrido;
@@ -134,7 +131,7 @@ namespace Trabalhos
                 try
                 {
                     tempoDecorrido = item.DataFim - item.DataInicio;
-                    preco += servicos.Find(lst => lst.ChaveServico == tarefas.Find(lstt => lstt.ChaveTarefa == item.ChaveTarefa).ChaveServico).Preco;
+                    preco += valor * Convert.ToDecimal(TimeSpan.Parse(Convert.ToString(tempoDecorrido)).TotalHours);
                 }
                 catch (Exception)
                 {
@@ -148,7 +145,7 @@ namespace Trabalhos
             Lst_Tempo.Items.Refresh();
 
             Sld_Desconto.Value = EditarTarefaCampos.Desconto;
-            Lbl_Preco.Content = preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))) + " €";
+            Lbl_Preco.Content = String.Format("{0:###0.00}", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value)))) + " €";
 
             Lbl_Servico.Visibility = Visibility.Hidden;
             Cb_Servico.Visibility = Visibility.Visible;
@@ -173,8 +170,6 @@ namespace Trabalhos
         //Botao alterar tarefa selecionada
         private void Btn_AtualizarTarefa_Click(object sender, RoutedEventArgs e)
         {
-            decimal preco = 0;
-
             KeyValido = false;
             ServicoValido = true;
             DataInicioValido = true;
@@ -187,6 +182,8 @@ namespace Trabalhos
 
             listaTempo.Clear();
 
+            decimal valor = servicos.Find(lst => lst.ChaveServico == tarefas[Lst_Tarefas.SelectedIndex].ChaveServico).Preco;
+            preco = 0;
             foreach (Tempo item in tempos)
             {
                 if (item.ChaveTarefa == tarefas[Lst_Tarefas.SelectedIndex].ChaveTarefa)
@@ -196,7 +193,7 @@ namespace Trabalhos
                     try
                     {
                         tempoDecorrido = item.DataFim - item.DataInicio;
-                        preco += servicos.Find(lst => lst.ChaveServico == tarefas.Find(lstt => lstt.ChaveTarefa == item.ChaveTarefa).ChaveServico).Preco;
+                        preco += valor * Convert.ToDecimal(TimeSpan.Parse(Convert.ToString(tempoDecorrido)).TotalHours);
                     }
                     catch (Exception)
                     {
@@ -213,7 +210,7 @@ namespace Trabalhos
             Sld_Desconto.Value = Convert.ToDouble(tarefas[Lst_Tarefas.SelectedIndex].Desconto);
             Lbl_Desconto.Content = tarefas[Lst_Tarefas.SelectedIndex].Desconto;
 
-            Lbl_Preco.Content = preco;
+            Lbl_Preco.Content = String.Format("{0:###0.00}", preco) + " €";
 
             Lbl_Servico.Visibility = Visibility.Hidden;
             Cb_Servico.Visibility = Visibility.Visible;
@@ -293,7 +290,6 @@ namespace Trabalhos
         {
             if (Lst_Tarefas.SelectedIndex >= 0)
             {
-                decimal preco = 0;
                 DataBase.conexao = new SqlConnection(DataBase.stringConexao);
 
                 queryTodosTempos.Connection = DataBase.conexao;
@@ -312,6 +308,8 @@ namespace Trabalhos
 
                 listaTempo.Clear();
 
+                decimal valor = servicos.Find(lst => lst.ChaveServico == tarefas[Lst_Tarefas.SelectedIndex].ChaveServico).Preco;
+                preco = 0;
                 foreach (Tempo item in tempos)
                 {
                     TimeSpan tempoDecorrido;
@@ -319,7 +317,7 @@ namespace Trabalhos
                     try
                     {
                         tempoDecorrido = item.DataFim - item.DataInicio;
-                        preco += servicos.Find(lst => lst.ChaveServico == tarefas.Find(lstt => lstt.ChaveTarefa == item.ChaveTarefa).ChaveServico).Preco;
+                        preco += valor * Convert.ToDecimal(TimeSpan.Parse(Convert.ToString(tempoDecorrido)).TotalHours);
                     }
                     catch (Exception)
                     {
@@ -334,7 +332,7 @@ namespace Trabalhos
 
                 Sld_Desconto.Value = Convert.ToDouble(tarefas[Lst_Tarefas.SelectedIndex].Desconto);
                 Lbl_Desconto.Content = Math.Round(Sld_Desconto.Value, 2) + "%";
-                Lbl_Preco.Content = preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))) + " €";
+                Lbl_Preco.Content = String.Format("{0:###0.00}", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value)))) + " €";
 
                 Btn_AtualizarTarefa.IsEnabled = true;
                 Btn_ApagarTarefa.IsEnabled = true;
@@ -547,11 +545,8 @@ namespace Trabalhos
         //Atribuir valor do slider ao label
         private void Sld_Desconto_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            sliderTemp.Stop();
-
             Lbl_Desconto.Content = Math.Round(Sld_Desconto.Value, 2) + "%";
-
-            sliderTemp.Start();
+            Lbl_Preco.Content = String.Format("{0:###0.00}", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value)))) + " €";
         }
 
         //Funçoes gerais
@@ -689,21 +684,6 @@ namespace Trabalhos
             temporizador.Stop();
 
             //VerificarServico();
-        }
-
-        //Chama função para atualizar o preço ao fim de 300ms
-        private void Slider_Tick(object sender, EventArgs e)
-        {
-            sliderTemp.Stop();
-
-            decimal preco = 0;
-
-            foreach (Tempo item in EditarTarefaCampos.tempos)
-            {
-                preco += servicos.Find(lst => lst.ChaveServico == tarefas.Find(lstt => lstt.ChaveTarefa == item.ChaveTarefa).ChaveServico).Preco;
-            }
-
-            Lbl_Preco.Content = preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))) + " €";
         }
     }
 
