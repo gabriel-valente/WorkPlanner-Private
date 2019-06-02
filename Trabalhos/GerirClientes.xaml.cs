@@ -28,8 +28,8 @@ namespace Trabalhos
     public partial class GerirClientes : Page
     {
         SqlCommand queryTodosClientes = new SqlCommand("SELECT Key_Cliente, Nome, DataNascimento, Sexo, Morada, CodigoPostal.CodPostal , Cliente.Localidade, Email, Telemovel, Telefone FROM Cliente LEFT JOIN CodigoPostal ON CodigoPostal.Key_CodPostal=Cliente.Key_CodPostal");
-        SqlCommand queryIndexCliente = new SqlCommand("SELECT IDENT_CURRENT('Cliente') AS 'Index'");
-        SqlCommand queryInserirCliente = new SqlCommand("INSERT INTO Cliente (Nome, DataNascimento, Sexo, Morada, Key_CodPostal, Localidade, Email, Telemovel, Telefone) VALUES (@Nome, @DataNascimento, @Sexo, @Morada, @CodPostal, @Localidade, @Email, @Telemovel, @Telefone)");
+        SqlCommand queryIndexCliente = new SqlCommand("SELECT Key_Cliente FROM Cliente WHERE Key_Cliente = @KeyCliente");
+        SqlCommand queryInserirCliente = new SqlCommand("INSERT INTO Cliente (Key_Cliente, Nome, DataNascimento, Sexo, Morada, Key_CodPostal, Localidade, Email, Telemovel, Telefone) VALUES (@KeyCliente, @Nome, @DataNascimento, @Sexo, @Morada, @CodPostal, @Localidade, @Email, @Telemovel, @Telefone)");
         SqlCommand queryAtualizarCliente = new SqlCommand("UPDATE Cliente SET Nome = @Nome, DataNascimento = @DataNascimento, Sexo = @Sexo, Morada = @Morada, Key_CodPostal = @CodPostal, Localidade = @Localidade, Email = @Email, Telemovel = @Telemovel, Telefone = @Telefone WHERE Key_Cliente = @Key_Cliente");
         SqlCommand queryProcurarCodigoPostal = new SqlCommand("SELECT * FROM CodigoPostal WHERE CodPostal=@CodPostal GROUP BY Key_CodPostal, CodPostal, Localidade, Rua");
         SqlCommand queryProcurarCliente = new SqlCommand("SELECT * FROM Cliente WHERE Nome = @Nome");
@@ -43,6 +43,14 @@ namespace Trabalhos
         DispatcherTimer temporizador = new DispatcherTimer();
 
         List<Cliente> clientes = new List<Cliente>();
+
+        //Gerar chave aleatória 
+        public static string RandomString(int length)
+        {
+            Random random = new Random();
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            return new string(Enumerable.Range(1, length).Select(_ => chars[random.Next(chars.Length)]).ToArray());
+        }
 
         string keyCodigo;
         bool NomeValido = false;
@@ -78,7 +86,15 @@ namespace Trabalhos
 
             LimparCampos();
 
-            Lbl_CodigoCliente.Content = EditarClienteCampos.ChaveCliente;
+            if (EditarClienteCampos.ChaveCliente == null)
+            {
+                Lbl_CodigoCliente.Content = ReservarChave();
+            }
+            else
+            {
+                Lbl_CodigoCliente.Content = EditarClienteCampos.ChaveCliente;
+            }
+
             Tb_NomeCliente.Text = EditarClienteCampos.Nome;
 
             if (EditarClienteCampos.DataNascimento.ToString() != "01/01/0001 00:00:00")
@@ -125,26 +141,7 @@ namespace Trabalhos
             if (EditarClienteCampos.Telefone != 0)
             {
                 Tb_Telefone.Text = EditarClienteCampos.Telefone.ToString();
-            }
-
-            try
-            {
-                DataBase.conexao.Open();
-                queryIndexCliente.Connection = DataBase.conexao;
-
-                Reader = queryIndexCliente.ExecuteReader();
-
-                Reader.Read();
-
-                Lbl_CodigoCliente.Content = Convert.ToInt64(Reader["Index"].ToString()) + 1;
-
-                Reader.Close();
-                DataBase.conexao.Close();
-            }
-            catch (Exception ex)
-            {
-                Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
-            }
+            }  
 
             Tb_NomeCliente.IsReadOnly = false;
             Lbl_Nascimento.Visibility = Visibility.Hidden;
@@ -173,6 +170,8 @@ namespace Trabalhos
         //Botao alterar cliente selecionado
         private void Btn_AtualizarCliente_Click(object sender, RoutedEventArgs e)
         {
+            Adicionar = false;
+
             NomeValido = false;
             CodigoValido = true;
             EmailValido = true;
@@ -334,6 +333,7 @@ namespace Trabalhos
 
                         DataBase.conexao.Open();
                         queryInserirCliente.Connection = DataBase.conexao;
+                        queryInserirCliente.Parameters.AddWithValue("@KeyCliente", Lbl_CodigoCliente.Content.ToString());
                         queryInserirCliente.Parameters.AddWithValue("@Nome", Tb_NomeCliente.Text.Trim());
 
                         if (Dp_Nascimento.SelectedDate.HasValue)
@@ -381,7 +381,7 @@ namespace Trabalhos
                             codigoPostal = Convert.ToString(Tb_CodPostalEsquerda.Text.Trim() + "-" + Tb_CodPostalDireita.Text.Trim());
                         }
 
-                        clientes.Add(new Cliente { ChaveCliente = Convert.ToInt32(Lbl_CodigoCliente.Content), Nome = Convert.ToString(Tb_NomeCliente.Text.Trim()), DataNascimento = Convert.ToDateTime(dataNascimento.Value), Sexo = Convert.ToString(sexo), Morada = Convert.ToString(Tb_Morada.Text.Trim()), CodigoPostal = Convert.ToString(codigoPostal), Localidade = Convert.ToString(Tb_Localidade.Text.Trim()), Email = Convert.ToString(Tb_Email.Text.Trim()), Telemovel = Convert.ToInt64(telemovel), Telefone = Convert.ToInt64(telefone), Contacto = contacto });
+                        clientes.Add(new Cliente { ChaveCliente = Convert.ToString(Lbl_CodigoCliente.Content), Nome = Convert.ToString(Tb_NomeCliente.Text.Trim()), DataNascimento = Convert.ToDateTime(dataNascimento.Value), Sexo = Convert.ToString(sexo), Morada = Convert.ToString(Tb_Morada.Text.Trim()), CodigoPostal = Convert.ToString(codigoPostal), Localidade = Convert.ToString(Tb_Localidade.Text.Trim()), Email = Convert.ToString(Tb_Email.Text.Trim()), Telemovel = Convert.ToInt64(telemovel), Telefone = Convert.ToInt64(telefone), Contacto = contacto });
 
                         Lst_Clientes.Items.Refresh();
 
@@ -429,7 +429,6 @@ namespace Trabalhos
         {
             if ((Tb_CodPostalEsquerda.Text.Length == 0 & Tb_CodPostalDireita.Text.Length == 0) || (Tb_CodPostalEsquerda.Text.Length == 4 & Tb_CodPostalDireita.Text.Length == 3))
             {
-                long keyCliente = Convert.ToInt64(Lbl_CodigoCliente.Content.ToString());
                 DateTime? nascimento = null;
                 char sexo = 'I';
                 string codigo = Tb_CodPostalEsquerda.Text + "-" + Tb_CodPostalDireita.Text;
@@ -507,14 +506,12 @@ namespace Trabalhos
                         queryAtualizarCliente.Parameters.AddWithValue("@Sexo", sexo);
                         queryAtualizarCliente.Parameters.AddWithValue("@Morada", Tb_Morada.Text.Trim());
 
-                        if (Tb_CodPostalEsquerda.Text.Length == 0 && Tb_CodPostalDireita.Text.Length == 0)
+                        if (keyCodigo == null)
                         {
-                            keyCodigo = null;
                             queryAtualizarCliente.Parameters.AddWithValue("@CodPostal", DBNull.Value);
                         }
                         else
                         {
-                            keyCodigo = ProcurarCodigoPostal(codigo);
                             queryAtualizarCliente.Parameters.AddWithValue("@CodPostal", keyCodigo);
                         }
 
@@ -522,7 +519,7 @@ namespace Trabalhos
                         queryAtualizarCliente.Parameters.AddWithValue("@Email", Tb_Email.Text.Trim());
                         queryAtualizarCliente.Parameters.AddWithValue("@Telemovel", telemovel);
                         queryAtualizarCliente.Parameters.AddWithValue("@Telefone", telefone);
-                        queryAtualizarCliente.Parameters.AddWithValue("@Key_Cliente", keyCliente);
+                        queryAtualizarCliente.Parameters.AddWithValue("@Key_Cliente", Lbl_CodigoCliente.Content.ToString());
 
                         queryAtualizarCliente.ExecuteNonQuery();
                         queryAtualizarCliente.Parameters.Clear();
@@ -707,14 +704,14 @@ namespace Trabalhos
                     {
                         Btn_ApagarCliente.IsEnabled = true;
                     }
-
-                    Reader.Close();
-                    DataBase.conexao.Close();
                 }
                 catch (Exception ex)
                 {
                     Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
                 }
+
+                Reader.Close();
+                DataBase.conexao.Close();
             }
             else if (Lst_Clientes.SelectedIndex == -1)
             {
@@ -726,6 +723,8 @@ namespace Trabalhos
         //Botao cancelar novo cliente
         private void Btn_CancelarCliente_Click(object sender, RoutedEventArgs e)
         {
+            Adicionar = false;
+
             LimparCampos();
 
             NomeValido = false;
@@ -811,7 +810,7 @@ namespace Trabalhos
                     sexo = 'M';
                 }
 
-                EditarClienteCampos.ChaveCliente = Convert.ToInt64(Lbl_CodigoCliente.Content);
+                EditarClienteCampos.ChaveCliente = Lbl_CodigoCliente.Content.ToString();
                 EditarClienteCampos.Nome = Tb_NomeCliente.Text;
                 EditarClienteCampos.DataNascimento = data;
                 EditarClienteCampos.Sexo = sexo.ToString();
@@ -1174,7 +1173,7 @@ namespace Trabalhos
                 {
                     string contacto = ContactoVisivel(Convert.ToString(Reader["Email"].ToString()), Convert.ToInt64(Reader["Telemovel"].ToString()), Convert.ToInt64(Reader["Telefone"].ToString()));
 
-                    clientes.Add(new Cliente { ChaveCliente = Convert.ToInt32(Reader["Key_Cliente"].ToString()), Nome = Convert.ToString(Reader["Nome"].ToString()), DataNascimento = Convert.ToDateTime(Reader["DataNascimento"] as DateTime?), Sexo = Convert.ToString(Reader["Sexo"].ToString()), Morada = Convert.ToString(Reader["Morada"].ToString()), CodigoPostal = Convert.ToString(Reader["CodPostal"].ToString()), Localidade = Convert.ToString(Reader["Localidade"].ToString()), Email = Convert.ToString(Reader["Email"].ToString()), Telemovel = Convert.ToInt64(Reader["Telemovel"].ToString()), Telefone = Convert.ToInt64(Reader["Telefone"].ToString()), Contacto = contacto });
+                    clientes.Add(new Cliente { ChaveCliente = Convert.ToString(Reader["Key_Cliente"].ToString()), Nome = Convert.ToString(Reader["Nome"].ToString()), DataNascimento = Convert.ToDateTime(Reader["DataNascimento"] as DateTime?), Sexo = Convert.ToString(Reader["Sexo"].ToString()), Morada = Convert.ToString(Reader["Morada"].ToString()), CodigoPostal = Convert.ToString(Reader["CodPostal"].ToString()), Localidade = Convert.ToString(Reader["Localidade"].ToString()), Email = Convert.ToString(Reader["Email"].ToString()), Telemovel = Convert.ToInt64(Reader["Telemovel"].ToString()), Telefone = Convert.ToInt64(Reader["Telefone"].ToString()), Contacto = contacto });
                 }
 
                 Reader.Close();
@@ -1412,6 +1411,35 @@ namespace Trabalhos
                 Btn_GuardarAlteracoes.IsEnabled = true;
                 Lbl_ErroContacto.Visibility = Visibility.Hidden;
             }
+        }
+
+        //Verificar se chave existe na base de dados
+        string ReservarChave()
+        {
+            string key;
+
+            DataBase.conexao = new SqlConnection(DataBase.stringConexao);
+            DataBase.conexao.Open();
+
+            while (true)
+            {
+                key = RandomString(10);
+                queryIndexCliente.Connection = DataBase.conexao;
+                queryIndexCliente.Parameters.AddWithValue("@KeyCliente", key);
+                Reader = queryIndexCliente.ExecuteReader();
+
+                queryIndexCliente.Parameters.Clear();
+
+                if (!Reader.HasRows)
+                {
+                    break;
+                }
+            }
+
+            Reader.Close();
+            DataBase.conexao.Close();
+
+            return key;
         }
 
         //Chama função para validar o nome aoo fim de 1 segundos

@@ -108,7 +108,7 @@
                 <ComboBox x:Name="Cmb_Contacto" VerticalAlignment="Top" Margin="142,36,0,0" IsTextSearchEnabled="False" Height="31" ToolTip="A ordem de preferencia dos contactos é a seguinte:&#x0a;Nenhum: Email, Telemovel, Telefone.&#x0a;Email: Email, Telemovel, Telefone.&#x0a;Telemovel: Telemovel, Email, Telefone.&#x0a;Telefone: Telefone, Email, Telemovel." SelectionChanged="Cmb_Contacto_SelectionChanged">
                     <ComboBoxItem Content="Nenhum"/>
                     <ComboBoxItem Content="Email"/>
-                    <ComboBoxItem Content="Telemovel"/>
+                    <ComboBoxItem Content="Telemóvel"/>
                     <ComboBoxItem Content="Telefone"/>
                 </ComboBox>
             </Grid>

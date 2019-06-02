@@ -23,11 +23,11 @@ namespace Trabalhos
     public partial class GerirServicos : Page
     {
         SqlCommand queryTodosServicos = new SqlCommand("SELECT Key_Servico, Nome, Preco FROM Servico");
-        SqlCommand queryIndexServico = new SqlCommand("SELECT IDENT_CURRENT('Servico') AS 'Index'");
-        SqlCommand queryInserirServico = new SqlCommand("INSERT INTO Servico (Nome, Preco) VALUES (@Nome, @Preco)");
+        SqlCommand queryIndexServico = new SqlCommand("SELECT Key_Servico FROM Servico WHERE Key_Servico = @KeyServico");
+        SqlCommand queryInserirServico = new SqlCommand("INSERT INTO Servico (Key_Servico, Nome, Preco) VALUES (@KeyServico, @Nome, @Preco)");
         SqlCommand queryAtualizarServico = new SqlCommand("UPDATE Servico SET Nome = @Nome, Preco = @Preco WHERE Key_Servico = @Key_Servico");
         SqlCommand queryProcurarServico = new SqlCommand("SELECT * FROM Servico WHERE Nome = @Nome");
-        SqlCommand queryProcurarTrabalhosServico = new SqlCommand("SELECT COUNT(Key_Tempo) AS 'Contagem' FROM Tempo WHERE Key_Servico = @Key_Servico");
+        SqlCommand queryProcurarTrabalhosServico = new SqlCommand("SELECT COUNT(Key_Tarefa) AS 'Contagem' FROM Tarefa WHERE Key_Servico = @Key_Servico");
         SqlCommand queryApagarServico = new SqlCommand("DELETE FROM Servico WHERE Key_Servico = @Key_Servico");
 
         SqlDataReader Reader;
@@ -35,6 +35,14 @@ namespace Trabalhos
         DispatcherTimer temporizador = new DispatcherTimer();
 
         List<Servico> servicos = new List<Servico>();
+
+        //Gerar chave aleatória 
+        public static string RandomString(int length)
+        {
+            Random random = new Random();
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            return new string(Enumerable.Range(1, length).Select(_ => chars[random.Next(chars.Length)]).ToArray());
+        }
 
         bool NomeValido = false;
         bool PrecoValido = false;
@@ -63,28 +71,17 @@ namespace Trabalhos
 
             LimparCampos();
 
-            Lbl_CodigoServico.Content = EditarServicoCampos.ChaveServico;
+            if (EditarServicoCampos.ChaveServico == null)
+            {
+                Lbl_CodigoServico.Content = ReservarChave();
+            }
+            else
+            {
+                Lbl_CodigoServico.Content = EditarServicoCampos.ChaveServico;
+            }
+
             Tb_Servico.Text = EditarServicoCampos.Nome;
             Tb_Preco.Text = EditarServicoCampos.Preco.ToString();
-
-            try
-            {
-                DataBase.conexao.Open();
-                queryIndexServico.Connection = DataBase.conexao;
-
-                Reader = queryIndexServico.ExecuteReader();
-
-                Reader.Read();
-
-                Lbl_CodigoServico.Content = Convert.ToInt64(Reader["Index"].ToString()) + 1;
-
-                Reader.Close();
-                DataBase.conexao.Close();
-            }
-            catch (Exception ex)
-            {
-                Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
-            }
 
             Tb_Servico.IsReadOnly = false;
             Tb_Preco.IsReadOnly = false;
@@ -99,6 +96,8 @@ namespace Trabalhos
         //Botao alterar servico selecionado
         private void Btn_AtualizarServico_Click(object sender, RoutedEventArgs e)
         {
+            Adicionar = false;
+
             NomeValido = false;
             PrecoValido = false;
 
@@ -111,7 +110,7 @@ namespace Trabalhos
             Tb_Servico.IsReadOnly = false;
             Tb_Preco.IsReadOnly = false;
             Lst_Servicos.IsEnabled = false;
-            Btn_GuardarServico.Visibility = Visibility.Visible;
+            Btn_GuardarAlteracoes.Visibility = Visibility.Visible;
             Btn_CancelarServico.Visibility = Visibility.Visible;
             Btn_AdicionarServico.Visibility = Visibility.Hidden;
             Btn_AtualizarServico.Visibility = Visibility.Hidden;
@@ -172,14 +171,15 @@ namespace Trabalhos
                     DataBase.conexao.Open();
                     queryInserirServico.Connection = DataBase.conexao;
                     queryInserirServico.Parameters.AddWithValue("@Nome", Tb_Servico.Text.Trim());
-                    queryInserirServico.Parameters.AddWithValue("@Preco", Tb_Preco.Text.Trim());
+                    queryInserirServico.Parameters.AddWithValue("@Preco", Convert.ToDecimal(Tb_Preco.Text.Trim()));
+                    queryInserirServico.Parameters.AddWithValue("@KeyServico", Lbl_CodigoServico.Content);
 
                     queryInserirServico.ExecuteNonQuery();
                     queryInserirServico.Parameters.Clear();
 
                     DataBase.conexao.Close();
 
-                    servicos.Add(new Servico { ChaveServico = Convert.ToInt32(Lbl_CodigoServico.Content), Nome = Convert.ToString(Tb_Servico.Text.Trim()), Preco = Convert.ToDecimal(Tb_Preco.Text.Trim()) });
+                    servicos.Add(new Servico { ChaveServico = Convert.ToString(Lbl_CodigoServico.Content), Nome = Convert.ToString(Tb_Servico.Text.Trim()), Preco = Convert.ToDecimal(Tb_Preco.Text.Trim()) });
 
                     Lst_Servicos.Items.Refresh();
 
@@ -206,8 +206,6 @@ namespace Trabalhos
         //Botao guardar alteraçoes no servico
         private void Btn_GuardarAlteracoes_Click(object sender, RoutedEventArgs e)
         {
-            long keyServico = Convert.ToInt64(Lbl_CodigoServico.Content.ToString());
-
             if (NomeValido && PrecoValido)
             {
                 try
@@ -215,8 +213,8 @@ namespace Trabalhos
                     DataBase.conexao.Open();
                     queryAtualizarServico.Connection = DataBase.conexao;
                     queryAtualizarServico.Parameters.AddWithValue("@Nome", Tb_Servico.Text.Trim());
-                    queryAtualizarServico.Parameters.AddWithValue("@Preco", Tb_Preco.Text.Trim());
-                    queryAtualizarServico.Parameters.AddWithValue("@Key_Servico", keyServico);
+                    queryAtualizarServico.Parameters.AddWithValue("@Preco", Convert.ToDecimal(Tb_Preco.Text.Trim()));
+                    queryAtualizarServico.Parameters.AddWithValue("@Key_Servico", Lbl_CodigoServico.Content.ToString());
 
                     queryAtualizarServico.ExecuteNonQuery();
                     queryAtualizarServico.Parameters.Clear();
@@ -287,14 +285,14 @@ namespace Trabalhos
                     {
                         Btn_ApagarServico.IsEnabled = true;
                     }
-
-                    Reader.Close();
-                    DataBase.conexao.Close();
                 }
                 catch (Exception ex)
                 {
                     Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
                 }
+
+                Reader.Close();
+                DataBase.conexao.Close();
             }
             else if (Lst_Servicos.SelectedIndex == -1)
             {
@@ -306,6 +304,8 @@ namespace Trabalhos
         //Botao cancelar novo servico
         private void Btn_CancelarServico_Click(object sender, RoutedEventArgs e)
         {
+            Adicionar = false;
+
             LimparCampos();
 
             NomeValido = false;
@@ -337,7 +337,7 @@ namespace Trabalhos
                     preco = null;
                 }
 
-                EditarServicoCampos.ChaveServico = Convert.ToInt64(Lbl_CodigoServico.Content);
+                EditarServicoCampos.ChaveServico = Lbl_CodigoServico.Content.ToString();
                 EditarServicoCampos.Nome = Tb_Servico.Text;
                 EditarServicoCampos.Preco = preco;
             }
@@ -423,9 +423,23 @@ namespace Trabalhos
                 Tb_Preco.SelectionStart = pos;
             }
 
+            int passComma = 0;
+
             for (int i = 0; i < preco.Length; i++)
             {
+                if (preco[i] == ',')
+                {
+                    passComma = i;
+                }
+
                 if (!char.IsDigit(preco[i]) && preco[i] != ',')
+                {
+                    Tb_Preco.Text = Tb_Preco.Text.Remove(i, 1);
+                    Array.Clear(preco, 0, preco.Length);
+                    preco = Tb_Preco.Text.TrimStart().ToCharArray();
+                    Tb_Preco.SelectionStart = i;
+                }
+                else if (i >= passComma + 3)
                 {
                     Tb_Preco.Text = Tb_Preco.Text.Remove(i, 1);
                     Array.Clear(preco, 0, preco.Length);
@@ -434,17 +448,24 @@ namespace Trabalhos
                 }
             }
 
-            if (Tb_Preco.Text.Length > 0 && Convert.ToDecimal(Tb_Preco.Text) < Configuracoes.ServicoPrecoMinimo)
+            if (Tb_Preco.Text.Length > 0)
             {
-                Lbl_AvisoPreco.Visibility = Visibility.Visible;
-            }
-            else if (Tb_Preco.Text.Length > 0 && Convert.ToDecimal(Tb_Preco.Text) >= Configuracoes.ServicoPrecoMinimo)
-            {
-                Lbl_AvisoPreco.Visibility = Visibility.Hidden;
+                if (!Tb_Preco.IsReadOnly && Convert.ToDecimal(Tb_Preco.Text) < Configuracoes.ServicoPrecoMinimo)
+                {
+                    Lbl_AvisoPreco.Visibility = Visibility.Visible;
+                }
+                else if (!Tb_Preco.IsReadOnly && Convert.ToDecimal(Tb_Preco.Text) >= Configuracoes.ServicoPrecoMinimo)
+                {
+                    Lbl_AvisoPreco.Visibility = Visibility.Hidden;
+                }
+                else if (Tb_Preco.IsReadOnly)
+                {
+                    Lbl_AvisoPreco.Visibility = Visibility.Hidden;
+                }
             }
             else
             {
-                Lbl_AvisoPreco.Visibility = Visibility.Visible;
+                Lbl_AvisoPreco.Visibility = Visibility.Hidden;
             }
 
             if (Tb_Preco.Text.Length <= 0 || Convert.ToDecimal(Tb_Preco.Text) == 0)
@@ -473,11 +494,8 @@ namespace Trabalhos
 
                 while (Reader.Read())
                 {
-                    servicos.Add(new Servico { ChaveServico = Convert.ToInt32(Reader["Key_Servico"].ToString()), Nome = Convert.ToString(Reader["Nome"].ToString()), Preco = Convert.ToDecimal(Reader["Preco"].ToString()) });
+                    servicos.Add(new Servico { ChaveServico = Convert.ToString(Reader["Key_Servico"].ToString()), Nome = Convert.ToString(Reader["Nome"].ToString()), Preco = Convert.ToDecimal(Reader["Preco"].ToString()) });
                 }
-
-                Reader.Close();
-                DataBase.conexao.Close();
             }
             catch (Exception ex)
             {
@@ -485,6 +503,9 @@ namespace Trabalhos
                 Btn_AdicionarServico.IsEnabled = false;
                 Btn_AtualizarServico.IsEnabled = false;
             }
+
+            Reader.Close();
+            DataBase.conexao.Close();
         }
 
         //Limpar todos os campos que estao indroduzidos
@@ -511,6 +532,35 @@ namespace Trabalhos
                 Btn_GuardarServico.IsEnabled = true;
                 Btn_GuardarAlteracoes.IsEnabled = true;
             }
+        }
+
+        //Verificar se chave existe na base de dados
+        string ReservarChave()
+        {
+            string key;
+
+            DataBase.conexao = new SqlConnection(DataBase.stringConexao);
+            DataBase.conexao.Open();
+
+            while (true)
+            {
+                key = RandomString(5);
+                queryIndexServico.Connection = DataBase.conexao;
+                queryIndexServico.Parameters.AddWithValue("@KeyServico", key);
+                Reader = queryIndexServico.ExecuteReader();
+
+                queryIndexServico.Parameters.Clear();
+
+                if (!Reader.HasRows)
+                {
+                    break;
+                }
+            }
+
+            Reader.Close();
+            DataBase.conexao.Close(); 
+
+            return key;
         }
 
         //Chama função para validar o nome aoo fim de 1 segundos
@@ -557,9 +607,6 @@ namespace Trabalhos
                         Lbl_Erros.Text = null;
                         NomeValido = true;
                     }
-
-                    Reader.Close();
-                    DataBase.conexao.Close();
                 }
                 catch (Exception ex)
                 {
@@ -567,6 +614,8 @@ namespace Trabalhos
                     Console.WriteLine(ex.ToString());
                     NomeValido = false;
                 }
+                Reader.Close();
+                DataBase.conexao.Close();
             }
             else
             {

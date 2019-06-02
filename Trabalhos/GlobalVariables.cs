@@ -23,7 +23,11 @@ namespace Trabalhos
     public static class DataBase
     {
         public static SqlConnection conexao;
-        public static string stringConexao = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|WorkPlanner.mdf; Integrated Security=True";
+#if DEBUG
+        public static string stringConexao = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=E:\PAP\Trabalhos\Trabalhos\WorkPlanner.mdf;Integrated Security=True";
+#else
+        public static string stringConexao = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\WorkPlanner.mdf;Integrated Security=True";
+#endif
     }
 
     public static class Configuracoes
@@ -37,7 +41,7 @@ namespace Trabalhos
 
     public static class EditarClienteCampos
     {
-        public static long ChaveCliente;
+        public static string ChaveCliente;
         public static string Nome;
         public static DateTime? DataNascimento;
         public static string Sexo;
@@ -51,7 +55,7 @@ namespace Trabalhos
 
     public static class EditarServicoCampos
     {
-        public static long ChaveServico;
+        public static string ChaveServico;
         public static string Nome;
         public static decimal? Preco;
     }

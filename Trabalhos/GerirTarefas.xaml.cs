@@ -510,6 +510,11 @@ namespace Trabalhos
                 Dp_DataInicio.DisplayDate = DateTime.Now;
                 Lbl_Erros.Text = "A data de fim não pode ser após a este momento!";
             }
+            else if (Dp_DataFim.SelectedDate == Convert.ToDateTime(null))
+            {
+                Dp_DataFim.SelectedDate = null;
+                Dp_DataFim.DisplayDate = DateTime.Now;
+            }
             else if (Dp_DataInicio.SelectedDate >= Dp_DataFim.SelectedDate)
             {
                 Dp_DataInicio.SelectedDate = null;
@@ -564,7 +569,7 @@ namespace Trabalhos
 
                 while (Reader.Read())
                 {
-                    tarefas.Add(new Tarefa { ChaveTarefa = Convert.ToString(Reader["Key_Tarefa"].ToString()), ChaveTrabalho = Convert.ToString(Reader["Key_Trabalho"].ToString()), ChaveServico = Convert.ToInt32(Reader["Key_Servico"].ToString()), Desconto = Convert.ToDecimal(Reader["Desconto"].ToString()) });
+                    tarefas.Add(new Tarefa { ChaveTarefa = Convert.ToString(Reader["Key_Tarefa"].ToString()), ChaveTrabalho = Convert.ToString(Reader["Key_Trabalho"].ToString()), ChaveServico = Convert.ToString(Reader["Key_Servico"].ToString()), Desconto = Convert.ToDecimal(Reader["Desconto"].ToString()) });
                 }
 
                 Reader.Close();
@@ -574,7 +579,7 @@ namespace Trabalhos
 
                 while (Reader.Read())
                 {
-                    servicos.Add(new Servico { ChaveServico = Convert.ToInt32(Reader["Key_Servico"].ToString()), Nome = Convert.ToString(Reader["Nome"].ToString()), Preco = Convert.ToDecimal(Reader["Preco"].ToString()) });
+                    servicos.Add(new Servico { ChaveServico = Convert.ToString(Reader["Key_Servico"].ToString()), Nome = Convert.ToString(Reader["Nome"].ToString()), Preco = Convert.ToDecimal(Reader["Preco"].ToString()) });
                 }
 
                 Reader.Close();
@@ -649,6 +654,8 @@ namespace Trabalhos
                     queryIndexTarefa.Parameters.AddWithValue("@KeyTarefa", key);
                     Reader = queryIndexTarefa.ExecuteReader();
 
+                    queryIndexTarefa.Parameters.Clear();
+
                     if (!Reader.HasRows)
                     {
                         break;
@@ -661,14 +668,17 @@ namespace Trabalhos
                     queryIndexTempo.Parameters.AddWithValue("@KeyTempo", key);
                     Reader = queryIndexTempo.ExecuteReader();
 
+                    queryIndexTempo.Parameters.Clear();
+
                     if (!Reader.HasRows)
                     {
                         break;
                     }
                 }
-
-                Reader.Close();
             }
+
+            Reader.Close();
+            DataBase.conexao.Close();
 
             return key;
         }
