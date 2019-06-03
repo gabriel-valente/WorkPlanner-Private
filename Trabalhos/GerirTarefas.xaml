@@ -152,18 +152,18 @@
                 </Style>
             </ListBox.Style>
         </ListBox>
-        <Button x:Name="Btn_AdicionarTempo" Grid.Row="0" Grid.Column="2" Content="Adicionar" Margin="0,97,10,0" HorizontalAlignment="Right" Width="100" Height="48" VerticalAlignment="Top"/>
+        <Button x:Name="Btn_AdicionarTempo" Grid.Row="0" Grid.Column="2" Content="Adicionar" Margin="0,97,10,0" HorizontalAlignment="Right" Width="100" Height="48" VerticalAlignment="Top" Click="Btn_AdicionarTempo_Click" Visibility="Hidden" IsEnabled="False"/>
         <Button x:Name="Btn_EditarTempo" Grid.Row="0" Grid.Column="2" Content="Atualizar" Margin="0,97,10,0" HorizontalAlignment="Right" Width="100" Height="48" VerticalAlignment="Top" Visibility="Hidden"/>
-        <Button x:Name="Btn_ApagarTempo" Grid.Row="0" Grid.Column="2" Content="Apagar" Margin="0,151,10,0" HorizontalAlignment="Right" Width="100" Height="48" VerticalAlignment="Top" IsEnabled="False"/>
+        <Button x:Name="Btn_ApagarTempo" Grid.Row="0" Grid.Column="2" Content="Apagar" Margin="0,151,10,0" HorizontalAlignment="Right" Width="100" Height="48" VerticalAlignment="Top" IsEnabled="False" Visibility="Hidden"/>
         <Label Grid.Row="0" Grid.Column="1" Content="Data/hora de inicio:" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="10,205,10,0" Height="30"/>
         <Label x:Name="Lbl_DataInicio" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="10,205,10,0" Height="30"/>
-        <DatePicker x:Name="Dp_DataInicio" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,211,0,0" FontSize="16" Height="20" Width="230" IsTodayHighlighted="False" SelectedDateFormat="Short" BorderThickness="0" Padding="0" BorderBrush="{x:Null}" IsTabStop="True" Visibility="Hidden" SelectedDateChanged="Dp_DataInicio_SelectedDateChanged">
+        <DatePicker x:Name="Dp_DataInicio" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,211,0,0" FontSize="16" Height="20" Width="230" IsTodayHighlighted="False" BorderThickness="0" Padding="0" BorderBrush="{x:Null}" IsTabStop="True" Visibility="Hidden" SelectedDateChanged="Dp_DataInicio_SelectedDateChanged">
             <DatePicker.Resources>
                 <Style TargetType="{x:Type DatePickerTextBox}">
                     <Setter Property="Control.Template">
                         <Setter.Value>
                             <ControlTemplate>
-                                <TextBox x:Name="PART_TextBox" Text="{Binding Path=SelectedDate, RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}, StringFormat='dd/MM/yyyy hh:mm:ss'}" Background="#FF494949" Foreground="#FFEEEEEE" BorderThickness="0" IsReadOnly="False"/>
+                                <TextBox x:Name="PART_TextBox" Text="{Binding Path=SelectedDate, RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}, StringFormat='dd/MM/yyyy HH:mm:ss'}" Background="#FF494949" Foreground="#FFEEEEEE" BorderThickness="0" IsReadOnly="False"/>
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
@@ -180,7 +180,7 @@
                     <Setter Property="Control.Template">
                         <Setter.Value>
                             <ControlTemplate>
-                                <TextBox x:Name="PART_TextBox" Text="{Binding Path=SelectedDate, RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}, StringFormat='dd/MM/yyyy hh:mm:ss'}" Background="#FF494949" Foreground="#FFEEEEEE" BorderThickness="0" IsReadOnly="False"/>
+                                <TextBox x:Name="PART_TextBox" Text="{Binding Path=SelectedDate, RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}, StringFormat='dd/MM/yyyy HH:mm:ss'}" Background="#FF494949" Foreground="#FFEEEEEE" BorderThickness="0" IsReadOnly="False"/>
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
@@ -201,7 +201,7 @@
         </Rectangle>
         <Label Grid.Row="0" Grid.Column="1" Content="Desconto:" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="5,277,10,0" Height="30"/>
         <Slider x:Name="Sld_Desconto" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="10,287,93,0" ValueChanged="Sld_Desconto_ValueChanged" Maximum="100" IsEnabled="False" IsSnapToTickEnabled="True" TickFrequency="0.01"/>
-        <Label x:Name="Lbl_Desconto" Grid.Row="0" Grid.Column="2" VerticalAlignment="Top" HorizontalContentAlignment="Center" Margin="0,287,6,0" Height="20" FontSize="16" HorizontalAlignment="Right" Width="87" Content="" Padding="0" VerticalContentAlignment="Center"/>
+        <Label x:Name="Lbl_Desconto" Grid.Row="0" Grid.Column="2" VerticalAlignment="Top" HorizontalContentAlignment="Center" Margin="0,287,6,0" Height="20" FontSize="16" HorizontalAlignment="Right" Width="87" Padding="0" VerticalContentAlignment="Center" Content="0,00%"/>
         <Label Grid.Row="0" Grid.Column="1" Content="Preço:" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="5,313,10,0" Height="30"/>
         <Label x:Name="Lbl_Preco" Grid.Row="0" Grid.Column="2"  HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="10,318,0,0" Height="19" FontSize="16" Width="149" Content="" Padding="0"/>
 
