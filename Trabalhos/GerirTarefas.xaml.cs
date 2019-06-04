@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -69,6 +71,8 @@ namespace Trabalhos
         public GerirTarefas()
         {
             InitializeComponent();
+
+            this.Language = XmlLanguage.GetLanguage("pt-PT");
 
             ////////////////////
             /// REMOVER ISTO ///
@@ -355,6 +359,11 @@ namespace Trabalhos
         //Lista Tempo e Validar
         private void Lst_Tempo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            Dp_DataInicio.SelectedDate = null;
+            Dp_DataInicio.DisplayDate = DateTime.Today;
+            Dp_DataFim.SelectedDate = null;
+            Dp_DataFim.DisplayDate = DateTime.Today;
+
             DataInicio = listaTempo[Lst_Tempo.SelectedIndex].DataInicio;
             DataFim = listaTempo[Lst_Tempo.SelectedIndex].DataFim;
 
@@ -375,7 +384,6 @@ namespace Trabalhos
                 Btn_EditarTempo.Visibility = Visibility.Visible;
                 Btn_AdicionarTempo.Visibility = Visibility.Hidden;
                 Btn_ApagarTempo.IsEnabled = true;
-                Lst_Tempo.IsEnabled = false;
             }
 
             AtualizarBotoes();
@@ -431,6 +439,8 @@ namespace Trabalhos
             string key = ReservarChave("Tempo");
             DateTime data;
 
+            Console.WriteLine(key);
+
             try
             {
                 data = Dp_DataInicio.SelectedDate.Value;
@@ -446,6 +456,11 @@ namespace Trabalhos
             listaTempo.Add(new ListaTempo { ChaveTempo = key, DataInicio = Dp_DataInicio.SelectedDate.Value, DataFim = Dp_DataFim.SelectedDate.Value, TempoDecorrido = String.Format("{0:00}:{1:00}:{2:00}", tempo.Hours, tempo.Minutes, tempo.Seconds) });
 
             Lst_Tempo.Items.Refresh();
+
+            Dp_DataInicio.SelectedDate = null;
+            Dp_DataInicio.DisplayDate = DateTime.Today;
+            Dp_DataFim.SelectedDate = null;
+            Dp_DataFim.DisplayDate = DateTime.Today;
         }
 
         //Botao voltar para o menu principal
@@ -700,16 +715,31 @@ namespace Trabalhos
                 }
                 else if (Tabela == "Tempo")
                 {
+                    bool keyExiste = false;
+
                     key = RandomString(30);
-                    queryIndexTempo.Connection = DataBase.conexao;
-                    queryIndexTempo.Parameters.AddWithValue("@KeyTempo", key);
-                    Reader = queryIndexTempo.ExecuteReader();
 
-                    queryIndexTempo.Parameters.Clear();
-
-                    if (!Reader.HasRows)
+                    foreach (Tempo item in tempos)
                     {
-                        break;
+                        if (!keyExiste && key == item.ChaveTempo)
+                        {
+                            keyExiste = true;
+                            break;
+                        }
+                    }
+
+                    if (!keyExiste)
+                    {
+                        queryIndexTempo.Connection = DataBase.conexao;
+                        queryIndexTempo.Parameters.AddWithValue("@KeyTempo", key);
+                        Reader = queryIndexTempo.ExecuteReader();
+
+                        queryIndexTempo.Parameters.Clear();
+
+                        if (!Reader.HasRows)
+                        {
+                            break;
+                        }
                     }
                 }
             }
