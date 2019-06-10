@@ -359,34 +359,99 @@ namespace Trabalhos
         //Lista Tempo e Validar
         private void Lst_Tempo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Dp_DataInicio.SelectedDate = null;
-            Dp_DataInicio.DisplayDate = DateTime.Today;
-            Dp_DataFim.SelectedDate = null;
-            Dp_DataFim.DisplayDate = DateTime.Today;
-
-            DataInicio = listaTempo[Lst_Tempo.SelectedIndex].DataInicio;
-            DataFim = listaTempo[Lst_Tempo.SelectedIndex].DataFim;
-
-            if (!Lst_Tempo.HasItems)
+            if (Lst_Tempo.SelectedIndex > -1)
             {
-                TempoValido = false;
+                Dp_DataInicio.SelectedDate = null;
+                Dp_DataInicio.DisplayDate = DateTime.Today;
+                Dp_DataFim.SelectedDate = null;
+                Dp_DataFim.DisplayDate = DateTime.Today;
+
+                DataInicio = listaTempo[Lst_Tempo.SelectedIndex].DataInicio;
+                DataFim = listaTempo[Lst_Tempo.SelectedIndex].DataFim;
+
+                if (!Lst_Tempo.HasItems)
+                {
+                    TempoValido = false;
+                }
+                else
+                {
+                    TempoValido = true;
+                }
+
+                if (Lst_Tempo.SelectedIndex > -1)
+                {
+                    Dp_DataInicio.SelectedDate = listaTempo[Lst_Tempo.SelectedIndex].DataInicio;
+                    Dp_DataFim.SelectedDate = listaTempo[Lst_Tempo.SelectedIndex].DataFim;
+
+                    Btn_EditarTempo.Visibility = Visibility.Visible;
+                    Btn_AdicionarTempo.Visibility = Visibility.Hidden;
+                    Btn_ApagarTempo.IsEnabled = true;
+                }
             }
             else
             {
-                TempoValido = true;
-            }
-
-            if (Lst_Tempo.SelectedIndex > -1)
-            {
-                Dp_DataInicio.SelectedDate = listaTempo[Lst_Tempo.SelectedIndex].DataInicio;
-                Dp_DataFim.SelectedDate = listaTempo[Lst_Tempo.SelectedIndex].DataFim;
-
-                Btn_EditarTempo.Visibility = Visibility.Visible;
-                Btn_AdicionarTempo.Visibility = Visibility.Hidden;
-                Btn_ApagarTempo.IsEnabled = true;
+                Btn_AdicionarTempo.Visibility = Visibility.Visible;
+                Btn_EditarTempo.Visibility = Visibility.Hidden;
+                Btn_ApagarTempo.IsEnabled = false;
             }
 
             AtualizarBotoes();
+        }
+
+        //Botao guardas tarefa
+        private void Btn_GuardarTarefa_Click(object sender, RoutedEventArgs e)
+        {
+            string keyServico = servicos.Find(lst => lst.Nome == Cb_Servico.SelectedItem.ToString()).ChaveServico;
+            decimal desconto = Convert.ToDecimal(Math.Round(Sld_Desconto.Value, 2)) / 100;
+            TimeSpan time = new TimeSpan(0);
+
+
+            try
+            {
+                DataBase.conexao.Open();
+                queryInserirTarefa.Connection = DataBase.conexao;
+                queryInserirTarefa.Parameters.AddWithValue("@KeyTarefa", Lbl_CodigoTarefa.Content.ToString());
+                queryInserirTarefa.Parameters.AddWithValue("@KeyTrabalho", InterPages.KeyTrabalho);
+                queryInserirTarefa.Parameters.AddWithValue("@KeyServico", keyServico);
+                queryInserirTarefa.Parameters.AddWithValue("@Desconto", desconto);
+
+                queryInserirTarefa.ExecuteNonQuery();
+                queryInserirTarefa.Parameters.Clear();
+
+
+                queryInserirTempo.Connection = DataBase.conexao;
+
+                foreach (ListaTempo item in listaTempo)
+                {
+                    queryInserirTempo.Parameters.AddWithValue("@KeyTempo", item.ChaveTempo);
+                    queryInserirTempo.Parameters.AddWithValue("@KeyTarefa", Lbl_CodigoTarefa.Content.ToString());
+                    queryInserirTempo.Parameters.AddWithValue("@DataInicio", item.DataInicio);
+
+                    if (item.DataFim != Convert.ToDateTime(null))
+                    {
+                        time += item.DataFim - item.DataInicio;
+
+                        queryInserirTempo.Parameters.AddWithValue("@DataFim", item.DataFim);
+                    }
+                    else
+                    {
+                        queryInserirTempo.Parameters.AddWithValue("@DataFim", DBNull.Value);
+                    }
+
+                    queryInserirTempo.ExecuteNonQuery();
+                    queryInserirTempo.Parameters.Clear();
+                }
+
+                DataBase.conexao.Close();
+
+                tarefas.Add(new Tarefa { ChaveTarefa = Lbl_CodigoTarefa.Content.ToString(), ChaveTrabalho = InterPages.KeyTrabalho, ChaveServico = keyServico, Desconto = desconto });
+
+                listaTarefa.Add(new ListaTarefas { ChaveTarefa = Lbl_CodigoTarefa.Content.ToString(), Servico = Cb_Servico.SelectedItem.ToString(), Tempo = time }); ;
+            }
+            catch (Exception ex)
+            {
+                Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
+            }
         }
 
         //Botao voltar á data anterior ou limpar data
@@ -439,11 +504,9 @@ namespace Trabalhos
             string key = ReservarChave("Tempo");
             DateTime data;
 
-            Console.WriteLine(key);
-
             try
             {
-                data = Dp_DataInicio.SelectedDate.Value;
+                data = Dp_DataFim.SelectedDate.Value;
             }
             catch (Exception)
             {
@@ -457,10 +520,125 @@ namespace Trabalhos
 
             Lst_Tempo.Items.Refresh();
 
+            tempo = new TimeSpan(0);
+
+            foreach (ListaTempo item in listaTempo)
+            {
+                tempo += item.DataFim - item.DataInicio;
+            }
+
+            preco = servicos.Find(lst => lst.Nome == Cb_Servico.Text).Preco * Convert.ToDecimal(tempo.TotalHours);
+
+            Lbl_Preco.Content = String.Format("{0:###0.00} €", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))));
+
             Dp_DataInicio.SelectedDate = null;
             Dp_DataInicio.DisplayDate = DateTime.Today;
             Dp_DataFim.SelectedDate = null;
             Dp_DataFim.DisplayDate = DateTime.Today;
+
+            if (Lst_Tempo.Items.Count >= 1)
+            {
+                Btn_GuardarTarefa.IsEnabled = true;
+                Btn_GuardarAlteracoes.IsEnabled = true;
+            }
+            else
+            {
+                Btn_GuardarTarefa.IsEnabled = false;
+                Btn_GuardarAlteracoes.IsEnabled = false;
+            }
+        }
+
+        //Botao editar tempo
+        private void Btn_EditarTempo_Click(object sender, RoutedEventArgs e)
+        {
+            DateTime data;
+
+            try
+            {
+                data = Dp_DataFim.SelectedDate.Value;
+            }
+            catch (Exception)
+            {
+                data = Convert.ToDateTime(null);
+            }
+
+            var tempo = Dp_DataFim.SelectedDate.Value - Dp_DataInicio.SelectedDate.Value;
+
+            listaTempo[Lst_Tempo.SelectedIndex].DataInicio = Dp_DataInicio.SelectedDate.Value;
+            listaTempo[Lst_Tempo.SelectedIndex].DataFim = data;
+            listaTempo[Lst_Tempo.SelectedIndex].TempoDecorrido = String.Format("{0:00}:{1:00}:{2:00}", tempo.Hours, tempo.Minutes, tempo.Seconds);
+
+            int index = tempos.FindIndex(lst => lst.ChaveTempo == listaTempo[Lst_Tempo.SelectedIndex].ChaveTempo);
+
+            tempos[index].DataInicio = Dp_DataInicio.SelectedDate.Value;
+            tempos[index].DataFim = data;
+
+            Lst_Tempo.Items.Refresh();
+            Lst_Tempo.SelectedIndex = -1;
+            Dp_DataInicio.SelectedDate = null;
+            Dp_DataInicio.DisplayDate = DateTime.Today;
+            Dp_DataFim.SelectedDate = null;
+            Dp_DataFim.DisplayDate = DateTime.Today;
+
+            tempo = new TimeSpan(0);
+
+            foreach (ListaTempo item in listaTempo)
+            {
+                tempo += item.DataFim - item.DataInicio;
+            }
+
+            preco = servicos.Find(lst => lst.Nome == Cb_Servico.Text).Preco * Convert.ToDecimal(tempo.TotalHours);
+
+            Lbl_Preco.Content = String.Format("{0:###0.00} €", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))));
+
+            if (Lst_Tempo.Items.Count >= 1)
+            {
+                Btn_GuardarTarefa.IsEnabled = true;
+                Btn_GuardarAlteracoes.IsEnabled = true;
+            }
+            else
+            {
+                Btn_GuardarTarefa.IsEnabled = false;
+                Btn_GuardarAlteracoes.IsEnabled = false;
+            }
+        }
+
+        //Botao apagar tempo
+        private void Btn_ApagarTempo_Click(object sender, RoutedEventArgs e) 
+        {
+            TimeSpan tempo = new TimeSpan(0);
+
+            listaTempo.RemoveAt(Lst_Tempo.SelectedIndex);
+
+            int index = tempos.FindIndex(lst => lst.ChaveTempo == listaTempo[Lst_Tempo.SelectedIndex].ChaveTempo);
+
+            tempos.RemoveAt(tempos.FindIndex(lst => lst.ChaveTempo == listaTempo[Lst_Tempo.SelectedIndex].ChaveTempo));
+
+            Lst_Tempo.Items.Refresh();
+            Dp_DataInicio.SelectedDate = null;
+            Dp_DataInicio.DisplayDate = DateTime.Today;
+            Dp_DataFim.SelectedDate = null;
+            Dp_DataFim.DisplayDate = DateTime.Today;
+
+            foreach (ListaTempo item in listaTempo)
+            {
+                tempo += item.DataFim - item.DataInicio;
+            }
+
+            preco = servicos.Find(lst => lst.Nome == Cb_Servico.Text).Preco * Convert.ToDecimal(tempo.TotalHours);
+
+            Lbl_Preco.Content = String.Format("{0:###0.00} €", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))));
+
+            if (Lst_Tempo.Items.Count >= 1)
+            {
+                Btn_GuardarTarefa.IsEnabled = true;
+                Btn_GuardarAlteracoes.IsEnabled = true;
+            }
+            else
+            {
+                Btn_GuardarTarefa.IsEnabled = false;
+                Btn_GuardarAlteracoes.IsEnabled = false;
+            }
         }
 
         //Botao voltar para o menu principal

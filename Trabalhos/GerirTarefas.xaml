@@ -71,7 +71,7 @@
             </Rectangle.Fill>
         </Rectangle>
         <Label Grid.Row="0" Grid.Column="1" Content="Tempo:" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="9,97,9,0" Height="32"/>
-        <ListBox x:Name ="Lst_Tempo" Grid.Column="2" Height="110" Margin="10,97,115,0" VerticalAlignment="Top" SnapsToDevicePixels="True" Foreground="#FFEEEEEE" SelectionChanged="Lst_Tempo_SelectionChanged" IsEnabled="False">
+        <ListBox x:Name ="Lst_Tempo" Grid.Column="2" Height="110" Margin="10,97,115,0" VerticalAlignment="Top" SnapsToDevicePixels="True" Foreground="#FFEEEEEE" SelectionChanged="Lst_Tempo_SelectionChanged" IsEnabled="False" ScrollViewer.VerticalScrollBarVisibility="Disabled">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Horizontal" />
@@ -153,8 +153,8 @@
             </ListBox.Style>
         </ListBox>
         <Button x:Name="Btn_AdicionarTempo" Grid.Row="0" Grid.Column="2" Content="Adicionar" Margin="0,97,10,0" HorizontalAlignment="Right" Width="100" Height="52" VerticalAlignment="Top" Click="Btn_AdicionarTempo_Click" IsEnabled="False" Visibility="Hidden"/>
-        <Button x:Name="Btn_EditarTempo" Grid.Row="0" Grid.Column="2" Content="Atualizar" Margin="0,97,10,0" HorizontalAlignment="Right" Width="100" Height="52" VerticalAlignment="Top" Visibility="Hidden"/>
-        <Button x:Name="Btn_ApagarTempo" Grid.Row="0" Grid.Column="2" Content="Apagar" Margin="0,156,10,0" HorizontalAlignment="Right" Width="100" Height="52" VerticalAlignment="Top" IsEnabled="False" Visibility="Hidden"/>
+        <Button x:Name="Btn_EditarTempo" Grid.Row="0" Grid.Column="2" Content="Atualizar" Margin="0,97,10,0" HorizontalAlignment="Right" Width="100" Height="52" VerticalAlignment="Top" Visibility="Hidden" Click="Btn_EditarTempo_Click"/>
+        <Button x:Name="Btn_ApagarTempo" Grid.Row="0" Grid.Column="2" Content="Apagar" Margin="0,156,10,0" HorizontalAlignment="Right" Width="100" Height="52" VerticalAlignment="Top" IsEnabled="False" Visibility="Hidden" Click="Btn_ApagarTempo_Click"/>
         <Label Grid.Row="0" Grid.Column="1" Content="Data/hora de inicio:" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="10,208,10,0" Height="30"/>
         <Label x:Name="Lbl_DataInicio" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="10,208,10,0" Height="30"/>
         <DatePicker x:Name="Dp_DataInicio" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,214,0,0" FontSize="16" Height="20" Width="230" IsTodayHighlighted="False" BorderThickness="0" Padding="0" BorderBrush="{x:Null}" IsTabStop="True" SelectedDateChanged="Dp_DataInicio_SelectedDateChanged" Visibility="Hidden">
@@ -219,7 +219,7 @@
         <Button x:Name="Btn_AtualizarTarefa" Grid.Row="1" Grid.Column="1" Content="Editar Tarefa Selecionada" Margin="10,89,0,89" Width="250" Height="73" HorizontalAlignment="Left" IsEnabled="False" Click="Btn_AtualizarTarefa_Click" Grid.ColumnSpan="2"/>
         <Button x:Name="Btn_ApagarTarefa" Grid.Row="1" Grid.Column="1" Content="Apagar Tarefa Selecionada" Margin="10,0,0,10" Width="250" Height="73" HorizontalAlignment="Left" IsEnabled="False" VerticalAlignment="Bottom" Click="Btn_ApagarTarefa_Click" Grid.ColumnSpan="2"/>
         <Button x:Name="Btn_CancelarTarefa" Grid.Row="1" Grid.Column="1" Content="Cancelar" Margin="10,0,0,10" Width="250" HorizontalAlignment="Left" Height="73" VerticalAlignment="Bottom" Grid.ColumnSpan="2" Visibility="Hidden"/>
-        <Button x:Name="Btn_GuardarTarefa" Grid.Row="1" Grid.Column="1" Content="Guardar Tarefa" Margin="10,10,0,0" Height="73" Width="250" VerticalAlignment="Top" HorizontalAlignment="Left" IsEnabled="False" Grid.ColumnSpan="2" Visibility="Hidden"/>
+        <Button x:Name="Btn_GuardarTarefa" Grid.Row="1" Grid.Column="1" Content="Guardar Tarefa" Margin="10,10,0,0" Height="73" Width="250" VerticalAlignment="Top" HorizontalAlignment="Left" IsEnabled="False" Grid.ColumnSpan="2" Visibility="Hidden" Click="Btn_GuardarTarefa_Click"/>
         <Button x:Name="Btn_GuardarAlteracoes" Grid.Row="1" Grid.Column="1" Content="Guardar Alterações" Margin="9,10,0,0" Height="73" Width="251" VerticalAlignment="Top" HorizontalAlignment="Left" IsEnabled="True" Grid.ColumnSpan="2" Visibility="Hidden"/>
         <Button x:Name="Btn_Voltar" Grid.Row="1" Grid.Column="2" Content="Voltar" Margin="0,0,10,10" HorizontalAlignment="Right" Width="100" Height="50" VerticalAlignment="Bottom" Click="Btn_Voltar_Click"/>
         <ScrollViewer Grid.Row="1" Grid.Column="2" Margin="103,10,10,65" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Auto">
