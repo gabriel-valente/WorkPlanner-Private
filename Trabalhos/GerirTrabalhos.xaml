@@ -146,8 +146,6 @@
                 </Style>
             </ListBox.Style>
         </ListBox>
-        <Label Grid.Row="0" Grid.Column="1" Content="Descricao:" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="9,279,9,0" Height="31"/>
-        <Label Grid.Row="0" Grid.Column="1" Content="Descricao:" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="9,315,9,0" Height="31"/>
 
         <Rectangle Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Height="1" VerticalAlignment="Bottom">
             <Rectangle.Fill>

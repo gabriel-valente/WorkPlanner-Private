@@ -55,7 +55,7 @@
                 </LinearGradientBrush>
             </Rectangle.Fill>
         </Rectangle>
-        <Label Grid.Row="0" Grid.Column="1" Content="Identificação cliente:" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="10,10,10,0" Height="31"/>
+        <Label Grid.Row="0" Grid.Column="1" Content="Código cliente:" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="10,10,10,0" Height="31"/>
         <Label x:Name="Lbl_CodigoCliente" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="10,10,10,0" Height="31"/>
         <Label Grid.Row="0" Grid.Column="1" Content="Nome cliente:" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="10,46,10,0" Height="31"/>
         <TextBox x:Name="Tb_NomeCliente" Grid.Row="0" Grid.Column="2"  HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="10,50,10,0" Height="21" FontSize="16" TextWrapping="WrapWithOverflow" MaxLength="50" IsReadOnly="True" TextChanged="Tb_NomeCliente_TextChanged" LostFocus="Tb_NomeCliente_LostFocus"/>
