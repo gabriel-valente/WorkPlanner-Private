@@ -35,7 +35,7 @@ namespace Trabalhos
         SqlCommand queryAtualizarTempo = new SqlCommand("UPDATE Tempo SET DataInicio = @DataInicio, DataFim = @DataFim WHERE Key_Tempo = @KeyTempo");
         SqlCommand queryApagarTarefa = new SqlCommand("DELETE FROM Tarefa WHERE Key_Tarefa = @KeyTarefa");
         SqlCommand queryApagarTodosTempos = new SqlCommand("DELETE FROM Tempo WHERE Key_Tarefa = @KeyTarefa");
-        SqlCommand queryApagarTempo = new SqlCommand("DELETE FROM Tempo WHERE Key_Tempo = @Key_Tempo");
+        SqlCommand queryApagarTempo = new SqlCommand("DELETE FROM Tempo WHERE Key_Tempo = @KeyTempo");
 
         SqlDataReader Reader;
 
@@ -145,10 +145,10 @@ namespace Trabalhos
 
             listaTempo.Clear();
 
+            preco = 0;
             try
             {
                 decimal valor = servicos.Find(lst => lst.Nome == EditarTarefaCampos.Servico).Preco;
-                preco = 0;
                 foreach (Tempo item in EditarTarefaCampos.tempos)
                 {
                     TimeSpan tempoDecorrido;
@@ -180,13 +180,13 @@ namespace Trabalhos
             Lst_Tempo.Items.Refresh();
 
             Sld_Desconto.Value = EditarTarefaCampos.Desconto;
-            Console.WriteLine(EditarTarefaCampos.Desconto);
             Tb_Desconto.Text = String.Format("{0:##0.00}%", Math.Round(Sld_Desconto.Value, 2));
             Lbl_Preco.Content = String.Format("{0:###0.00} €", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))));
 
             Lbl_Servico.Visibility = Visibility.Hidden;
             Cb_Servico.Visibility = Visibility.Visible;
             Lst_Tempo.IsEnabled = true;
+            Btn_AdicionarTempo.IsEnabled = false;
             Btn_AdicionarTempo.Visibility = Visibility.Visible;
             Btn_ApagarTempo.Visibility = Visibility.Visible;
             Lbl_DataInicio.Visibility = Visibility.Hidden;
@@ -197,6 +197,7 @@ namespace Trabalhos
             Dp_DataFim.Visibility = Visibility.Visible;
             Btn_LimparDataFim.Visibility = Visibility.Visible;
             Btn_AtualDataFim.Visibility = Visibility.Visible;
+            Sld_Desconto.Visibility = Visibility.Visible;
             Sld_Desconto.IsEnabled = true;
             Tb_Desconto.IsReadOnly = false;
             Lst_Tarefas.IsEnabled = false;
@@ -210,6 +211,8 @@ namespace Trabalhos
         //Botao alterar tarefa selecionada
         private void Btn_AtualizarTarefa_Click(object sender, RoutedEventArgs e)
         {
+            Adicionar = false;
+
             KeyValido = false;
             ServicoValido = true;
             TempoValido = true;
@@ -257,6 +260,7 @@ namespace Trabalhos
             Lbl_Servico.Visibility = Visibility.Hidden;
             Cb_Servico.Visibility = Visibility.Visible;
             Lst_Tempo.IsEnabled = true;
+            Btn_AdicionarTempo.IsEnabled = false;
             Btn_AdicionarTempo.Visibility = Visibility.Visible;
             Btn_ApagarTempo.Visibility = Visibility.Visible;
             Lbl_DataInicio.Visibility = Visibility.Hidden;
@@ -267,7 +271,9 @@ namespace Trabalhos
             Dp_DataFim.Visibility = Visibility.Visible;
             Btn_LimparDataFim.Visibility = Visibility.Visible;
             Btn_AtualDataFim.Visibility = Visibility.Visible;
+            Sld_Desconto.Visibility = Visibility.Visible;
             Sld_Desconto.IsEnabled = true;
+            Tb_Desconto.IsReadOnly = false;
             Lst_Tarefas.IsEnabled = false;
             Btn_GuardarAlteracoes.Visibility = Visibility.Visible;
             Btn_CancelarTarefa.Visibility = Visibility.Visible;
@@ -334,6 +340,8 @@ namespace Trabalhos
         {
             if (Lst_Tarefas.SelectedIndex >= 0)
             {
+                tempos.Clear();
+
                 DataBase.conexao.Open();
 
                 queryTodosTempos.Connection = DataBase.conexao;
@@ -345,7 +353,11 @@ namespace Trabalhos
                     tempos.Add(new Tempo { ChaveTempo = Convert.ToString(Reader["Key_Tempo"].ToString()), ChaveTarefa = Convert.ToString(Reader["Key_Tarefa"].ToString()), DataInicio = Convert.ToDateTime(Reader["DataInicio"] as DateTime?), DataFim = Convert.ToDateTime(Reader["DataFim"] as DateTime?) });
                 }
 
+                queryTodosTempos.Parameters.Clear();
                 Reader.Close();
+                queryTodosTempos.Connection.Close();
+
+                DataBase.conexao.Close();
 
                 Lbl_CodigoTarefa.Content = tarefas[Lst_Tarefas.SelectedIndex].ChaveTarefa;
                 Cb_Servico.Text = servicos.Find(lst => lst.ChaveServico == tarefas[Lst_Tarefas.SelectedIndex].ChaveServico).Nome;
@@ -355,12 +367,26 @@ namespace Trabalhos
 
                 decimal valor = servicos.Find(lst => lst.ChaveServico == tarefas[Lst_Tarefas.SelectedIndex].ChaveServico).Preco;
                 preco = 0;
+
+                DateTime inicio = tempos[0].DataInicio;
+                DateTime? fim = tempos[0].DataFim;
+
                 foreach (Tempo item in tempos)
                 {
                     TimeSpan tempoDecorrido;
 
                     try
                     {
+                        if (item.DataInicio < inicio)
+                        {
+                            inicio = item.DataInicio;
+                        }
+
+                        if (item.DataFim > fim)
+                        {
+                            fim = item.DataFim;
+                        }
+
                         tempoDecorrido = item.DataFim - item.DataInicio;
                         preco += valor * Convert.ToDecimal(TimeSpan.Parse(Convert.ToString(tempoDecorrido)).TotalHours);
                     }
@@ -375,6 +401,10 @@ namespace Trabalhos
                 Lst_Tempo.ItemsSource = listaTempo;
                 Lst_Tempo.Items.Refresh();
 
+                Lbl_DataInicio.Content = inicio;
+                Lbl_DataFim.Content = fim;
+
+                Sld_Desconto.Visibility = Visibility.Visible;
                 Sld_Desconto.Value = Convert.ToDouble(tarefas[Lst_Tarefas.SelectedIndex].Desconto * 100);
                 Tb_Desconto.Text = String.Format("{0:##0.00}%", Math.Round(Sld_Desconto.Value, 2));
                 Lbl_Preco.Content = String.Format("{0:###0.00} €", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))));
@@ -545,7 +575,7 @@ namespace Trabalhos
 
                     tarefas.Add(new Tarefa { ChaveTarefa = Lbl_CodigoTarefa.Content.ToString(), ChaveTrabalho = InterPages.KeyTrabalho, ChaveServico = keyServico, Desconto = desconto });
 
-                    listaTarefa.Add(new ListaTarefas { ChaveTarefa = Lbl_CodigoTarefa.Content.ToString(), Servico = Cb_Servico.SelectedItem.ToString(), Tempo = time }); ;
+                    listaTarefa.Add(new ListaTarefas { ChaveTarefa = Lbl_CodigoTarefa.Content.ToString(), Servico = Cb_Servico.Text, Tempo = time }); ;
                 }
                 catch (Exception ex)
                 {
@@ -555,8 +585,32 @@ namespace Trabalhos
 
             tempos.Clear();
             listaTempo.Clear();
+
             Lst_Tarefas.Items.Refresh();
             LimparCampos();
+
+            Lbl_Servico.Visibility = Visibility.Visible;
+            Cb_Servico.Visibility = Visibility.Hidden;
+            Lst_Tempo.IsEnabled = false;
+            Btn_AdicionarTempo.Visibility = Visibility.Hidden;
+            Btn_ApagarTempo.Visibility = Visibility.Hidden;
+            Lbl_DataInicio.Visibility = Visibility.Visible;
+            Dp_DataInicio.Visibility = Visibility.Hidden;
+            Btn_LimparDataInicio.Visibility = Visibility.Hidden;
+            Btn_AtualDataInicio.Visibility = Visibility.Hidden;
+            Lbl_DataFim.Visibility = Visibility.Visible;
+            Dp_DataFim.Visibility = Visibility.Hidden;
+            Btn_LimparDataFim.Visibility = Visibility.Hidden;
+            Btn_AtualDataFim.Visibility = Visibility.Hidden;
+            Sld_Desconto.Visibility = Visibility.Hidden;
+            Sld_Desconto.IsEnabled = false;
+            Tb_Desconto.IsReadOnly = true;
+            Lst_Tarefas.IsEnabled = true;
+            Btn_GuardarTarefa.Visibility = Visibility.Hidden;
+            Btn_CancelarTarefa.Visibility = Visibility.Hidden;
+            Btn_AdicionarTarefa.Visibility = Visibility.Visible;
+            Btn_AtualizarTarefa.Visibility = Visibility.Visible;
+            Btn_ApagarTarefa.Visibility = Visibility.Visible;
         }
 
         //Botao guardar alteraçoes na tarefa
@@ -580,88 +634,77 @@ namespace Trabalhos
                     queryAtualizarTarefa.Parameters.Clear();
 
                     queryAtualizarTempo.Connection = DataBase.conexao;
+                    queryApagarTempo.Connection = DataBase.conexao;
 
                     foreach (string item in temposAlterados)
                     {
-                        queryAtualizarTempo.Parameters.AddWithValue("@DataInicio", tempos.Find(lst => lst.ChaveTempo == item).DataInicio);
-                        queryAtualizarTempo.Parameters.AddWithValue("@DataFim", tempos.Find(lst => lst.ChaveTempo == item).DataFim);
+                        try
+                        {
+                            tempos.Find(lst => lst.ChaveTempo == item);
 
-                        queryAtualizarTempo.ExecuteNonQuery();
-                        queryAtualizarTempo.Parameters.Clear();
+                            queryAtualizarTempo.Parameters.AddWithValue("@DataInicio", tempos.Find(lst => lst.ChaveTempo == item).DataInicio);
+                            queryAtualizarTempo.Parameters.AddWithValue("@DataFim", tempos.Find(lst => lst.ChaveTempo == item).DataFim);
+                            queryAtualizarTempo.Parameters.AddWithValue("@KeyTempo", item);
+
+                            queryAtualizarTempo.ExecuteNonQuery();
+                            queryAtualizarTempo.Parameters.Clear();
+                        }
+                        catch (Exception)
+                        {
+                            queryApagarTempo.Parameters.AddWithValue("@KeyTempo", item);
+
+                            queryApagarTempo.ExecuteNonQuery();
+                            queryApagarTempo.Parameters.Clear();
+                        }
                     }
 
                     DataBase.conexao.Close();
 
+                    tarefas[Lst_Tarefas.SelectedIndex].ChaveServico = keyServico;
+                    tarefas[Lst_Tarefas.SelectedIndex].Desconto = desconto;
 
-                    //INSERIR NA LISTA AS ATUALIZAÇÕES!!!!!!
-                    //INSERIR NA LISTA AS ATUALIZAÇÕES!!!!!!
-                    //INSERIR NA LISTA AS ATUALIZAÇÕES!!!!!!
-                    //INSERIR NA LISTA AS ATUALIZAÇÕES!!!!!!
-                    //INSERIR NA LISTA AS ATUALIZAÇÕES!!!!!!
-                    //INSERIR NA LISTA AS ATUALIZAÇÕES!!!!!!
-                    //INSERIR NA LISTA AS ATUALIZAÇÕES!!!!!!
-                    //INSERIR NA LISTA AS ATUALIZAÇÕES!!!!!!
-                    //INSERIR NA LISTA AS ATUALIZAÇÕES!!!!!!
-                    clientes[Lst_Clientes.SelectedIndex].Nome = Convert.ToString(Tb_NomeCliente.Text.Trim());
+                    listaTarefa[Lst_Tarefas.SelectedIndex].Servico = Cb_Servico.Text.ToString();
 
-                    if (Dp_Nascimento.SelectedDate.HasValue)
+                    TimeSpan tempo = new TimeSpan(0);
+
+                    foreach (ListaTempo item in listaTempo)
                     {
-                        clientes[Lst_Clientes.SelectedIndex].DataNascimento = Convert.ToDateTime(Dp_Nascimento.SelectedDate.Value.ToString());
-                    }
-                    else if (!Dp_Nascimento.SelectedDate.HasValue)
-                    {
-                        clientes[Lst_Clientes.SelectedIndex].DataNascimento = Convert.ToDateTime(null);
+                        tempo += TimeSpan.Parse(item.TempoDecorrido);
                     }
 
-                    clientes[Lst_Clientes.SelectedIndex].Sexo = Convert.ToString(sexo);
-                    clientes[Lst_Clientes.SelectedIndex].Morada = Convert.ToString(Tb_Morada.Text.Trim());
+                    listaTarefa[Lst_Tarefas.SelectedIndex].Tempo = tempo;
 
-                    if (keyCodigo == null)
-                    {
-                        clientes[Lst_Clientes.SelectedIndex].CodigoPostal = null;
-                    }
-                    else
-                    {
-                        clientes[Lst_Clientes.SelectedIndex].CodigoPostal = Convert.ToString(Tb_CodPostalEsquerda.Text.Trim() + "-" + Tb_CodPostalDireita.Text.Trim());
-                    }
+                    tempos.Clear();
+                    listaTempo.Clear();
 
-                    clientes[Lst_Clientes.SelectedIndex].Localidade = Convert.ToString(Tb_Localidade.Text.Trim());
-                    clientes[Lst_Clientes.SelectedIndex].Email = Convert.ToString(Tb_Email.Text.Trim());
-                    clientes[Lst_Clientes.SelectedIndex].Telemovel = Convert.ToInt64(telemovel);
-                    clientes[Lst_Clientes.SelectedIndex].Telefone = Convert.ToInt64(telefone);
-
-                    string contacto = ContactoVisivel(Tb_Email.Text.Trim(), telemovel, telefone);
-
-                    clientes[Lst_Clientes.SelectedIndex].Contacto = contacto;
-
-                    Lst_Clientes.Items.Refresh();
+                    Lst_Tarefas.Items.Refresh();
 
                     LimparCampos();
 
-                    Tb_NomeCliente.IsReadOnly = true;
-                    Lbl_Nascimento.Visibility = Visibility.Visible;
-                    Dp_Nascimento.Visibility = Visibility.Hidden;
-                    Btn_LimparData.Visibility = Visibility.Hidden;
-                    Lbl_Sexo.Visibility = Visibility.Visible;
-                    RdB_Feminino.Visibility = Visibility.Hidden;
-                    RdB_Indefinido.Visibility = Visibility.Hidden;
-                    RdB_Masculino.Visibility = Visibility.Hidden;
-                    Tb_Morada.IsReadOnly = true;
-                    Tb_CodPostalEsquerda.IsReadOnly = true;
-                    Tb_CodPostalDireita.IsReadOnly = true;
-                    Lbl_CodPostalDiv.Visibility = Visibility.Hidden;
-                    Btn_ProcurarCodigoPostal.Visibility = Visibility.Hidden;
-                    Tb_Email.IsReadOnly = true;
-                    Tb_Telemovel.IsReadOnly = true;
-                    Tb_Telefone.IsReadOnly = true;
-                    Lst_Clientes.IsEnabled = true;
+                    Lbl_Servico.Visibility = Visibility.Visible;
+                    Cb_Servico.Visibility = Visibility.Hidden;
+                    Lst_Tempo.IsEnabled = false;
+                    Btn_AdicionarTempo.Visibility = Visibility.Hidden;
+                    Btn_ApagarTempo.Visibility = Visibility.Hidden;
+                    Lbl_DataInicio.Visibility = Visibility.Visible;
+                    Dp_DataInicio.Visibility = Visibility.Hidden;
+                    Btn_LimparDataInicio.Visibility = Visibility.Hidden;
+                    Btn_AtualDataInicio.Visibility = Visibility.Hidden;
+                    Lbl_DataFim.Visibility = Visibility.Visible;
+                    Dp_DataFim.Visibility = Visibility.Hidden;
+                    Btn_LimparDataFim.Visibility = Visibility.Hidden;
+                    Btn_AtualDataFim.Visibility = Visibility.Hidden;
+                    Sld_Desconto.Visibility = Visibility.Visible;
+                    Sld_Desconto.IsEnabled = false;
+                    Tb_Desconto.IsReadOnly = true;
+                    Lst_Tarefas.IsEnabled = true;
                     Btn_GuardarAlteracoes.Visibility = Visibility.Hidden;
-                    Btn_CancelarCliente.Visibility = Visibility.Hidden;
-                    Btn_AdicionarCliente.Visibility = Visibility.Visible;
-                    Btn_AtualizarCliente.Visibility = Visibility.Visible;
-                    Btn_ApagarCliente.Visibility = Visibility.Visible;
+                    Btn_CancelarTarefa.Visibility = Visibility.Hidden;
+                    Btn_AdicionarTarefa.Visibility = Visibility.Visible;
+                    Btn_AtualizarTarefa.Visibility = Visibility.Visible;
+                    Btn_ApagarTarefa.Visibility = Visibility.Visible;
                 }
-                catch (Exception ex)
+                    catch (Exception ex)
                 {
                     Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
                 }
@@ -690,8 +733,8 @@ namespace Trabalhos
         //Botao colocar data atual
         private void Btn_AtualDataInicio_Click(object sender, RoutedEventArgs e)
         {
-            Dp_DataInicio.SelectedDate = DateTime.Now;
-            Dp_DataInicio.DisplayDate = DateTime.Now;
+            Dp_DataInicio.SelectedDate = DateTime.Now.AddMilliseconds(-DateTime.Now.Millisecond);
+            Dp_DataInicio.DisplayDate = DateTime.Now.AddMilliseconds(-DateTime.Now.Millisecond);
         }
 
         //Botao voltar á data anterior ou limpar data
@@ -712,8 +755,8 @@ namespace Trabalhos
         //Botao colocar data atual
         private void Btn_AtualDataFim_Click(object sender, RoutedEventArgs e)
         {
-            Dp_DataFim.SelectedDate = DateTime.Now;
-            Dp_DataFim.DisplayDate = DateTime.Now;
+            Dp_DataFim.SelectedDate = DateTime.Now.AddMilliseconds(-DateTime.Now.Millisecond + 1);
+            Dp_DataFim.DisplayDate = DateTime.Now.AddMilliseconds(-DateTime.Now.Millisecond + 1);
         }
 
         //Botao adicionar tempo
@@ -804,16 +847,9 @@ namespace Trabalhos
             listaTempo[Lst_Tempo.SelectedIndex].TempoDecorrido = String.Format("{0:00}:{1:00}:{2:00}", tempo.Hours, tempo.Minutes, tempo.Seconds);
 
             int index = tempos.FindIndex(lst => lst.ChaveTempo == listaTempo[Lst_Tempo.SelectedIndex].ChaveTempo);
-
+            
             tempos[index].DataInicio = Dp_DataInicio.SelectedDate.Value;
             tempos[index].DataFim = data;
-
-            Lst_Tempo.Items.Refresh();
-            Lst_Tempo.SelectedIndex = -1;
-            Dp_DataInicio.SelectedDate = null;
-            Dp_DataInicio.DisplayDate = DateTime.Today;
-            Dp_DataFim.SelectedDate = null;
-            Dp_DataFim.DisplayDate = DateTime.Today;
 
             bool existe = false;
 
@@ -832,6 +868,13 @@ namespace Trabalhos
                 temposAlterados.Add(listaTempo[Lst_Tempo.SelectedIndex].ChaveTempo);
             }
 
+            Lst_Tempo.Items.Refresh();
+            Lst_Tempo.SelectedIndex = -1;
+            Dp_DataInicio.SelectedDate = null;
+            Dp_DataInicio.DisplayDate = DateTime.Today;
+            Dp_DataFim.SelectedDate = null;
+            Dp_DataFim.DisplayDate = DateTime.Today;
+            
             decimal valor = 0;
 
             try
@@ -876,6 +919,23 @@ namespace Trabalhos
         private void Btn_ApagarTempo_Click(object sender, RoutedEventArgs e) 
         {
             int index = tempos.FindIndex(lst => lst.ChaveTempo == listaTempo[Lst_Tempo.SelectedIndex].ChaveTempo);
+
+            bool existe = false;
+
+            foreach (string item in temposAlterados)
+            {
+                if (listaTempo[Lst_Tempo.SelectedIndex].ChaveTempo == item)
+                {
+                    existe = true;
+
+                    break;
+                }
+            }
+
+            if (!existe)
+            {
+                temposAlterados.Add(listaTempo[Lst_Tempo.SelectedIndex].ChaveTempo);
+            }
 
             tempos.RemoveAt(tempos.FindIndex(lst => lst.ChaveTempo == listaTempo[index].ChaveTempo));
             listaTempo.RemoveAt(Lst_Tempo.SelectedIndex);
@@ -1248,6 +1308,7 @@ namespace Trabalhos
             Lbl_DataInicio.Content = null;
             Dp_DataInicio.SelectedDate = null;
             Dp_DataInicio.DisplayDate = DateTime.Now;
+            Lbl_DataFim.Content = null;
             Dp_DataFim.SelectedDate = null;
             Dp_DataFim.DisplayDate = DateTime.Now;
             Sld_Desconto.Value = 0;

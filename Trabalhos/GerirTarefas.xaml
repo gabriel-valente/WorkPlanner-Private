@@ -200,7 +200,7 @@
             </Rectangle.Fill>
         </Rectangle>
         <Label Grid.Row="0" Grid.Column="1" Content="Desconto:" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="5,277,10,0" Height="30"/>
-        <Slider x:Name="Sld_Desconto" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="10,287,93,0" ValueChanged="Sld_Desconto_ValueChanged" Maximum="100" IsEnabled="False" IsSnapToTickEnabled="True" TickFrequency="0.01"/>
+        <Slider x:Name="Sld_Desconto" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="10,287,93,0" ValueChanged="Sld_Desconto_ValueChanged" Maximum="100" IsEnabled="False" IsSnapToTickEnabled="True" TickFrequency="0.01" Visibility="Hidden"/>
         <TextBox x:Name="Tb_Desconto" Grid.Row="0" Grid.Column="2" VerticalAlignment="Top" HorizontalContentAlignment="Center" Margin="0,287,6,0" Height="20" FontSize="16" HorizontalAlignment="Right" Width="87" Padding="0" VerticalContentAlignment="Center" Text="{Binding Value, StringFormat={}{0:#00.00%}}" IsReadOnly="True" TextChanged="Tb_Desconto_TextChanged"/>
         <Label Grid.Row="0" Grid.Column="1" Content="Preço:" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="5,313,10,0" Height="30"/>
         <Label x:Name="Lbl_Preco" Grid.Row="0" Grid.Column="2"  HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="10,318,0,0" Height="19" FontSize="16" Width="149" Content="" Padding="0"/>
