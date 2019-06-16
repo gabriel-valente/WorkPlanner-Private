@@ -22,7 +22,7 @@ namespace Trabalhos
     /// </summary>
     public partial class GerirServicos : Page
     {
-        SqlCommand queryTodosServicos = new SqlCommand("SELECT Key_Servico, Nome, Preco FROM Servico");
+        SqlCommand queryTodosServicos = new SqlCommand("SELECT Key_Servico, Nome, Preco FROM Servico ORDER BY Nome, Preco");
         SqlCommand queryIndexServico = new SqlCommand("SELECT Key_Servico FROM Servico WHERE Key_Servico = @KeyServico");
         SqlCommand queryInserirServico = new SqlCommand("INSERT INTO Servico (Key_Servico, Nome, Preco) VALUES (@KeyServico, @Nome, @Preco)");
         SqlCommand queryAtualizarServico = new SqlCommand("UPDATE Servico SET Nome = @Nome, Preco = @Preco WHERE Key_Servico = @Key_Servico");
@@ -166,12 +166,23 @@ namespace Trabalhos
         {
             if (NomeValido && PrecoValido)
             {
+                decimal valor;
+
+                if (Tb_Preco.Text.Contains("€"))
+                {
+                    decimal.TryParse(Tb_Preco.Text.Remove(Tb_Preco.Text.Length - 1), out valor);
+                }
+                else
+                {
+                    decimal.TryParse(Tb_Preco.Text, out valor);
+                }
+
                 try
                 {
                     DataBase.conexao.Open();
                     queryInserirServico.Connection = DataBase.conexao;
                     queryInserirServico.Parameters.AddWithValue("@Nome", Tb_Servico.Text.Trim());
-                    queryInserirServico.Parameters.AddWithValue("@Preco", Convert.ToDecimal(Tb_Preco.Text.Trim()));
+                    queryInserirServico.Parameters.AddWithValue("@Preco", valor);
                     queryInserirServico.Parameters.AddWithValue("@KeyServico", Lbl_CodigoServico.Content);
 
                     queryInserirServico.ExecuteNonQuery();
@@ -179,7 +190,7 @@ namespace Trabalhos
 
                     DataBase.conexao.Close();
 
-                    servicos.Add(new Servico { ChaveServico = Convert.ToString(Lbl_CodigoServico.Content), Nome = Convert.ToString(Tb_Servico.Text.Trim()), Preco = Convert.ToDecimal(Tb_Preco.Text.Trim()) });
+                    servicos.Add(new Servico { ChaveServico = Convert.ToString(Lbl_CodigoServico.Content), Nome = Convert.ToString(Tb_Servico.Text.Trim()), Preco = valor });
 
                     Lst_Servicos.Items.Refresh();
 
@@ -188,6 +199,7 @@ namespace Trabalhos
                     Tb_Servico.IsReadOnly = true;
                     Tb_Preco.IsReadOnly = true;
                     Lst_Servicos.IsEnabled = true;
+                    Lbl_AvisoPreco.Visibility = Visibility.Hidden;
                     Btn_GuardarServico.Visibility = Visibility.Hidden;
                     Btn_CancelarServico.Visibility = Visibility.Hidden;
                     Btn_AdicionarServico.Visibility = Visibility.Visible;
@@ -208,12 +220,23 @@ namespace Trabalhos
         {
             if (NomeValido && PrecoValido)
             {
+                decimal valor;
+
+                if (Tb_Preco.Text.Contains("€"))
+                {
+                    decimal.TryParse(Tb_Preco.Text.Remove(Tb_Preco.Text.Length - 1), out valor);
+                }
+                else
+                {
+                    decimal.TryParse(Tb_Preco.Text, out valor);
+                }
+
                 try
                 {
                     DataBase.conexao.Open();
                     queryAtualizarServico.Connection = DataBase.conexao;
                     queryAtualizarServico.Parameters.AddWithValue("@Nome", Tb_Servico.Text.Trim());
-                    queryAtualizarServico.Parameters.AddWithValue("@Preco", Convert.ToDecimal(Tb_Preco.Text.Trim()));
+                    queryAtualizarServico.Parameters.AddWithValue("@Preco", valor);
                     queryAtualizarServico.Parameters.AddWithValue("@Key_Servico", Lbl_CodigoServico.Content.ToString());
 
                     queryAtualizarServico.ExecuteNonQuery();
@@ -222,7 +245,7 @@ namespace Trabalhos
                     DataBase.conexao.Close();
 
                     servicos[Lst_Servicos.SelectedIndex].Nome = Convert.ToString(Tb_Servico.Text.Trim());
-                    servicos[Lst_Servicos.SelectedIndex].Preco = Convert.ToDecimal(Tb_Preco.Text.Trim());
+                    servicos[Lst_Servicos.SelectedIndex].Preco = valor;
 
                     Lst_Servicos.Items.Refresh();
 
@@ -231,6 +254,7 @@ namespace Trabalhos
                     Tb_Servico.IsReadOnly = true;
                     Tb_Preco.IsReadOnly = true;
                     Lst_Servicos.IsEnabled = true;
+                    Lbl_AvisoPreco.Visibility = Visibility.Hidden;
                     Btn_GuardarServico.Visibility = Visibility.Hidden;
                     Btn_CancelarServico.Visibility = Visibility.Hidden;
                     Btn_AdicionarServico.Visibility = Visibility.Visible;
@@ -253,7 +277,7 @@ namespace Trabalhos
             {
                 Lbl_CodigoServico.Content = servicos[Lst_Servicos.SelectedIndex].ChaveServico;
                 Tb_Servico.Text = servicos[Lst_Servicos.SelectedIndex].Nome;
-                Tb_Preco.Text = servicos[Lst_Servicos.SelectedIndex].Preco.ToString();
+                Tb_Preco.Text = servicos[Lst_Servicos.SelectedIndex].Preco.ToString() + " €";
 
                 Btn_AtualizarServico.IsEnabled = true;
 
@@ -423,6 +447,28 @@ namespace Trabalhos
                 Tb_Preco.SelectionStart = pos;
             }
 
+            for (int i = 0; i < preco.Length; i++)
+            {
+                if (i < preco.Length - 1 && preco[i] == '€')
+                {
+                    Tb_Preco.Text = Tb_Preco.Text.Remove(i, 1);
+                    Array.Clear(preco, 0, preco.Length);
+                    preco = Tb_Preco.Text.Trim().ToCharArray();
+                    Tb_Preco.SelectionStart = i;
+                }
+            }
+
+            for (int i = 0; i < preco.Length; i++)
+            {
+                if (!char.IsDigit(preco[i]) && preco[i] != ',' && preco[i] != '€')
+                {
+                    Tb_Preco.Text = Tb_Preco.Text.Remove(i, 1);
+                    Array.Clear(preco, 0, preco.Length);
+                    preco = Tb_Preco.Text.Trim().ToCharArray();
+                    Tb_Preco.SelectionStart = i;
+                }
+            }
+
             int passComma = 0;
 
             for (int i = 0; i < preco.Length; i++)
@@ -432,29 +478,40 @@ namespace Trabalhos
                     passComma = i;
                 }
 
-                if (!char.IsDigit(preco[i]) && preco[i] != ',')
+                if (!char.IsDigit(preco[i]) && preco[i] != ',' && preco[i] != '€')
                 {
                     Tb_Preco.Text = Tb_Preco.Text.Remove(i, 1);
                     Array.Clear(preco, 0, preco.Length);
-                    preco = Tb_Preco.Text.TrimStart().ToCharArray();
+                    preco = Tb_Preco.Text.Trim().ToCharArray();
                     Tb_Preco.SelectionStart = i;
                 }
-                else if (i >= passComma + 3)
+                else if (i >= passComma + 3 && preco[i] != '€')
                 {
                     Tb_Preco.Text = Tb_Preco.Text.Remove(i, 1);
                     Array.Clear(preco, 0, preco.Length);
-                    preco = Tb_Preco.Text.TrimStart().ToCharArray();
+                    preco = Tb_Preco.Text.Trim().ToCharArray();
                     Tb_Preco.SelectionStart = i;
                 }
             }
 
-            if (Tb_Preco.Text.Length > 0)
+            decimal valor;
+
+            if (Tb_Preco.Text.Contains("€"))
             {
-                if (!Tb_Preco.IsReadOnly && Convert.ToDecimal(Tb_Preco.Text) < Configuracoes.ServicoPrecoMinimo)
+                decimal.TryParse(Tb_Preco.Text.Remove(Tb_Preco.Text.Length - 1), out valor);
+            }
+            else
+            {
+                decimal.TryParse(Tb_Preco.Text, out valor);
+            }
+
+            if (valor.ToString().Length > 0)
+            {
+                if (!Tb_Preco.IsReadOnly && valor < Configuracoes.ServicoPrecoMinimo)
                 {
                     Lbl_AvisoPreco.Visibility = Visibility.Visible;
                 }
-                else if (!Tb_Preco.IsReadOnly && Convert.ToDecimal(Tb_Preco.Text) >= Configuracoes.ServicoPrecoMinimo)
+                else if (!Tb_Preco.IsReadOnly && valor >= Configuracoes.ServicoPrecoMinimo)
                 {
                     Lbl_AvisoPreco.Visibility = Visibility.Hidden;
                 }
@@ -468,7 +525,7 @@ namespace Trabalhos
                 Lbl_AvisoPreco.Visibility = Visibility.Hidden;
             }
 
-            if (Tb_Preco.Text.Length <= 0 || Convert.ToDecimal(Tb_Preco.Text) == 0)
+            if (valor.ToString().Length <= 0 || valor == 0)
             {
                 PrecoValido = false;
             }

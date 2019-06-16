@@ -27,7 +27,7 @@ namespace Trabalhos
     /// </summary>
     public partial class GerirClientes : Page
     {
-        SqlCommand queryTodosClientes = new SqlCommand("SELECT Key_Cliente, Nome, DataNascimento, Sexo, Morada, CodigoPostal.CodPostal , Cliente.Localidade, Email, Telemovel, Telefone FROM Cliente LEFT JOIN CodigoPostal ON CodigoPostal.Key_CodPostal=Cliente.Key_CodPostal");
+        SqlCommand queryTodosClientes = new SqlCommand("SELECT Key_Cliente, Nome, DataNascimento, Sexo, Morada, CodigoPostal.CodPostal , Cliente.Localidade, Email, Telemovel, Telefone FROM Cliente LEFT JOIN CodigoPostal ON CodigoPostal.Key_CodPostal=Cliente.Key_CodPostal ORDER BY Nome");
         SqlCommand queryIndexCliente = new SqlCommand("SELECT Key_Cliente FROM Cliente WHERE Key_Cliente = @KeyCliente");
         SqlCommand queryInserirCliente = new SqlCommand("INSERT INTO Cliente (Key_Cliente, Nome, DataNascimento, Sexo, Morada, Key_CodPostal, Localidade, Email, Telemovel, Telefone) VALUES (@KeyCliente, @Nome, @DataNascimento, @Sexo, @Morada, @CodPostal, @Localidade, @Email, @Telemovel, @Telefone)");
         SqlCommand queryAtualizarCliente = new SqlCommand("UPDATE Cliente SET Nome = @Nome, DataNascimento = @DataNascimento, Sexo = @Sexo, Morada = @Morada, Key_CodPostal = @CodPostal, Localidade = @Localidade, Email = @Email, Telemovel = @Telemovel, Telefone = @Telefone WHERE Key_Cliente = @Key_Cliente");
@@ -1503,33 +1503,5 @@ namespace Trabalhos
 
             AtualizarBotoes();
         }
-
-        //Verificar se o nome já existe na base de dados (ao fim de 3 segundos)
-        //private void Timer_Tick(object sender, EventArgs e)
-        //{
-        //    string nome = Tb_NomeCliente.Text;
-
-        //    DataBase.conexao.Open();
-        //    queryProcurarCliente.Connection = DataBase.conexao;
-        //    queryProcurarCliente.Parameters.AddWithValue("@nome", "%" + nome + "%");
-
-        //    Reader = queryProcurarCliente.ExecuteReader();
-        //    queryProcurarCliente.Parameters.Clear();
-
-        //    if (Reader.HasRows)
-        //    {
-        //        Reader.Read();
-        //        Lbl_Erros.Text = "Este nome de Cliente já existe!\nCódigo Cliente: " + Convert.ToString(Reader["Key_Cliente"].ToString()) + "\nNome Cliente: " + Convert.ToString(Reader["Nome"].ToString());
-        //        Btn_GuardarCliente.IsEnabled = false;
-        //    }
-        //    else
-        //    {
-        //        Lbl_Erros.Text = null;
-        //        Btn_GuardarCliente.IsEnabled = true;
-        //    }
-
-        //    Reader.Close();
-        //    DataBase.conexao.Close();
-        //}
     }
 }
