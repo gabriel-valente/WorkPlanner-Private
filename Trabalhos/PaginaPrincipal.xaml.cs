@@ -61,7 +61,7 @@ namespace Trabalhos
 
         private void Btn_GerirTrabalhos_Click(object sender, RoutedEventArgs e)
         {
-            ((MainWindow)Application.Current.MainWindow).Frm_Principal.Content = new GerirTarefas();
+            ((MainWindow)Application.Current.MainWindow).Frm_Principal.Content = new GerirTrabalhos();
         }
     }
 

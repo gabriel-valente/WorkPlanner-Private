@@ -20,7 +20,7 @@
         </Grid.RowDefinitions>
 
         <Label Grid.Row="0" Grid.Column="0" Content="Trabalhos atuais" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="10,10,10,0" Height="31"/>
-        <ListBox x:Name="Lst_Trabalhos" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="10,49,10,10" VerticalAlignment="Stretch">
+        <ListBox x:Name="Lst_Trabalhos" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="10,49,10,10" VerticalAlignment="Stretch" SelectionChanged="Lst_Trabalhos_SelectionChanged">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -65,7 +65,7 @@
         <Label Grid.Row="0" Grid.Column="1" Content="Descrição:" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="9,118,9,0" Height="31"/>
         <TextBox x:Name="Tb_Descricao" Grid.Row="0" Grid.Column="2" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="10,118,11,0" Height="67" FontSize="16" TextWrapping="WrapWithOverflow" MaxLength="512" IsReadOnly="True"/>
         <Label Grid.Row="0" Grid.Column="1" Content="Tarefas:" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="9,190,9,0" Height="31"/>
-        <ListBox x:Name="Lst_Tarefas" Grid.Column="2" Height="84" Margin="10,190,10,0" VerticalAlignment="Top" SnapsToDevicePixels="True" Foreground="#FFEEEEEE" IsEnabled="False">
+        <ListBox x:Name="Lst_Tarefas" Grid.Column="2" Height="110" Margin="10,190,109,0" VerticalAlignment="Top" SnapsToDevicePixels="True" Foreground="#FFEEEEEE" ScrollViewer.VerticalScrollBarVisibility="Disabled" IsEnabled="False">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Horizontal" />
@@ -81,14 +81,14 @@
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Content="{Binding ChaveTrabalho}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
-                        <Rectangle Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Height="1" VerticalAlignment="Bottom">
+                        <Label Grid.Column="0" Grid.Row="0" Content="{Binding Tarefa}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                        <Rectangle Grid.Row="0" Grid.Column="0" Height="1" VerticalAlignment="Bottom">
                             <Rectangle.Fill>
                                 <LinearGradientBrush EndPoint="0,0.5" StartPoint="1,0.5">
                                     <GradientStop Color="#00000000" Offset="0"/>
@@ -98,10 +98,10 @@
                                 </LinearGradientBrush>
                             </Rectangle.Fill>
                         </Rectangle>
-                        <Label Grid.Row="1" Grid.Column="0" Content="{Binding TempoDecorrido}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
-                        <Rectangle Grid.Row="1" Grid.Column="1" Width="1" HorizontalAlignment="Left">
+                        <Label Grid.Row="1" Grid.Column="0" Content="{Binding Tempo}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                        <Rectangle Grid.Row="1" Grid.Column="0" Height="1" VerticalAlignment="Bottom">
                             <Rectangle.Fill>
-                                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                <LinearGradientBrush EndPoint="0,0.5" StartPoint="1,0.5">
                                     <GradientStop Color="#00000000" Offset="0"/>
                                     <GradientStop Color="#00000000" Offset="1"/>
                                     <GradientStop Color="White" Offset="0.4"/>
@@ -109,7 +109,7 @@
                                 </LinearGradientBrush>
                             </Rectangle.Fill>
                         </Rectangle>
-                        <Label Grid.Row="1" Grid.Column="1" Content="{Binding Preco}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                        <Label Grid.Row="2" Grid.Column="0" Content="{Binding Preco}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
@@ -146,8 +146,9 @@
                 </Style>
             </ListBox.Style>
         </ListBox>
-        <Label Grid.Row="0" Grid.Column="1" Content="Valor total:" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="9,279,9,0" Height="31"/>
-        <Label x:Name="Lbl_Preco" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="10,279,534,0" Height="31"/>
+        <Button x:Name="Btn_EditarTarefas" Grid.Column="2" Content="Gerir Tarefas" Margin="0,190,10,0" HorizontalAlignment="Right" Width="94" IsEnabled="False" Height="110" VerticalAlignment="Top" Visibility="Hidden"/>
+        <Label Grid.Row="0" Grid.Column="1" Content="Valor total:" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="9,305,9,0" Height="31"/>
+        <Label x:Name="Lbl_Preco" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="10,305,534,0" Height="31"/>
 
         <Rectangle Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Height="1" VerticalAlignment="Bottom">
             <Rectangle.Fill>
@@ -159,7 +160,7 @@
                 </LinearGradientBrush>
             </Rectangle.Fill>
         </Rectangle>
-        <Button x:Name="Btn_AdicionarTrabalho" Grid.Row="1" Grid.Column="1" Content="Adicionar Novo Trabalho" Margin="10,10,0,0" Width="250" HorizontalAlignment="Left" Height="73" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+        <Button x:Name="Btn_AdicionarTrabalho" Grid.Row="1" Grid.Column="1" Content="Adicionar Novo Trabalho" Margin="10,10,0,0" Width="250" HorizontalAlignment="Left" Height="73" VerticalAlignment="Top" Grid.ColumnSpan="2" Click="Btn_AdicionarTrabalho_Click"/>
         <Button x:Name="Btn_AtualizarTrabalho" Grid.Row="1" Grid.Column="1" Content="Editar Trabalho Selecionado" Margin="10,80,0,81" Width="250" Height="73" HorizontalAlignment="Left" IsEnabled="False" Grid.ColumnSpan="2"/>
         <Button x:Name="Btn_ApagarTrabalho" Grid.Row="1" Grid.Column="1" Content="Apagar Trabalho Selecionado" Margin="10,0,0,10" Width="250" Height="73" HorizontalAlignment="Left" IsEnabled="False" VerticalAlignment="Bottom" Grid.ColumnSpan="2"/>
         <Button x:Name="Btn_CancelarTrabalho" Grid.Row="1" Grid.Column="1" Content="Cancelar" Margin="10,0,0,10" Width="250" HorizontalAlignment="Left" Height="73" VerticalAlignment="Bottom" Grid.ColumnSpan="2" Visibility="Hidden"/>

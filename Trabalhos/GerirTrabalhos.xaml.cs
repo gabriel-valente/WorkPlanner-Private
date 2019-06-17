@@ -21,23 +21,20 @@ namespace Trabalhos
     /// </summary>
     public partial class GerirTrabalhos : Page
     {
-        SqlCommand queryTodosTrabalhos = new SqlCommand("SELECT Key_Trabalho, Key_Cliente, Trabalho.Nome AS 'Trabalho', Descricao FROM Trabalho INNER JOIN Cliente ON Trabalho.Key_Cliente = Cliente.Key_Cliente ORDER BY Trabalho.Nome, Cliente.Nome");
+        SqlCommand queryTodosTrabalhos = new SqlCommand("SELECT Key_Trabalho, Trabalho.Key_Cliente AS 'Cliente', Trabalho.Nome AS 'Trabalho', Descricao FROM Trabalho INNER JOIN Cliente ON Trabalho.Key_Cliente = Cliente.Key_Cliente ORDER BY Trabalho.Nome, Cliente.Nome");
         SqlCommand queryTodosClientes = new SqlCommand("SELECT Key_Cliente, Nome, Email, Telemovel, Telefone FROM Cliente ORDER BY Nome");
         SqlCommand queryTodosServicos = new SqlCommand("SELECT Key_Servico, Nome, Preco FROM Servico ORDER BY Nome");
+        SqlCommand queryTodasTarefas = new SqlCommand("SELECT Key_Tarefa, Key_Servico, Desconto FROM Tarefa WHERE Key_Trabalho = @KeyTrabalho");
+        SqlCommand queryTodosTempos = new SqlCommand("SELECT Key_Tempo, DataInicio, DataFim FROM Tempo WHERE Key_Tarefa = @KeyTarefa ORDER BY DataInicio, DataFim");
         SqlCommand queryIndexTrabalho = new SqlCommand("SELECT Key_Trabalho FROM Trabalho WHERE Key_Trabalho = @KeyTrabalho");
-        SqlCommand queryIndexTempo = new SqlCommand("SELECT Key_Tempo FROM Tempo WHERE Key_Tempo = @KeyTempo");
-        SqlCommand queryInserirTarefa = new SqlCommand("INSERT INTO Tarefa (Key_Tarefa, Key_Trabalho, Key_Servico, Desconto) VALUES (@KeyTarefa, @KeyTrabalho, @KeyServico, @Desconto)");
-        SqlCommand queryInserirTempo = new SqlCommand("INSERT INTO Tempo (Key_Tempo, Key_Tarefa, DataInicio, DataFim) VALUES (@KeyTempo, @KeyTarefa, @DataInicio, @DataFim)");
-        SqlCommand queryAtualizarTarefa = new SqlCommand("UPDATE Tarefa SET Key_Servico = @KeyServico, Desconto = @Desconto WHERE Key_Tarefa = @KeyTarefa");
-        SqlCommand queryAtualizarTempo = new SqlCommand("UPDATE Tempo SET DataInicio = @DataInicio, DataFim = @DataFim WHERE Key_Tempo = @KeyTempo");
-        SqlCommand queryApagarTarefa = new SqlCommand("DELETE FROM Tarefa WHERE Key_Tarefa = @KeyTarefa");
-        SqlCommand queryApagarTodosTempos = new SqlCommand("DELETE FROM Tempo WHERE Key_Tarefa = @KeyTarefa");
-        SqlCommand queryApagarTempo = new SqlCommand("DELETE FROM Tempo WHERE Key_Tempo = @KeyTempo");
 
         SqlDataReader Reader;
 
         List<Trabalho> trabalhos = new List<Trabalho>();
+        List<ListaTrabalho> listaTrabalhos = new List<ListaTrabalho>();
         List<Cliente> clientes = new List<Cliente>();
+        List<Servico> servicos = new List<Servico>();
+        List<TrabalhoTarefas> tarefas = new List<TrabalhoTarefas>(); 
 
         //Gerar chave aleatória 
         public static string RandomString(int length)
@@ -47,17 +44,168 @@ namespace Trabalhos
             return new string(Enumerable.Range(1, length).Select(_ => chars[random.Next(chars.Length)]).ToArray());
         }
 
+        decimal preco = 0;
+
         bool KeyValido = false;
         bool TrabalhoValido = false;
         bool TarefaValido = false;
 
         bool Adicionar = false;
 
+        //Iniciação
         public GerirTrabalhos()
         {
             InitializeComponent();
 
             LigarBaseDados();
+
+            foreach (Trabalho item in trabalhos)
+            {
+                listaTrabalhos.Add(new ListaTrabalho { ChaveTrabalho = item.ChaveTrabalho, NomeCliente = clientes.Find(lst => lst.ChaveCliente == item.ChaveCliente).Nome, NomeTrabalho = item.Nome });
+            }
+
+            Lst_Trabalhos.ItemsSource = listaTrabalhos;
+            Lst_Trabalhos.Items.Refresh();
+
+            Cb_Cliente.ItemsSource = clientes;
+            Cb_Cliente.DisplayMemberPath = "Nome";
+            Cb_Cliente.Items.Refresh();
+        }
+
+        //Funçoes de butoes e lista
+        //Butao adicionar novo trabalho
+        private void Btn_AdicionarTrabalho_Click(object sender, RoutedEventArgs e)
+        {
+            //Adicionar = true;
+
+            //LimparCampos();
+
+            //if (EditarTrabalhoCampos.ChaveTrabalho == null)
+            //{
+            //    Lbl_CodigoTrabalho.Content = ReservarChave();
+            //}
+            //else
+            //{
+            //    Lbl_CodigoTrabalho.Content = EditarTrabalhoCampos.ChaveTrabalho;
+            //}
+
+            //Cb_Cliente.Text = EditarTrabalhoCampos.Cliente;
+            //Tb_Trabalho.Text = EditarTrabalhoCampos.Trabalho;
+            //Tb_Descricao.Text = EditarTrabalhoCampos.Descricao;
+
+            //tarefas.Clear();
+
+            //preco = 0;
+            //decimal valor;
+
+            //try
+            //{
+            //    valor = servicos.Find(lst => lst.Nome == EditarTrabalhoCampos.Servico).Preco;
+            //}
+            //catch (Exception)
+            //{
+            //    valor = 0;
+            //}
+
+            //foreach (TrabalhoTarefas item in EditarTrabalhoCampos.Tarefas)
+            //{
+            //    DateTime data;
+            //    TimeSpan tempo;
+
+            //    if (item.DataFim == Convert.ToDateTime("01/01/0001 00:00:00") || item.DataFim == Convert.ToDateTime(null))
+            //    {
+            //        data = Convert.ToDateTime(null);
+            //        tempo = new TimeSpan(0, 0, 0);
+            //    }
+            //    else
+            //    {
+            //        data = item.DataFim;
+            //        tempo = item.DataFim - item.DataInicio;
+            //        preco += valor * Convert.ToDecimal(TimeSpan.Parse(Convert.ToString(tempo)).TotalHours);
+            //    }
+
+            //    tempos.Add(new Tempo { ChaveTempo = item.ChaveTempo, ChaveTarefa = EditarTarefaCampos.ChaveTarefa, DataInicio = item.DataInicio, DataFim = data });
+            //    listaTempo.Add(new ListaTempo { ChaveTempo = item.ChaveTempo, DataInicio = item.DataInicio, DataFim = data, TempoDecorrido = String.Format("{0:00}:{1:00}:{2:00}", tempo.Hours, tempo.Minutes, tempo.Seconds) });
+            //}
+
+            ////Lst_Tempo.ItemsSource = listaTempo;
+            ////Lst_Tempo.Items.Refresh();
+
+            ////Sld_Desconto.Value = EditarTarefaCampos.Desconto;
+            ////Tb_Desconto.Text = String.Format("{0:##0.00}%", Math.Round(Sld_Desconto.Value, 2));
+            ////Lbl_Preco.Content = String.Format("{0:###0.00} €", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))));
+
+            //Lbl_Cliente.Visibility = Visibility.Hidden;
+            //Cb_Cliente.Visibility = Visibility.Visible;
+            //Tb_Trabalho.IsEnabled = true;
+            //Tb_Descricao.IsEnabled = true;
+            //Lst_Tarefas.IsEnabled = true;
+            //Lst_Trabalhos.IsEnabled = false;
+            //Btn_EditarTarefas.Visibility = Visibility.Visible;
+            //Btn_GuardarTrabalho.Visibility = Visibility.Visible;
+            //Btn_CancelarTrabalho.Visibility = Visibility.Visible;
+            //Btn_AdicionarTrabalho.Visibility = Visibility.Hidden;
+            //Btn_AtualizarTrabalho.Visibility = Visibility.Hidden;
+            //Btn_ApagarTrabalho.Visibility = Visibility.Hidden;
+        }
+
+        //Lista trabalhos
+        private void Lst_Trabalhos_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (Lst_Trabalhos.SelectedIndex >= 0)
+            {
+                tarefas.Clear();
+
+                DataBase.conexao.Open();
+                queryTodasTarefas.Connection = DataBase.conexao;
+                queryTodasTarefas.Parameters.AddWithValue("@KeyTrabalho", listaTrabalhos[Lst_Trabalhos.SelectedIndex].ChaveTrabalho);
+                Reader = queryTodasTarefas.ExecuteReader();
+
+                while (Reader.Read())
+                {
+                    SqlDataReader Reader2;
+
+                    queryTodosTempos.Connection = DataBase.conexao;
+                    queryTodosTempos.Parameters.AddWithValue("@KeyTarefa", Convert.ToString(Reader["Key_Tarefa"].ToString()));
+                    Reader2 = queryTodosTempos.ExecuteReader();
+
+                    TimeSpan time = new TimeSpan(0);
+
+                    while (Reader2.Read())
+                    {
+                        if (Convert.ToString(Reader2["DataFim"].ToString()) == "01/01/0001 00:00:00" || Convert.ToString(Reader2["DataFim"].ToString()) == null)
+                        {
+                            time += new TimeSpan(0);
+                        }
+                        else
+                        { 
+                            time += Convert.ToDateTime(Reader2["DataFim"].ToString()) - Convert.ToDateTime(Reader2["DataInicio"].ToString());
+                        }
+                    }
+
+                    queryTodosTempos.Parameters.Clear();
+                    Reader2.Close();
+                    queryTodosTempos.Connection.Close();
+
+
+                    //CORRIGIR ERRO AO NAO DAR PARA VOLTAR A LER //Tentativa inválida para chamar MetaData quando o leitor está fechado.
+                    //CORRIGIR ERRO AO NAO DAR PARA VOLTAR A LER //Tentativa inválida para chamar MetaData quando o leitor está fechado.
+                    //CORRIGIR ERRO AO NAO DAR PARA VOLTAR A LER //Tentativa inválida para chamar MetaData quando o leitor está fechado.
+                    //CORRIGIR ERRO AO NAO DAR PARA VOLTAR A LER //Tentativa inválida para chamar MetaData quando o leitor está fechado.
+                    //CORRIGIR ERRO AO NAO DAR PARA VOLTAR A LER //Tentativa inválida para chamar MetaData quando o leitor está fechado.
+                    //CORRIGIR ERRO AO NAO DAR PARA VOLTAR A LER //Tentativa inválida para chamar MetaData quando o leitor está fechado.
+                    //CORRIGIR ERRO AO NAO DAR PARA VOLTAR A LER //Tentativa inválida para chamar MetaData quando o leitor está fechado.
+                    //CORRIGIR ERRO AO NAO DAR PARA VOLTAR A LER //Tentativa inválida para chamar MetaData quando o leitor está fechado.
+                    decimal valor = (servicos.Find(lst => lst.ChaveServico == Convert.ToString(Reader["Key_Servico"].ToString())).Preco * Convert.ToDecimal(time.TotalHours)) * (Convert.ToDecimal(Reader["Key_Servico"].ToString()) * 10);
+
+                    tarefas.Add(new TrabalhoTarefas { ChaveTarefa = Convert.ToString(Reader["Key_Tarefa"].ToString()), Tarefa = servicos.Find(lst => lst.ChaveServico == Convert.ToString(Reader["Key_Servico"].ToString())).Nome, Tempo = time, Preco = valor });
+                }
+            }
+            else if (Lst_Tarefas.SelectedIndex == -1)
+            {
+                Btn_AtualizarTrabalho.IsEnabled = false;
+                Btn_ApagarTrabalho.IsEnabled = false;
+            }
         }
 
         //Funçoes gerais
@@ -74,7 +222,7 @@ namespace Trabalhos
 
                 while (Reader.Read())
                 {
-                    trabalhos.Add(new Trabalho { ChaveTrabalho = Convert.ToString(Reader["Key_Trabalho"].ToString()), ChaveCliente = Convert.ToString(Reader["Key_Cliente"].ToString()), Nome = Convert.ToString(Reader["Trabalho"].ToString()), Descricao = Convert.ToString(Reader["Descricao"].ToString()) });
+                    trabalhos.Add(new Trabalho { ChaveTrabalho = Convert.ToString(Reader["Key_Trabalho"].ToString()), ChaveCliente = Convert.ToString(Reader["Cliente"].ToString()), Nome = Convert.ToString(Reader["Trabalho"].ToString()), Descricao = Convert.ToString(Reader["Descricao"].ToString()) });
                 }
 
                 Reader.Close();
@@ -87,6 +235,16 @@ namespace Trabalhos
                     string contacto = ContactoVisivel(Convert.ToString(Reader["Email"].ToString()), Convert.ToInt64(Reader["Telemovel"].ToString()), Convert.ToInt64(Reader["Telefone"].ToString()));
 
                     clientes.Add(new Cliente { ChaveCliente = Convert.ToString(Reader["Key_Cliente"].ToString()), Nome = Convert.ToString(Reader["Nome"].ToString()), DataNascimento = Convert.ToDateTime(null), Sexo = null, Morada = null, CodigoPostal = null, Localidade = null, Email = Convert.ToString(Reader["Email"].ToString()), Telemovel = Convert.ToInt64(Reader["Telemovel"].ToString()), Telefone = Convert.ToInt64(Reader["Telefone"].ToString()), Contacto = contacto });
+                }
+
+                Reader.Close();
+
+                queryTodosServicos.Connection = DataBase.conexao;
+                Reader = queryTodosServicos.ExecuteReader();
+
+                while (Reader.Read())
+                {
+                    servicos.Add(new Servico { ChaveServico = Convert.ToString(Reader["Key_Servico"].ToString()), Nome = Convert.ToString(Reader["Nome"].ToString()), Preco = Convert.ToDecimal(Reader["Preco"].ToString()) });
                 }
 
                 Reader.Close();
@@ -261,5 +419,12 @@ namespace Trabalhos
 
             return key;
         }
+    }
+
+    internal class ListaTrabalho
+    {
+        public string ChaveTrabalho { get; set; }
+        public string NomeCliente { get; set; }
+        public string NomeTrabalho { get; set; }
     }
 }

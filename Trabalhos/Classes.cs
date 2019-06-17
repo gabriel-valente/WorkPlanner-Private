@@ -14,6 +14,14 @@ namespace Trabalhos
         public string Descricao { get; set; }
     }
 
+    public class TrabalhoTarefas
+    {
+        public string ChaveTarefa { get; set; }
+        public string Tarefa { get; set; }
+        public TimeSpan Tempo { get; set; }
+        public decimal Preco { get; set; }
+    }
+
     public class Tempo
     {
         public string ChaveTempo { get; set; }

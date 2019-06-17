@@ -18,15 +18,16 @@ namespace Trabalhos
     public static class InterPages
     {
         public static string KeyTrabalho;
+        public static string NomeTrabalho;
     }
 
     public static class DataBase
     {
         public static SqlConnection conexao;
 #if DEBUG
-        public static string stringConexao = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=E:\PAP\Trabalhos\Trabalhos\WorkPlanner.mdf;Integrated Security=True"; //E:\PAP\Trabalhos\Trabalhos\WorkPlanner.mdf //C:\Users\Muhdex\source\repos\Muhdo\Trabalhos\Trabalhos\WorkPlanner.mdf
+        public static string stringConexao = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=E:\PAP\Trabalhos\Trabalhos\WorkPlanner.mdf;Integrated Security=True;MultipleActiveResultSets=True"; //E:\PAP\Trabalhos\Trabalhos\WorkPlanner.mdf //C:\Users\Muhdex\source\repos\Muhdo\Trabalhos\Trabalhos\WorkPlanner.mdf
 #else
-        public static string stringConexao = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\WorkPlanner.mdf;Integrated Security=True";
+        public static string stringConexao = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\WorkPlanner.mdf;Integrated Security=True;MultipleActiveResultSets=True";
 #endif
     }
 
@@ -68,5 +69,14 @@ namespace Trabalhos
         public static DateTime? DataInicio;
         public static DateTime? DataFim;
         public static double Desconto;
+    }
+
+    public static class EditarTrabalhoCampos
+    {
+        public static string ChaveTrabalho;
+        public static string Cliente;
+        public static string Trabalho;
+        public static string Descricao;
+        public static List<TrabalhoTarefas> Tarefas = new List<TrabalhoTarefas>(); 
     }
 }

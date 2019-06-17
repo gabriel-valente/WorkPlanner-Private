@@ -78,44 +78,47 @@ namespace Trabalhos
 
             this.Language = XmlLanguage.GetLanguage("pt-PT");
 
-            ////////////////////
-            /// REMOVER ISTO ///
-            ////////////////////
-            InterPages.KeyTrabalho = "hq9sf4XKx5";
-
-            Lbl_Trabalho.Content = "Tarefas do trabalho " + InterPages.KeyTrabalho;
-
-            LigarBaseDados();
-
-            DataBase.conexao.Open();
-            queryTodosTempos.Connection = DataBase.conexao;
-
-            foreach (Tarefa item in tarefas)
+            if (InterPages.KeyTrabalho != null)
             {
-                queryTodosTempos.Parameters.AddWithValue("@KeyTarefa", item.ChaveTarefa);
-                Reader = queryTodosTempos.ExecuteReader();
-                queryTodosTempos.Parameters.Clear();
+                Lbl_Trabalho.Content = "Tarefas do trabalho " + InterPages.NomeTrabalho;
 
-                TimeSpan tempoDecorrido = new TimeSpan(0, 0, 0);
+                LigarBaseDados();
 
-                while (Reader.Read())
+                DataBase.conexao.Open();
+                queryTodosTempos.Connection = DataBase.conexao;
+
+                foreach (Tarefa item in tarefas)
                 {
-                    tempoDecorrido += Convert.ToDateTime(Reader["DataFim"] as DateTime?) - Convert.ToDateTime(Reader["DataInicio"] as DateTime?);
+                    queryTodosTempos.Parameters.AddWithValue("@KeyTarefa", item.ChaveTarefa);
+                    Reader = queryTodosTempos.ExecuteReader();
+                    queryTodosTempos.Parameters.Clear();
+
+                    TimeSpan tempoDecorrido = new TimeSpan(0, 0, 0);
+
+                    while (Reader.Read())
+                    {
+                        tempoDecorrido += Convert.ToDateTime(Reader["DataFim"] as DateTime?) - Convert.ToDateTime(Reader["DataInicio"] as DateTime?);
+                    }
+
+                    Reader.Close();
+
+                    listaTarefa.Add(new ListaTarefas { ChaveTarefa = item.ChaveTarefa, Servico = servicos.Find(lst => lst.ChaveServico == item.ChaveServico).Nome, Tempo = TimeSpan.Parse(String.Format("{0:00}:{1:00}:{2:00}", tempoDecorrido.Hours, tempoDecorrido.Minutes, tempoDecorrido.Seconds)) });
                 }
 
-                Reader.Close();
+                DataBase.conexao.Close();
 
-                listaTarefa.Add(new ListaTarefas { ChaveTarefa = item.ChaveTarefa, Servico = servicos.Find(lst => lst.ChaveServico == item.ChaveServico).Nome, Tempo = TimeSpan.Parse(String.Format("{0:00}:{1:00}:{2:00}", tempoDecorrido.Hours, tempoDecorrido.Minutes, tempoDecorrido.Seconds)) });
+                Lst_Tarefas.ItemsSource = listaTarefa;
+                Lst_Tarefas.Items.Refresh();
+
+                Cb_Servico.ItemsSource = servicos;
+                Cb_Servico.DisplayMemberPath = "Nome";
+                Cb_Servico.Items.Refresh();
             }
-
-            DataBase.conexao.Close();
-
-            Lst_Tarefas.ItemsSource = listaTarefa;
-            Lst_Tarefas.Items.Refresh();
-
-            Cb_Servico.ItemsSource = servicos;
-            Cb_Servico.DisplayMemberPath = "Nome";
-            Cb_Servico.Items.Refresh();
+            else
+            {
+                Btn_AdicionarTarefa.IsEnabled = false;
+                Lbl_Erros.Text = "Não foi possivel receber o código do trabalho!\nReinicie o programa e volte a tentar!\nSe fechar o programa, as alterações no menu de gestão de trabalhos, vão ser perdidas.";
+            }
         }
 
         //Funçoes de butoes e lista
@@ -1493,14 +1496,14 @@ namespace Trabalhos
         }
     }
 
-    class ListaTarefas
+    internal class ListaTarefas
     {
         public string ChaveTarefa { get; set; }
         public string Servico { get; set; }
         public TimeSpan Tempo { get; set; }
     }
 
-    class ListaTempo
+    internal class ListaTempo
     {
         public string ChaveTempo { get; set; }
         public DateTime DataInicio { get; set; }
