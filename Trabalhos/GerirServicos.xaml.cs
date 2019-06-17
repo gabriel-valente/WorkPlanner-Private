@@ -596,7 +596,6 @@ namespace Trabalhos
         {
             string key;
 
-            DataBase.conexao = new SqlConnection(DataBase.stringConexao);
             DataBase.conexao.Open();
 
             while (true)

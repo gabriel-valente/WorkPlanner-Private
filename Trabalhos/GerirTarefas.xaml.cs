@@ -85,7 +85,7 @@ namespace Trabalhos
 
             Lbl_Trabalho.Content = "Tarefas do trabalho " + InterPages.KeyTrabalho;
 
-            LigarBaseDados();         
+            LigarBaseDados();
 
             DataBase.conexao.Open();
             queryTodosTempos.Connection = DataBase.conexao;
@@ -1437,7 +1437,6 @@ namespace Trabalhos
         {
             string key;
 
-            DataBase.conexao = new SqlConnection(DataBase.stringConexao);
             DataBase.conexao.Open();
 
             while (true)
