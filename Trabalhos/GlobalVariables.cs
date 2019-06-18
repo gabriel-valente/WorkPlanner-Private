@@ -25,9 +25,9 @@ namespace Trabalhos
     {
         public static SqlConnection conexao;
 #if DEBUG
-        public static string stringConexao = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=E:\PAP\Trabalhos\Trabalhos\WorkPlanner.mdf;Integrated Security=True;MultipleActiveResultSets=True"; //E:\PAP\Trabalhos\Trabalhos\WorkPlanner.mdf //C:\Users\Muhdex\source\repos\Muhdo\Trabalhos\Trabalhos\WorkPlanner.mdf
+        public static string stringConexao = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=E:\PAP\Trabalhos\Trabalhos\WorkPlanner.mdf;Integrated Security=True"; //E:\PAP\Trabalhos\Trabalhos\WorkPlanner.mdf //C:\Users\Muhdex\source\repos\Muhdo\Trabalhos\Trabalhos\WorkPlanner.mdf
 #else
-        public static string stringConexao = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\WorkPlanner.mdf;Integrated Security=True;MultipleActiveResultSets=True";
+        public static string stringConexao = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\WorkPlanner.mdf;Integrated Security=True";
 #endif
     }
 

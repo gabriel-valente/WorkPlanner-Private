@@ -62,7 +62,6 @@ namespace Trabalhos
 
         string ChaveTarefaServico = null;
 
-        bool KeyValido = false;
         bool ServicoValido = false;
         bool TempoValido = false;
         bool DataInicioValido = false;
@@ -140,6 +139,7 @@ namespace Trabalhos
 
             Cb_Servico.Text = EditarTarefaCampos.Servico;
 
+            tempos.Clear();
             listaTempo.Clear();
 
             preco = 0;
@@ -217,7 +217,6 @@ namespace Trabalhos
         {
             Adicionar = false;
 
-            KeyValido = false;
             ServicoValido = true;
             TempoValido = true;
             DataInicioValido = true;
@@ -441,6 +440,7 @@ namespace Trabalhos
                 if (!Lst_Tempo.HasItems)
                 {
                     TempoValido = false;
+                    Console.WriteLine("Lst_Tempo_SelectionChanged");
                 }
                 else
                 {
@@ -595,6 +595,7 @@ namespace Trabalhos
             Lst_Tarefas.Items.Refresh();
             LimparCampos();
 
+            Adicionar = false;
             Lbl_Servico.Visibility = Visibility.Visible;
             Cb_Servico.Visibility = Visibility.Hidden;
             Lst_Tempo.IsEnabled = false;
@@ -824,7 +825,7 @@ namespace Trabalhos
             DataInicioValido = false;
             DataFimValido = true;
 
-            if (Lst_Tempo.Items.Count >= 1)
+            if (listaTempo.Count > 0)
             {
                 TempoValido = true;
             }
@@ -832,6 +833,8 @@ namespace Trabalhos
             {
                 TempoValido = false;
             }
+
+            AtualizarBotoes();
         }
 
         //Botao editar tempo
@@ -915,7 +918,7 @@ namespace Trabalhos
 
             Lbl_Preco.Content = String.Format("{0:###0.00} €", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))));
 
-            if (Lst_Tempo.Items.Count >= 1)
+            if (listaTempo.Count > 0)
             {
                 TempoValido = true;
             }
@@ -923,6 +926,8 @@ namespace Trabalhos
             {
                 TempoValido = false;
             }
+
+            AtualizarBotoes();
         }
 
         //Botao apagar tempo
@@ -987,7 +992,7 @@ namespace Trabalhos
 
             Lbl_Preco.Content = String.Format("{0:###0.00} €", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))));
 
-            if (Lst_Tempo.Items.Count >= 1)
+            if (listaTempo.Count > 0)
             {
                 TempoValido = true;
             }
@@ -995,6 +1000,8 @@ namespace Trabalhos
             {
                 TempoValido = false;
             }
+
+            AtualizarBotoes();
         }
 
         //Botao cancelar nova tarefa
@@ -1007,7 +1014,6 @@ namespace Trabalhos
 
             LimparCampos();
 
-            KeyValido = false;
             ServicoValido = false;
             TempoValido = false;
             DataInicioValido = false;
@@ -1424,12 +1430,12 @@ namespace Trabalhos
                 Btn_AdicionarTempo.IsEnabled = true;
             }
 
-            if (!KeyValido || !ServicoValido || !TempoValido)
+            if (!ServicoValido || !TempoValido)
             {
                 Btn_GuardarTarefa.IsEnabled = false;
 
             }
-            else if (KeyValido && ServicoValido && TempoValido)
+            else if (ServicoValido && TempoValido)
             {
                 Btn_GuardarTarefa.IsEnabled = true;
             }

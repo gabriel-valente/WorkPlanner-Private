@@ -19,7 +19,7 @@ namespace Trabalhos
         public string ChaveTarefa { get; set; }
         public string Tarefa { get; set; }
         public TimeSpan Tempo { get; set; }
-        public decimal Preco { get; set; }
+        public string Preco { get; set; }
     }
 
     public class Tempo

@@ -163,43 +163,150 @@ namespace Trabalhos
 
                 while (Reader.Read())
                 {
-                    SqlDataReader Reader2;
+                    tarefas.Add(new TrabalhoTarefas { ChaveTarefa = Convert.ToString(Reader["Key_Tarefa"].ToString()), Tarefa = servicos.Find(lst => lst.ChaveServico == Convert.ToString(Reader["Key_Servico"].ToString())).Nome, Tempo = new TimeSpan(0), Preco = Convert.ToString(Reader["Desconto"].ToString()) });
+                }
 
+                queryTodasTarefas.Parameters.Clear();
+                Reader.Close();
+                queryTodasTarefas.Connection.Close();
+                DataBase.conexao.Close();
+
+                decimal total = 0;
+
+                foreach (TrabalhoTarefas item in tarefas)
+                {
+                    DataBase.conexao.Open();
                     queryTodosTempos.Connection = DataBase.conexao;
-                    queryTodosTempos.Parameters.AddWithValue("@KeyTarefa", Convert.ToString(Reader["Key_Tarefa"].ToString()));
-                    Reader2 = queryTodosTempos.ExecuteReader();
+
+                    decimal desconto = Convert.ToDecimal(item.Preco);
+
+                    queryTodosTempos.Parameters.AddWithValue("@KeyTarefa", item.ChaveTarefa);
+                    Reader = queryTodosTempos.ExecuteReader();
 
                     TimeSpan time = new TimeSpan(0);
 
-                    while (Reader2.Read())
+                    while (Reader.Read())
                     {
-                        if (Convert.ToString(Reader2["DataFim"].ToString()) == "01/01/0001 00:00:00" || Convert.ToString(Reader2["DataFim"].ToString()) == null)
+                        if (Convert.ToString(Reader["DataFim"].ToString()) == "01/01/0001 00:00:00" || Convert.ToString(Reader["DataFim"].ToString()) == null)
                         {
                             time += new TimeSpan(0);
                         }
                         else
-                        { 
-                            time += Convert.ToDateTime(Reader2["DataFim"].ToString()) - Convert.ToDateTime(Reader2["DataInicio"].ToString());
+                        {
+                            time += Convert.ToDateTime(Reader["DataFim"].ToString()) - Convert.ToDateTime(Reader["DataInicio"].ToString());
                         }
                     }
 
                     queryTodosTempos.Parameters.Clear();
-                    Reader2.Close();
+                    Reader.Close();
                     queryTodosTempos.Connection.Close();
+                    DataBase.conexao.Close();
 
+                    decimal valor = (servicos.Find(lst => lst.Nome == item.Tarefa).Preco * Convert.ToDecimal(time.TotalHours)) * (1 - desconto);
 
-                    //CORRIGIR ERRO AO NAO DAR PARA VOLTAR A LER //Tentativa inválida para chamar MetaData quando o leitor está fechado.
-                    //CORRIGIR ERRO AO NAO DAR PARA VOLTAR A LER //Tentativa inválida para chamar MetaData quando o leitor está fechado.
-                    //CORRIGIR ERRO AO NAO DAR PARA VOLTAR A LER //Tentativa inválida para chamar MetaData quando o leitor está fechado.
-                    //CORRIGIR ERRO AO NAO DAR PARA VOLTAR A LER //Tentativa inválida para chamar MetaData quando o leitor está fechado.
-                    //CORRIGIR ERRO AO NAO DAR PARA VOLTAR A LER //Tentativa inválida para chamar MetaData quando o leitor está fechado.
-                    //CORRIGIR ERRO AO NAO DAR PARA VOLTAR A LER //Tentativa inválida para chamar MetaData quando o leitor está fechado.
-                    //CORRIGIR ERRO AO NAO DAR PARA VOLTAR A LER //Tentativa inválida para chamar MetaData quando o leitor está fechado.
-                    //CORRIGIR ERRO AO NAO DAR PARA VOLTAR A LER //Tentativa inválida para chamar MetaData quando o leitor está fechado.
-                    decimal valor = (servicos.Find(lst => lst.ChaveServico == Convert.ToString(Reader["Key_Servico"].ToString())).Preco * Convert.ToDecimal(time.TotalHours)) * (Convert.ToDecimal(Reader["Key_Servico"].ToString()) * 10);
+                    total += valor;
 
-                    tarefas.Add(new TrabalhoTarefas { ChaveTarefa = Convert.ToString(Reader["Key_Tarefa"].ToString()), Tarefa = servicos.Find(lst => lst.ChaveServico == Convert.ToString(Reader["Key_Servico"].ToString())).Nome, Tempo = time, Preco = valor });
+                    item.Tempo = time;
+                    item.Preco = String.Format("{0:###0.00} €", valor);
                 }
+
+                Lbl_CodigoTrabalho.Content = trabalhos[Lst_Trabalhos.SelectedIndex].ChaveTrabalho;
+                Lbl_Cliente.Content = clientes.Find(lst => lst.ChaveCliente == trabalhos[Lst_Trabalhos.SelectedIndex].ChaveCliente).Nome;
+                Tb_Trabalho.Text = trabalhos[Lst_Trabalhos.SelectedIndex].Nome;
+                Tb_Descricao.Text = trabalhos[Lst_Trabalhos.SelectedIndex].Descricao;
+                Lbl_Preco.Content = String.Format("{0:###0.00} €", total);
+
+                Lst_Tarefas.ItemsSource = tarefas;
+                Lst_Tarefas.Items.Refresh();
+
+                Btn_EditarTarefas.Visibility = Visibility.Visible;
+            }
+            else if (Lst_Tarefas.SelectedIndex == -1)
+            {
+                Btn_AtualizarTrabalho.IsEnabled = false;
+                Btn_ApagarTrabalho.IsEnabled = false;
+            }
+        }
+
+        //Pagina editar tarefas
+        private void Btn_EditarTarefas_Click(object sender, RoutedEventArgs e)
+        {
+            InterPages.KeyTrabalho = trabalhos[Lst_Trabalhos.SelectedIndex].ChaveTrabalho;
+            InterPages.NomeTrabalho = trabalhos[Lst_Trabalhos.SelectedIndex].Nome;
+            ((MainWindow)Application.Current.MainWindow).Frm_Principal.Content = new GerirTarefas();
+        }
+
+        //Recarregar dados da página
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (Lst_Trabalhos.SelectedIndex >= 0)
+            {
+                tarefas.Clear();
+
+                DataBase.conexao.Open();
+                queryTodasTarefas.Connection = DataBase.conexao;
+                queryTodasTarefas.Parameters.AddWithValue("@KeyTrabalho", listaTrabalhos[Lst_Trabalhos.SelectedIndex].ChaveTrabalho);
+                Reader = queryTodasTarefas.ExecuteReader();
+
+                while (Reader.Read())
+                {
+                    tarefas.Add(new TrabalhoTarefas { ChaveTarefa = Convert.ToString(Reader["Key_Tarefa"].ToString()), Tarefa = servicos.Find(lst => lst.ChaveServico == Convert.ToString(Reader["Key_Servico"].ToString())).Nome, Tempo = new TimeSpan(0), Preco = Convert.ToString(Reader["Desconto"].ToString()) });
+                }
+
+                queryTodasTarefas.Parameters.Clear();
+                Reader.Close();
+                queryTodasTarefas.Connection.Close();
+                DataBase.conexao.Close();
+
+                decimal total = 0;
+
+                foreach (TrabalhoTarefas item in tarefas)
+                {
+                    DataBase.conexao.Open();
+                    queryTodosTempos.Connection = DataBase.conexao;
+
+                    decimal desconto = Convert.ToDecimal(item.Preco);
+
+                    queryTodosTempos.Parameters.AddWithValue("@KeyTarefa", item.ChaveTarefa);
+                    Reader = queryTodosTempos.ExecuteReader();
+
+                    TimeSpan time = new TimeSpan(0);
+
+                    while (Reader.Read())
+                    {
+                        if (Convert.ToString(Reader["DataFim"].ToString()) == "01/01/0001 00:00:00" || Convert.ToString(Reader["DataFim"].ToString()) == null)
+                        {
+                            time += new TimeSpan(0);
+                        }
+                        else
+                        {
+                            time += Convert.ToDateTime(Reader["DataFim"].ToString()) - Convert.ToDateTime(Reader["DataInicio"].ToString());
+                        }
+                    }
+
+                    queryTodosTempos.Parameters.Clear();
+                    Reader.Close();
+                    queryTodosTempos.Connection.Close();
+                    DataBase.conexao.Close();
+
+                    decimal valor = (servicos.Find(lst => lst.Nome == item.Tarefa).Preco * Convert.ToDecimal(time.TotalHours)) * (1 - desconto);
+
+                    total += valor;
+
+                    item.Tempo = time;
+                    item.Preco = String.Format("{0:###0.00} €", valor);
+                }
+
+                Lbl_CodigoTrabalho.Content = trabalhos[Lst_Trabalhos.SelectedIndex].ChaveTrabalho;
+                Lbl_Cliente.Content = clientes.Find(lst => lst.ChaveCliente == trabalhos[Lst_Trabalhos.SelectedIndex].ChaveCliente).Nome;
+                Tb_Trabalho.Text = trabalhos[Lst_Trabalhos.SelectedIndex].Nome;
+                Tb_Descricao.Text = trabalhos[Lst_Trabalhos.SelectedIndex].Descricao;
+                Lbl_Preco.Content = String.Format("{0:###0.00} €", total);
+
+                Lst_Tarefas.ItemsSource = tarefas;
+                Lst_Tarefas.Items.Refresh();
+
+                Btn_EditarTarefas.Visibility = Visibility.Visible;
             }
             else if (Lst_Tarefas.SelectedIndex == -1)
             {
