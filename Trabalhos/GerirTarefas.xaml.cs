@@ -1160,6 +1160,8 @@ namespace Trabalhos
             catch (Exception)
             {
             }
+
+            AtualizarBotoes();
         }
 
         //Validar Data inicio

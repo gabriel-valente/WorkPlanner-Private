@@ -71,12 +71,11 @@ namespace Trabalhos
         public static double Desconto;
     }
 
-    public static class EditarTrabalhoCampos
+    public static class VoltarPaginaTrabalho
     {
         public static string ChaveTrabalho;
-        public static string Cliente;
+        public static string ChaveCliente;
         public static string Trabalho;
         public static string Descricao;
-        public static List<TrabalhoTarefas> Tarefas = new List<TrabalhoTarefas>(); 
     }
 }

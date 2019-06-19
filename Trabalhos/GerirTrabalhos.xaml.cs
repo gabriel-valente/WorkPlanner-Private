@@ -27,6 +27,7 @@ namespace Trabalhos
         SqlCommand queryTodasTarefas = new SqlCommand("SELECT Key_Tarefa, Key_Servico, Desconto FROM Tarefa WHERE Key_Trabalho = @KeyTrabalho");
         SqlCommand queryTodosTempos = new SqlCommand("SELECT Key_Tempo, DataInicio, DataFim FROM Tempo WHERE Key_Tarefa = @KeyTarefa ORDER BY DataInicio, DataFim");
         SqlCommand queryIndexTrabalho = new SqlCommand("SELECT Key_Trabalho FROM Trabalho WHERE Key_Trabalho = @KeyTrabalho");
+        SqlCommand queryInserirTrabalho = new SqlCommand("INSERT INTO Trabalho (Key_Trabalho, Key_Cliente, Nome, Descricao) VALUES (@KeyTrabalho, @KeyCliente, @Nome, @Descricao)");
 
         SqlDataReader Reader;
 
@@ -46,9 +47,8 @@ namespace Trabalhos
 
         decimal preco = 0;
 
-        bool KeyValido = false;
+        bool ClienteValido = false;
         bool TrabalhoValido = false;
-        bool TarefaValido = false;
 
         bool Adicionar = false;
 
@@ -57,262 +57,182 @@ namespace Trabalhos
         {
             InitializeComponent();
 
-            LigarBaseDados();
+            //Carregarmento inicial mudado para Page_Loaded => CarrgarPagina();
+        }
 
-            foreach (Trabalho item in trabalhos)
-            {
-                listaTrabalhos.Add(new ListaTrabalho { ChaveTrabalho = item.ChaveTrabalho, NomeCliente = clientes.Find(lst => lst.ChaveCliente == item.ChaveCliente).Nome, NomeTrabalho = item.Nome });
-            }
-
-            Lst_Trabalhos.ItemsSource = listaTrabalhos;
-            Lst_Trabalhos.Items.Refresh();
-
-            Cb_Cliente.ItemsSource = clientes;
-            Cb_Cliente.DisplayMemberPath = "Nome";
-            Cb_Cliente.Items.Refresh();
+        //Recarregar dados da página
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            CarregarPagina();
         }
 
         //Funçoes de butoes e lista
         //Butao adicionar novo trabalho
         private void Btn_AdicionarTrabalho_Click(object sender, RoutedEventArgs e)
         {
-            //Adicionar = true;
+            Adicionar = true;
 
-            //LimparCampos();
+            LimparCampos();
 
-            //if (EditarTrabalhoCampos.ChaveTrabalho == null)
-            //{
-            //    Lbl_CodigoTrabalho.Content = ReservarChave();
-            //}
-            //else
-            //{
-            //    Lbl_CodigoTrabalho.Content = EditarTrabalhoCampos.ChaveTrabalho;
-            //}
+            Lbl_Erros.Text = "Para ser possivel gerir as tarefas é necessário adicionar o trabalho.\nApós todos os campos serem válidos se carregar em \"Gerir Tarefas\" este trabalho será guardado!";
 
-            //Cb_Cliente.Text = EditarTrabalhoCampos.Cliente;
-            //Tb_Trabalho.Text = EditarTrabalhoCampos.Trabalho;
-            //Tb_Descricao.Text = EditarTrabalhoCampos.Descricao;
+            Lbl_CodigoTrabalho.Content = ReservarChave();
 
-            //tarefas.Clear();
+            tarefas.Clear();
 
-            //preco = 0;
-            //decimal valor;
+            preco = 0;
 
-            //try
-            //{
-            //    valor = servicos.Find(lst => lst.Nome == EditarTrabalhoCampos.Servico).Preco;
-            //}
-            //catch (Exception)
-            //{
-            //    valor = 0;
-            //}
+            Lst_Tarefas.ItemsSource = tarefas;
+            Lst_Tarefas.Items.Refresh();
 
-            //foreach (TrabalhoTarefas item in EditarTrabalhoCampos.Tarefas)
-            //{
-            //    DateTime data;
-            //    TimeSpan tempo;
+            Lbl_Preco.Content = String.Format("{0:###0.00} €", preco);
 
-            //    if (item.DataFim == Convert.ToDateTime("01/01/0001 00:00:00") || item.DataFim == Convert.ToDateTime(null))
-            //    {
-            //        data = Convert.ToDateTime(null);
-            //        tempo = new TimeSpan(0, 0, 0);
-            //    }
-            //    else
-            //    {
-            //        data = item.DataFim;
-            //        tempo = item.DataFim - item.DataInicio;
-            //        preco += valor * Convert.ToDecimal(TimeSpan.Parse(Convert.ToString(tempo)).TotalHours);
-            //    }
-
-            //    tempos.Add(new Tempo { ChaveTempo = item.ChaveTempo, ChaveTarefa = EditarTarefaCampos.ChaveTarefa, DataInicio = item.DataInicio, DataFim = data });
-            //    listaTempo.Add(new ListaTempo { ChaveTempo = item.ChaveTempo, DataInicio = item.DataInicio, DataFim = data, TempoDecorrido = String.Format("{0:00}:{1:00}:{2:00}", tempo.Hours, tempo.Minutes, tempo.Seconds) });
-            //}
-
-            ////Lst_Tempo.ItemsSource = listaTempo;
-            ////Lst_Tempo.Items.Refresh();
-
-            ////Sld_Desconto.Value = EditarTarefaCampos.Desconto;
-            ////Tb_Desconto.Text = String.Format("{0:##0.00}%", Math.Round(Sld_Desconto.Value, 2));
-            ////Lbl_Preco.Content = String.Format("{0:###0.00} €", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))));
-
-            //Lbl_Cliente.Visibility = Visibility.Hidden;
-            //Cb_Cliente.Visibility = Visibility.Visible;
-            //Tb_Trabalho.IsEnabled = true;
-            //Tb_Descricao.IsEnabled = true;
-            //Lst_Tarefas.IsEnabled = true;
-            //Lst_Trabalhos.IsEnabled = false;
-            //Btn_EditarTarefas.Visibility = Visibility.Visible;
-            //Btn_GuardarTrabalho.Visibility = Visibility.Visible;
-            //Btn_CancelarTrabalho.Visibility = Visibility.Visible;
-            //Btn_AdicionarTrabalho.Visibility = Visibility.Hidden;
-            //Btn_AtualizarTrabalho.Visibility = Visibility.Hidden;
-            //Btn_ApagarTrabalho.Visibility = Visibility.Hidden;
+            Lbl_Cliente.Visibility = Visibility.Hidden;
+            Cb_Cliente.Visibility = Visibility.Visible;
+            Tb_Trabalho.IsReadOnly = false;
+            Tb_Descricao.IsReadOnly = false;
+            Lst_Tarefas.IsEnabled = true;
+            Lst_Trabalhos.IsEnabled = false;
+            Btn_EditarTarefas.IsEnabled = false;
+            Btn_EditarTarefas.Visibility = Visibility.Visible;
+            Btn_GuardarTrabalho.Visibility = Visibility.Visible;
+            Btn_CancelarTrabalho.Visibility = Visibility.Visible;
+            Btn_AdicionarTrabalho.Visibility = Visibility.Hidden;
+            Btn_AtualizarTrabalho.Visibility = Visibility.Hidden;
+            Btn_ApagarTrabalho.Visibility = Visibility.Hidden;
         }
 
         //Lista trabalhos
         private void Lst_Trabalhos_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (Lst_Trabalhos.SelectedIndex >= 0)
-            {
-                tarefas.Clear();
-
-                DataBase.conexao.Open();
-                queryTodasTarefas.Connection = DataBase.conexao;
-                queryTodasTarefas.Parameters.AddWithValue("@KeyTrabalho", listaTrabalhos[Lst_Trabalhos.SelectedIndex].ChaveTrabalho);
-                Reader = queryTodasTarefas.ExecuteReader();
-
-                while (Reader.Read())
-                {
-                    tarefas.Add(new TrabalhoTarefas { ChaveTarefa = Convert.ToString(Reader["Key_Tarefa"].ToString()), Tarefa = servicos.Find(lst => lst.ChaveServico == Convert.ToString(Reader["Key_Servico"].ToString())).Nome, Tempo = new TimeSpan(0), Preco = Convert.ToString(Reader["Desconto"].ToString()) });
-                }
-
-                queryTodasTarefas.Parameters.Clear();
-                Reader.Close();
-                queryTodasTarefas.Connection.Close();
-                DataBase.conexao.Close();
-
-                decimal total = 0;
-
-                foreach (TrabalhoTarefas item in tarefas)
-                {
-                    DataBase.conexao.Open();
-                    queryTodosTempos.Connection = DataBase.conexao;
-
-                    decimal desconto = Convert.ToDecimal(item.Preco);
-
-                    queryTodosTempos.Parameters.AddWithValue("@KeyTarefa", item.ChaveTarefa);
-                    Reader = queryTodosTempos.ExecuteReader();
-
-                    TimeSpan time = new TimeSpan(0);
-
-                    while (Reader.Read())
-                    {
-                        if (Convert.ToString(Reader["DataFim"].ToString()) == "01/01/0001 00:00:00" || Convert.ToString(Reader["DataFim"].ToString()) == null)
-                        {
-                            time += new TimeSpan(0);
-                        }
-                        else
-                        {
-                            time += Convert.ToDateTime(Reader["DataFim"].ToString()) - Convert.ToDateTime(Reader["DataInicio"].ToString());
-                        }
-                    }
-
-                    queryTodosTempos.Parameters.Clear();
-                    Reader.Close();
-                    queryTodosTempos.Connection.Close();
-                    DataBase.conexao.Close();
-
-                    decimal valor = (servicos.Find(lst => lst.Nome == item.Tarefa).Preco * Convert.ToDecimal(time.TotalHours)) * (1 - desconto);
-
-                    total += valor;
-
-                    item.Tempo = time;
-                    item.Preco = String.Format("{0:###0.00} €", valor);
-                }
-
-                Lbl_CodigoTrabalho.Content = trabalhos[Lst_Trabalhos.SelectedIndex].ChaveTrabalho;
-                Lbl_Cliente.Content = clientes.Find(lst => lst.ChaveCliente == trabalhos[Lst_Trabalhos.SelectedIndex].ChaveCliente).Nome;
-                Tb_Trabalho.Text = trabalhos[Lst_Trabalhos.SelectedIndex].Nome;
-                Tb_Descricao.Text = trabalhos[Lst_Trabalhos.SelectedIndex].Descricao;
-                Lbl_Preco.Content = String.Format("{0:###0.00} €", total);
-
-                Lst_Tarefas.ItemsSource = tarefas;
-                Lst_Tarefas.Items.Refresh();
-
-                Btn_EditarTarefas.Visibility = Visibility.Visible;
-            }
-            else if (Lst_Tarefas.SelectedIndex == -1)
-            {
-                Btn_AtualizarTrabalho.IsEnabled = false;
-                Btn_ApagarTrabalho.IsEnabled = false;
-            }
+            CarregarPagina();
         }
 
         //Pagina editar tarefas
         private void Btn_EditarTarefas_Click(object sender, RoutedEventArgs e)
         {
-            InterPages.KeyTrabalho = trabalhos[Lst_Trabalhos.SelectedIndex].ChaveTrabalho;
-            InterPages.NomeTrabalho = trabalhos[Lst_Trabalhos.SelectedIndex].Nome;
+            int index = trabalhos.FindIndex(lst => lst.ChaveTrabalho == Lbl_CodigoTrabalho.Content.ToString());
+            if (index == -1)
+            {
+                GuardarTrabalho();
+
+                VoltarPaginaTrabalho.ChaveCliente = clientes.Find(lst => lst.Nome == Cb_Cliente.Text).ChaveCliente;
+            }
+            else
+            {
+                VoltarPaginaTrabalho.ChaveCliente = clientes.Find(lst => lst.Nome == Lbl_Cliente.Content.ToString()).ChaveCliente;
+            }
+
+            VoltarPaginaTrabalho.ChaveTrabalho = Lbl_CodigoTrabalho.Content.ToString();
+            VoltarPaginaTrabalho.Trabalho = Tb_Trabalho.Text;
+            VoltarPaginaTrabalho.Descricao = Tb_Descricao.Text;
+
+            InterPages.KeyTrabalho = Lbl_CodigoTrabalho.Content.ToString();
+            InterPages.NomeTrabalho = Tb_Trabalho.Text;
             ((MainWindow)Application.Current.MainWindow).Frm_Principal.Content = new GerirTarefas();
         }
 
-        //Recarregar dados da página
-        private void Page_Loaded(object sender, RoutedEventArgs e)
+        //Botao cancelar nova tarefa
+        private void Btn_CancelarTrabalho_Click(object sender, RoutedEventArgs e)
         {
-            if (Lst_Trabalhos.SelectedIndex >= 0)
+            Adicionar = false;
+
+            tarefas.Clear();
+
+            InterPages.KeyTrabalho = null;
+            InterPages.NomeTrabalho = null;
+
+            LimparCampos();
+
+            ClienteValido = false;
+            TrabalhoValido = false;
+            Lbl_Cliente.Visibility = Visibility.Visible;
+            Cb_Cliente.Visibility = Visibility.Hidden;
+            Tb_Trabalho.IsReadOnly = true;
+            Tb_Descricao.IsReadOnly = true;
+            Lst_Tarefas.IsEnabled = false;
+            Btn_EditarTarefas.Visibility = Visibility.Hidden;
+            Lst_Trabalhos.IsEnabled = true;
+            Btn_GuardarTrabalho.Visibility = Visibility.Hidden;
+            Btn_GuardarAlteracoes.Visibility = Visibility.Hidden;
+            Btn_CancelarTrabalho.Visibility = Visibility.Hidden;
+            Btn_AdicionarTrabalho.Visibility = Visibility.Visible;
+            Btn_AtualizarTrabalho.Visibility = Visibility.Visible;
+            Btn_ApagarTrabalho.Visibility = Visibility.Visible;
+        }
+
+        //Botao voltar para o menu principal
+        private void Btn_Voltar_Click(object sender, RoutedEventArgs e)
+        {
+            InterPages.KeyTrabalho = null;
+            InterPages.NomeTrabalho = null;
+            ((MainWindow)Application.Current.MainWindow).Frm_Principal.GoBack();
+        }
+
+        //Funções de validação
+        //Validar cliente
+        private void Cb_Cliente_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (Cb_Cliente.SelectedIndex == -1)
             {
-                tarefas.Clear();
-
-                DataBase.conexao.Open();
-                queryTodasTarefas.Connection = DataBase.conexao;
-                queryTodasTarefas.Parameters.AddWithValue("@KeyTrabalho", listaTrabalhos[Lst_Trabalhos.SelectedIndex].ChaveTrabalho);
-                Reader = queryTodasTarefas.ExecuteReader();
-
-                while (Reader.Read())
-                {
-                    tarefas.Add(new TrabalhoTarefas { ChaveTarefa = Convert.ToString(Reader["Key_Tarefa"].ToString()), Tarefa = servicos.Find(lst => lst.ChaveServico == Convert.ToString(Reader["Key_Servico"].ToString())).Nome, Tempo = new TimeSpan(0), Preco = Convert.ToString(Reader["Desconto"].ToString()) });
-                }
-
-                queryTodasTarefas.Parameters.Clear();
-                Reader.Close();
-                queryTodasTarefas.Connection.Close();
-                DataBase.conexao.Close();
-
-                decimal total = 0;
-
-                foreach (TrabalhoTarefas item in tarefas)
-                {
-                    DataBase.conexao.Open();
-                    queryTodosTempos.Connection = DataBase.conexao;
-
-                    decimal desconto = Convert.ToDecimal(item.Preco);
-
-                    queryTodosTempos.Parameters.AddWithValue("@KeyTarefa", item.ChaveTarefa);
-                    Reader = queryTodosTempos.ExecuteReader();
-
-                    TimeSpan time = new TimeSpan(0);
-
-                    while (Reader.Read())
-                    {
-                        if (Convert.ToString(Reader["DataFim"].ToString()) == "01/01/0001 00:00:00" || Convert.ToString(Reader["DataFim"].ToString()) == null)
-                        {
-                            time += new TimeSpan(0);
-                        }
-                        else
-                        {
-                            time += Convert.ToDateTime(Reader["DataFim"].ToString()) - Convert.ToDateTime(Reader["DataInicio"].ToString());
-                        }
-                    }
-
-                    queryTodosTempos.Parameters.Clear();
-                    Reader.Close();
-                    queryTodosTempos.Connection.Close();
-                    DataBase.conexao.Close();
-
-                    decimal valor = (servicos.Find(lst => lst.Nome == item.Tarefa).Preco * Convert.ToDecimal(time.TotalHours)) * (1 - desconto);
-
-                    total += valor;
-
-                    item.Tempo = time;
-                    item.Preco = String.Format("{0:###0.00} €", valor);
-                }
-
-                Lbl_CodigoTrabalho.Content = trabalhos[Lst_Trabalhos.SelectedIndex].ChaveTrabalho;
-                Lbl_Cliente.Content = clientes.Find(lst => lst.ChaveCliente == trabalhos[Lst_Trabalhos.SelectedIndex].ChaveCliente).Nome;
-                Tb_Trabalho.Text = trabalhos[Lst_Trabalhos.SelectedIndex].Nome;
-                Tb_Descricao.Text = trabalhos[Lst_Trabalhos.SelectedIndex].Descricao;
-                Lbl_Preco.Content = String.Format("{0:###0.00} €", total);
-
-                Lst_Tarefas.ItemsSource = tarefas;
-                Lst_Tarefas.Items.Refresh();
-
-                Btn_EditarTarefas.Visibility = Visibility.Visible;
+                ClienteValido = false;
             }
-            else if (Lst_Tarefas.SelectedIndex == -1)
+            else
             {
-                Btn_AtualizarTrabalho.IsEnabled = false;
-                Btn_ApagarTrabalho.IsEnabled = false;
+                ClienteValido = true;
             }
+
+            AtualizarBotoes();
+        }
+
+        //Validar escrita do cliente
+        private void Cb_Cliente_KeyUp(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                Cb_Cliente.Text = Cb_Cliente.Text.TrimStart();
+
+                int index = clientes.FindIndex(lst => lst.Nome == Cb_Cliente.Text);
+
+                if (index >= 0)
+                {
+                    Lbl_Erros.Text = "Para ser possivel gerir as tarefas é necessário adicionar o trabalho.\nApós todos os campos serem válidos se carregar em \"Gerir Tarefas\" este trabalho será guardado!";
+                    ClienteValido = true;
+                }
+                else if (index == -1)
+                {
+                    Lbl_Erros.Text = "Tal serviço ainda não existe.\nSelecione um serviço da lista existente, ou procure ao escrever o nome do serviço.";
+                    ClienteValido = false;
+                }
+            }
+            catch (Exception)
+            {
+            }
+
+            AtualizarBotoes();
+        }
+
+        //Validar nome trabalho
+        private void Tb_Trabalho_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Tb_Trabalho.Text = Tb_Trabalho.Text.TrimStart();
+
+            if (Tb_Trabalho.Text.Length >= 3)
+            {
+                TrabalhoValido = true;
+            }
+            else
+            {
+                TrabalhoValido = false;
+            }
+
+            AtualizarBotoes();
+        }
+
+        //Validar descricao
+        private void Tb_Descricao_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Tb_Trabalho.Text = Tb_Trabalho.Text.TrimStart();
         }
 
         //Funçoes gerais
@@ -469,6 +389,210 @@ namespace Trabalhos
             return contacto;
         }
 
+        //Guardar Trabalho
+        void GuardarTrabalho()
+        {
+            string keyCliente = clientes.Find(lst => lst.Nome == Cb_Cliente.Text).ChaveCliente;
+
+            try
+            {
+                DataBase.conexao.Open();
+                queryInserirTrabalho.Connection = DataBase.conexao;
+                queryInserirTrabalho.Parameters.AddWithValue("@KeyTrabalho", Lbl_CodigoTrabalho.Content.ToString());
+                queryInserirTrabalho.Parameters.AddWithValue("@KeyCliente", keyCliente);
+                queryInserirTrabalho.Parameters.AddWithValue("@Nome", Tb_Trabalho.Text.Trim());
+                queryInserirTrabalho.Parameters.AddWithValue("@Descricao", Tb_Descricao.Text.Trim());
+
+                queryInserirTrabalho.ExecuteNonQuery();
+                queryInserirTrabalho.Parameters.Clear();
+            }
+            catch (Exception ex)
+            {
+                Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
+            }
+        }
+
+        //Carregar conteudo página
+        void CarregarPagina()
+        {
+            if (Lst_Trabalhos.SelectedIndex >= 0)
+            {
+                tarefas.Clear();
+
+                DataBase.conexao.Open();
+                queryTodasTarefas.Connection = DataBase.conexao;
+                queryTodasTarefas.Parameters.AddWithValue("@KeyTrabalho", listaTrabalhos[Lst_Trabalhos.SelectedIndex].ChaveTrabalho);
+                Reader = queryTodasTarefas.ExecuteReader();
+
+                while (Reader.Read())
+                {
+                    tarefas.Add(new TrabalhoTarefas { ChaveTarefa = Convert.ToString(Reader["Key_Tarefa"].ToString()), Tarefa = servicos.Find(lst => lst.ChaveServico == Convert.ToString(Reader["Key_Servico"].ToString())).Nome, Tempo = new TimeSpan(0), Preco = Convert.ToString(Reader["Desconto"].ToString()) });
+                }
+
+                queryTodasTarefas.Parameters.Clear();
+                Reader.Close();
+                queryTodasTarefas.Connection.Close();
+                DataBase.conexao.Close();
+
+                decimal total = 0;
+
+                foreach (TrabalhoTarefas item in tarefas)
+                {
+                    DataBase.conexao.Open();
+                    queryTodosTempos.Connection = DataBase.conexao;
+
+                    decimal desconto = Convert.ToDecimal(item.Preco);
+
+                    queryTodosTempos.Parameters.AddWithValue("@KeyTarefa", item.ChaveTarefa);
+                    Reader = queryTodosTempos.ExecuteReader();
+
+                    TimeSpan time = new TimeSpan(0);
+
+                    while (Reader.Read())
+                    {
+                        if (Convert.ToString(Reader["DataFim"].ToString()) == "01/01/0001 00:00:00" || Convert.ToString(Reader["DataFim"].ToString()) == null)
+                        {
+                            time += new TimeSpan(0);
+                        }
+                        else
+                        {
+                            time += Convert.ToDateTime(Reader["DataFim"].ToString()) - Convert.ToDateTime(Reader["DataInicio"].ToString());
+                        }
+                    }
+
+                    queryTodosTempos.Parameters.Clear();
+                    Reader.Close();
+                    queryTodosTempos.Connection.Close();
+                    DataBase.conexao.Close();
+
+                    decimal valor = (servicos.Find(lst => lst.Nome == item.Tarefa).Preco * Convert.ToDecimal(time.TotalHours)) * (1 - desconto);
+
+                    total += valor;
+
+                    item.Tempo = time;
+                    item.Preco = String.Format("{0:###0.00} €", valor);
+                }
+
+                Lbl_CodigoTrabalho.Content = trabalhos[Lst_Trabalhos.SelectedIndex].ChaveTrabalho;
+                Lbl_Cliente.Content = clientes.Find(lst => lst.ChaveCliente == trabalhos[Lst_Trabalhos.SelectedIndex].ChaveCliente).Nome;
+                Tb_Trabalho.Text = trabalhos[Lst_Trabalhos.SelectedIndex].Nome;
+                Tb_Descricao.Text = trabalhos[Lst_Trabalhos.SelectedIndex].Descricao;
+                Lbl_Preco.Content = String.Format("{0:###0.00} €", total);
+
+                Lst_Tarefas.ItemsSource = tarefas;
+                Lst_Tarefas.Items.Refresh();
+
+                InterPages.KeyTrabalho = trabalhos[Lst_Trabalhos.SelectedIndex].ChaveTrabalho;
+                InterPages.NomeTrabalho = trabalhos[Lst_Trabalhos.SelectedIndex].Nome;
+
+                Btn_EditarTarefas.IsEnabled = true;
+                Btn_EditarTarefas.Visibility = Visibility.Visible;
+            }
+            else if (Lst_Tarefas.SelectedIndex == -1)
+            {
+                //CARREGAR PÁGINA COMPLETA
+                //CARREGAR PÁGINA COMPLETA
+                //CARREGAR PÁGINA COMPLETA
+                //CARREGAR PÁGINA COMPLETA
+                //CARREGAR PÁGINA COMPLETA
+                //CARREGAR PÁGINA COMPLETA
+                //CARREGAR PÁGINA COMPLETA
+                //CARREGAR PÁGINA COMPLETA
+
+                trabalhos.Clear();
+                listaTrabalhos.Clear();
+                clientes.Clear();
+                servicos.Clear();
+                tarefas.Clear();
+
+                LigarBaseDados();
+
+                foreach (Trabalho item in trabalhos)
+                {
+                    listaTrabalhos.Add(new ListaTrabalho { ChaveTrabalho = item.ChaveTrabalho, NomeCliente = clientes.Find(lst => lst.ChaveCliente == item.ChaveCliente).Nome, NomeTrabalho = item.Nome });
+                }
+
+                Lst_Trabalhos.ItemsSource = listaTrabalhos;
+                Lst_Trabalhos.Items.Refresh();
+
+                Cb_Cliente.ItemsSource = clientes;
+                Cb_Cliente.DisplayMemberPath = "Nome";
+                Cb_Cliente.Items.Refresh();
+
+                if (Adicionar)
+                {
+                    Lbl_CodigoTrabalho.Content = VoltarPaginaTrabalho.ChaveTrabalho;
+                    Cb_Cliente.Text = clientes.Find(lst => lst.ChaveCliente == VoltarPaginaTrabalho.ChaveCliente).Nome;
+                    Tb_Trabalho.Text = VoltarPaginaTrabalho.Trabalho;
+                    Tb_Descricao.Text = VoltarPaginaTrabalho.Descricao;
+
+                    tarefas.Clear();
+
+                    DataBase.conexao.Open();
+                    queryTodasTarefas.Connection = DataBase.conexao;
+                    queryTodasTarefas.Parameters.AddWithValue("@KeyTrabalho", VoltarPaginaTrabalho.ChaveTrabalho);
+                    Reader = queryTodasTarefas.ExecuteReader();
+
+                    while (Reader.Read())
+                    {
+                        tarefas.Add(new TrabalhoTarefas { ChaveTarefa = Convert.ToString(Reader["Key_Tarefa"].ToString()), Tarefa = servicos.Find(lst => lst.ChaveServico == Convert.ToString(Reader["Key_Servico"].ToString())).Nome, Tempo = new TimeSpan(0), Preco = Convert.ToString(Reader["Desconto"].ToString()) });
+                    }
+
+                    queryTodasTarefas.Parameters.Clear();
+                    Reader.Close();
+                    queryTodasTarefas.Connection.Close();
+                    DataBase.conexao.Close();
+
+                    decimal total = 0;
+
+                    foreach (TrabalhoTarefas item in tarefas)
+                    {
+                        DataBase.conexao.Open();
+                        queryTodosTempos.Connection = DataBase.conexao;
+
+                        decimal desconto = Convert.ToDecimal(item.Preco);
+
+                        queryTodosTempos.Parameters.AddWithValue("@KeyTarefa", item.ChaveTarefa);
+                        Reader = queryTodosTempos.ExecuteReader();
+
+                        TimeSpan time = new TimeSpan(0);
+
+                        while (Reader.Read())
+                        {
+                            if (Convert.ToString(Reader["DataFim"].ToString()) == "01/01/0001 00:00:00" || Convert.ToString(Reader["DataFim"].ToString()) == null)
+                            {
+                                time += new TimeSpan(0);
+                            }
+                            else
+                            {
+                                time += Convert.ToDateTime(Reader["DataFim"].ToString()) - Convert.ToDateTime(Reader["DataInicio"].ToString());
+                            }
+                        }
+
+                        queryTodosTempos.Parameters.Clear();
+                        Reader.Close();
+                        queryTodosTempos.Connection.Close();
+                        DataBase.conexao.Close();
+
+                        decimal valor = (servicos.Find(lst => lst.Nome == item.Tarefa).Preco * Convert.ToDecimal(time.TotalHours)) * (1 - desconto);
+
+                        total += valor;
+
+                        item.Tempo = time;
+                        item.Preco = String.Format("{0:###0.00} €", valor);
+
+                        Lst_Tarefas.ItemsSource = tarefas;
+                        Lst_Tarefas.Items.Refresh();
+
+                        Lbl_Preco.Content = String.Format("{0:###0.00} €", total);
+                    }
+                }
+
+                Btn_AtualizarTrabalho.IsEnabled = false;
+                Btn_ApagarTrabalho.IsEnabled = false;
+            }
+        }
+
         //Limpar todos os campos que estao indroduzidos
         void LimparCampos()
         {
@@ -488,13 +612,17 @@ namespace Trabalhos
         //Atualiza os botoes caso os campos estejam incorretos ou corretos
         void AtualizarBotoes()
         {
-            if (!KeyValido || !TrabalhoValido || !TarefaValido)
+            if (!ClienteValido || !TrabalhoValido)
             {
+                Btn_EditarTarefas.IsEnabled = false;
                 Btn_GuardarTrabalho.IsEnabled = false;
-
             }
-            else if (KeyValido && TrabalhoValido && TarefaValido)
+            else if (ClienteValido && TrabalhoValido)
             {
+                InterPages.KeyTrabalho = Lbl_CodigoTrabalho.Content.ToString();
+                InterPages.NomeTrabalho = Tb_Trabalho.Text;
+
+                Btn_EditarTarefas.IsEnabled = true;
                 Btn_GuardarTrabalho.IsEnabled = true;
             }
         }
