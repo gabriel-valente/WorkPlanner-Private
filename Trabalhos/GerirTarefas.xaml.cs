@@ -45,7 +45,7 @@ namespace Trabalhos
         List<ListaTarefas> listaTarefa = new List<ListaTarefas>();
         List<ListaTempo> listaTempo = new List<ListaTempo>();
 
-        List<string> temposAlterados = new List<string>();
+        List<Tuple<string, string>> temposAlterados = new List<Tuple<string, string>>();
 
         //Gerar chave aleatória 
         public static string RandomString(int length)
@@ -96,7 +96,14 @@ namespace Trabalhos
 
                     while (Reader.Read())
                     {
-                        tempoDecorrido += Convert.ToDateTime(Reader["DataFim"] as DateTime?) - Convert.ToDateTime(Reader["DataInicio"] as DateTime?);
+                        try
+                        {
+                            tempoDecorrido += Convert.ToDateTime(Reader["DataFim"].ToString()) - Convert.ToDateTime(Reader["DataInicio"].ToString());
+                        }
+                        catch (Exception)
+                        {
+                            tempoDecorrido += new TimeSpan(0);
+                        }
                     }
 
                     Reader.Close();
@@ -166,8 +173,8 @@ namespace Trabalhos
                 }
                 else
                 {
-                    data = item.DataFim;
-                    tempo = item.DataFim - item.DataInicio;
+                    data = Convert.ToDateTime(item.DataFim as DateTime?);
+                    tempo = Convert.ToDateTime(item.DataFim as DateTime?) - item.DataInicio;
                     preco += valor * Convert.ToDecimal(TimeSpan.Parse(Convert.ToString(tempo)).TotalHours);
                 }
 
@@ -238,7 +245,15 @@ namespace Trabalhos
 
                     try
                     {
-                        tempoDecorrido = item.DataFim - item.DataInicio;
+                        if (item.DataFim == Convert.ToDateTime("01/01/0001 00:00:00") || item.DataFim == Convert.ToDateTime(null))
+                        {
+                            tempoDecorrido = new TimeSpan(0);
+                        }
+                        else
+                        {
+                            tempoDecorrido = Convert.ToDateTime(item.DataFim as DateTime?) - item.DataInicio;
+                        }
+
                         preco += valor * Convert.ToDecimal(TimeSpan.Parse(Convert.ToString(tempoDecorrido)).TotalHours);
                     }
                     catch (Exception)
@@ -246,7 +261,7 @@ namespace Trabalhos
                         tempoDecorrido = new TimeSpan(0, 0, 0);
                     }
 
-                    listaTempo.Add(new ListaTempo { ChaveTempo = item.ChaveTempo, DataInicio = item.DataInicio, DataFim = item.DataFim, TempoDecorrido = String.Format("{0:00}:{1:00}:{2:00}", tempoDecorrido.Hours, tempoDecorrido.Minutes, tempoDecorrido.Seconds) } );
+                    listaTempo.Add(new ListaTempo { ChaveTempo = item.ChaveTempo, DataInicio = item.DataInicio, DataFim = Convert.ToDateTime(item.DataFim as DateTime?), TempoDecorrido = String.Format("{0:00}:{1:00}:{2:00}", tempoDecorrido.Hours, tempoDecorrido.Minutes, tempoDecorrido.Seconds) } );
                 }
             }   
 
@@ -346,16 +361,19 @@ namespace Trabalhos
             if (Lst_Tarefas.SelectedIndex >= 0)
             {
                 tempos.Clear();
+                listaTempo.Clear();
 
                 DataBase.conexao.Open();
 
                 queryTodosTempos.Connection = DataBase.conexao;
                 queryTodosTempos.Parameters.AddWithValue("@KeyTarefa", tarefas[Lst_Tarefas.SelectedIndex].ChaveTarefa);
                 Reader = queryTodosTempos.ExecuteReader();
-
+                Console.WriteLine("\\/Devia aparecer aqui a quantidade");
+                Console.WriteLine(Reader.HasRows);
                 while (Reader.Read())
                 {
                     tempos.Add(new Tempo { ChaveTempo = Convert.ToString(Reader["Key_Tempo"].ToString()), ChaveTarefa = Convert.ToString(Reader["Key_Tarefa"].ToString()), DataInicio = Convert.ToDateTime(Reader["DataInicio"] as DateTime?), DataFim = Convert.ToDateTime(Reader["DataFim"] as DateTime?) });
+                    Console.WriteLine(tempos.Count);
                 }
 
                 queryTodosTempos.Parameters.Clear();
@@ -368,17 +386,15 @@ namespace Trabalhos
                 Cb_Servico.Text = servicos.Find(lst => lst.ChaveServico == tarefas[Lst_Tarefas.SelectedIndex].ChaveServico).Nome;
                 Lbl_Servico.Content = servicos.Find(lst => lst.ChaveServico == tarefas[Lst_Tarefas.SelectedIndex].ChaveServico).Nome;
 
-                listaTempo.Clear();
-
                 decimal valor = servicos.Find(lst => lst.ChaveServico == tarefas[Lst_Tarefas.SelectedIndex].ChaveServico).Preco;
                 preco = 0;
 
-                DateTime inicio = tempos[0].DataInicio;
-                DateTime? fim = tempos[0].DataFim;
+                DateTime inicio = tempos.First().DataInicio;
+                DateTime? fim = tempos.First().DataFim;
 
                 foreach (Tempo item in tempos)
                 {
-                    TimeSpan tempoDecorrido;
+                    TimeSpan tempoDecorrido = new TimeSpan(0);
 
                     try
                     {
@@ -392,7 +408,15 @@ namespace Trabalhos
                             fim = item.DataFim;
                         }
 
-                        tempoDecorrido = item.DataFim - item.DataInicio;
+                        if (item.DataFim == Convert.ToDateTime("01/01/0001 00:00:00") || item.DataFim == Convert.ToDateTime(null))
+                        {
+                            tempoDecorrido = new TimeSpan(0);
+                        }
+                        else
+                        {
+                            tempoDecorrido = Convert.ToDateTime(item.DataFim as DateTime?) - item.DataInicio;
+                        }
+
                         preco += valor * Convert.ToDecimal(TimeSpan.Parse(Convert.ToString(tempoDecorrido)).TotalHours);
                     }
                     catch (Exception)
@@ -400,7 +424,7 @@ namespace Trabalhos
                         tempoDecorrido = new TimeSpan(0, 0, 0);
                     }
 
-                    listaTempo.Add(new ListaTempo { ChaveTempo = item.ChaveTempo, DataInicio = item.DataInicio, DataFim = item.DataFim, TempoDecorrido = String.Format("{0:00}:{1:00}:{2:00}", tempoDecorrido.Hours, tempoDecorrido.Minutes, tempoDecorrido.Seconds) });
+                    listaTempo.Add(new ListaTempo { ChaveTempo = item.ChaveTempo, DataInicio = item.DataInicio, DataFim = Convert.ToDateTime(item.DataFim as DateTime?), TempoDecorrido = String.Format("{0:00}:{1:00}:{2:00}", tempoDecorrido.Hours, tempoDecorrido.Minutes, tempoDecorrido.Seconds) });
                 }
 
                 Lst_Tempo.ItemsSource = listaTempo;
@@ -640,30 +664,51 @@ namespace Trabalhos
                     queryAtualizarTarefa.ExecuteNonQuery();
                     queryAtualizarTarefa.Parameters.Clear();
 
+                    queryInserirTempo.Connection = DataBase.conexao;
                     queryAtualizarTempo.Connection = DataBase.conexao;
                     queryApagarTempo.Connection = DataBase.conexao;
 
-                    foreach (string item in temposAlterados)
+                    foreach (Tuple<string, string> item in temposAlterados)
                     {
-                        try
+                        if (item.Item2 == "Add")
                         {
-                            tempos.Find(lst => lst.ChaveTempo == item);
+                            queryInserirTempo.Parameters.AddWithValue("@KeyTempo", item.Item1);
+                            queryInserirTempo.Parameters.AddWithValue("@KeyTarefa", Lbl_CodigoTarefa.Content.ToString());
+                            queryInserirTempo.Parameters.AddWithValue("@DataInicio", tempos.Find(lst => lst.ChaveTempo == item.Item1).DataInicio);
 
-                            queryAtualizarTempo.Parameters.AddWithValue("@DataInicio", tempos.Find(lst => lst.ChaveTempo == item).DataInicio);
-                            queryAtualizarTempo.Parameters.AddWithValue("@DataFim", tempos.Find(lst => lst.ChaveTempo == item).DataFim);
-                            queryAtualizarTempo.Parameters.AddWithValue("@KeyTempo", item);
+                            if (tempos.Find(lst => lst.ChaveTempo == item.Item1).DataFim != Convert.ToDateTime(null))
+                            {
+                                queryInserirTempo.Parameters.AddWithValue("@DataFim", tempos.Find(lst => lst.ChaveTempo == item.Item1).DataFim);
+                            }
+                            else
+                            {
+                                queryInserirTempo.Parameters.AddWithValue("@DataFim", DBNull.Value);
+                            }
+
+                            queryInserirTempo.ExecuteNonQuery();
+                            queryInserirTempo.Parameters.Clear();
+                        }
+                        else if (item.Item2 == "Edit")
+                        {
+                            queryAtualizarTempo.Parameters.AddWithValue("@DataInicio", tempos.Find(lst => lst.ChaveTempo == item.Item1).DataInicio);
+                            queryAtualizarTempo.Parameters.AddWithValue("@DataFim", tempos.Find(lst => lst.ChaveTempo == item.Item1).DataFim);
+                            queryAtualizarTempo.Parameters.AddWithValue("@KeyTempo", item.Item1);
 
                             queryAtualizarTempo.ExecuteNonQuery();
                             queryAtualizarTempo.Parameters.Clear();
                         }
-                        catch (Exception)
+                        else if (item.Item2 == "Delete")
                         {
-                            queryApagarTempo.Parameters.AddWithValue("@KeyTempo", item);
+                            queryApagarTempo.Parameters.AddWithValue("@KeyTempo", item.Item1);
 
                             queryApagarTempo.ExecuteNonQuery();
                             queryApagarTempo.Parameters.Clear();
                         }
                     }
+
+                    queryInserirTempo.Connection.Close();
+                    queryAtualizarTempo.Connection.Close();
+                    queryApagarTempo.Connection.Close();
 
                     DataBase.conexao.Close();
 
@@ -810,12 +855,30 @@ namespace Trabalhos
                 }
                 else
                 {
-                    tempoDecorrido = item.DataFim - item.DataInicio;
-                    preco += valor * Convert.ToDecimal(TimeSpan.Parse(Convert.ToString(tempoDecorrido)).TotalHours);
+                    tempoDecorrido = Convert.ToDateTime(item.DataFim as DateTime?) - item.DataInicio;
                 }
+
+                preco += valor * Convert.ToDecimal(TimeSpan.Parse(Convert.ToString(tempoDecorrido)).TotalHours);
             }
 
             Lbl_Preco.Content = String.Format("{0:###0.00} €", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))));
+
+            bool existe = false;
+
+            foreach (Tuple<string, string> item in temposAlterados)
+            {
+                if (key == item.Item1)
+                {
+                    existe = true;
+
+                    break;
+                }
+            }
+
+            if (!existe)
+            {
+                temposAlterados.Add(new Tuple<string, string>(key, "Add"));
+            }
 
             Dp_DataInicio.SelectedDate = null;
             Dp_DataInicio.DisplayDate = DateTime.Today;
@@ -865,9 +928,9 @@ namespace Trabalhos
 
             bool existe = false;
 
-            foreach (string item in temposAlterados)
+            foreach (Tuple<string, string> item in temposAlterados)
             {
-                if (listaTempo[Lst_Tempo.SelectedIndex].ChaveTempo == item)
+                if (listaTempo[Lst_Tempo.SelectedIndex].ChaveTempo == item.Item1)
                 {
                     existe = true;
 
@@ -877,7 +940,7 @@ namespace Trabalhos
 
             if (!existe)
             {
-                temposAlterados.Add(listaTempo[Lst_Tempo.SelectedIndex].ChaveTempo);
+                temposAlterados.Add(new Tuple<string, string>(listaTempo[Lst_Tempo.SelectedIndex].ChaveTempo, "Edit"));
             }
 
             Lst_Tempo.Items.Refresh();
@@ -911,9 +974,10 @@ namespace Trabalhos
                 }
                 else
                 {
-                    tempoDecorrido = item.DataFim - item.DataInicio;
-                    preco += valor * Convert.ToDecimal(TimeSpan.Parse(Convert.ToString(tempoDecorrido)).TotalHours);
+                    tempoDecorrido = Convert.ToDateTime(item.DataFim as DateTime?) - item.DataInicio;
                 }
+
+                preco += valor * Convert.ToDecimal(TimeSpan.Parse(Convert.ToString(tempoDecorrido)).TotalHours);
             }
 
             Lbl_Preco.Content = String.Format("{0:###0.00} €", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))));
@@ -937,9 +1001,9 @@ namespace Trabalhos
 
             bool existe = false;
 
-            foreach (string item in temposAlterados)
+            foreach (Tuple<string, string> item in temposAlterados)
             {
-                if (listaTempo[Lst_Tempo.SelectedIndex].ChaveTempo == item)
+                if (listaTempo[Lst_Tempo.SelectedIndex].ChaveTempo == item.Item1)
                 {
                     existe = true;
 
@@ -949,7 +1013,7 @@ namespace Trabalhos
 
             if (!existe)
             {
-                temposAlterados.Add(listaTempo[Lst_Tempo.SelectedIndex].ChaveTempo);
+                temposAlterados.Add(new Tuple<string, string>(listaTempo[Lst_Tempo.SelectedIndex].ChaveTempo, "Delete"));
             }
 
             tempos.RemoveAt(tempos.FindIndex(lst => lst.ChaveTempo == listaTempo[index].ChaveTempo));
@@ -985,9 +1049,10 @@ namespace Trabalhos
                 }
                 else
                 {
-                    tempoDecorrido = item.DataFim - item.DataInicio;
-                    preco += valor * Convert.ToDecimal(TimeSpan.Parse(Convert.ToString(tempoDecorrido)).TotalHours);
+                    tempoDecorrido = Convert.ToDateTime(item.DataFim as DateTime?) - item.DataInicio;
                 }
+
+                preco += valor * Convert.ToDecimal(TimeSpan.Parse(Convert.ToString(tempoDecorrido)).TotalHours);
             }
 
             Lbl_Preco.Content = String.Format("{0:###0.00} €", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))));
@@ -1115,9 +1180,10 @@ namespace Trabalhos
                     }
                     else
                     {
-                        tempoDecorrido = item.DataFim - item.DataInicio;
-                        preco += valor * Convert.ToDecimal(TimeSpan.Parse(Convert.ToString(tempoDecorrido)).TotalHours);
+                        tempoDecorrido = Convert.ToDateTime(item.DataFim as DateTime?) - item.DataInicio;
                     }
+
+                    preco += valor * Convert.ToDecimal(TimeSpan.Parse(Convert.ToString(tempoDecorrido)).TotalHours);
                 }
 
                 Lbl_Preco.Content = String.Format("{0:###0.00} €", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))));

@@ -163,7 +163,7 @@
                     <Setter Property="Control.Template">
                         <Setter.Value>
                             <ControlTemplate>
-                                <TextBox x:Name="PART_TextBox" Text="{Binding Path=SelectedDate, RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}, StringFormat='dd/MM/yyyy HH:mm:ss'}" Background="#FF494949" Foreground="#FFEEEEEE" BorderThickness="0" IsReadOnly="False"/>
+                                <TextBox x:Name="PART_TextBox" Text="{Binding Path=SelectedDate, RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}, StringFormat='dd/MM/yyyy HH:mm:ss'}" Background="#FF494949" Foreground="#FFEEEEEE" BorderThickness="0" IsReadOnly="False" OverridesDefaultStyle="False"/>
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>

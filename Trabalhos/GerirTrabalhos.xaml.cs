@@ -108,6 +108,12 @@ namespace Trabalhos
             CarregarPagina();
         }
 
+        //Botao guardar trabalho
+        private void Btn_GuardarTrabalho_Click(object sender, RoutedEventArgs e)
+        {
+            GuardarTrabalho();
+        }
+
         //Pagina editar tarefas
         private void Btn_EditarTarefas_Click(object sender, RoutedEventArgs e)
         {
@@ -450,13 +456,13 @@ namespace Trabalhos
 
                     while (Reader.Read())
                     {
-                        if (Convert.ToString(Reader["DataFim"].ToString()) == "01/01/0001 00:00:00" || Convert.ToString(Reader["DataFim"].ToString()) == null)
-                        {
-                            time += new TimeSpan(0);
-                        }
-                        else
+                        try
                         {
                             time += Convert.ToDateTime(Reader["DataFim"].ToString()) - Convert.ToDateTime(Reader["DataInicio"].ToString());
+                        }
+                        catch (Exception)
+                        {
+                            time += new TimeSpan(0);
                         }
                     }
 
@@ -490,15 +496,6 @@ namespace Trabalhos
             }
             else if (Lst_Tarefas.SelectedIndex == -1)
             {
-                //CARREGAR PÁGINA COMPLETA
-                //CARREGAR PÁGINA COMPLETA
-                //CARREGAR PÁGINA COMPLETA
-                //CARREGAR PÁGINA COMPLETA
-                //CARREGAR PÁGINA COMPLETA
-                //CARREGAR PÁGINA COMPLETA
-                //CARREGAR PÁGINA COMPLETA
-                //CARREGAR PÁGINA COMPLETA
-
                 trabalhos.Clear();
                 listaTrabalhos.Clear();
                 clientes.Clear();

@@ -27,7 +27,7 @@ namespace Trabalhos
         public string ChaveTempo { get; set; }
         public string ChaveTarefa { get; set; }
         public DateTime DataInicio { get; set; }
-        public DateTime DataFim { get; set; }
+        public DateTime? DataFim { get; set; }
     }
 
     public class Tarefa
