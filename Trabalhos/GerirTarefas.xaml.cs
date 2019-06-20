@@ -193,7 +193,7 @@ namespace Trabalhos
 
             Sld_Desconto.Value = EditarTarefaCampos.Desconto;
             Tb_Desconto.Text = String.Format("{0:##0.00}%", Math.Round(Sld_Desconto.Value, 2));
-            Lbl_Preco.Content = String.Format("{0:###0.00} €", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))));
+            Lbl_Preco.Content = String.Format("{0:###0.00}€", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))));
 
             Lbl_Servico.Visibility = Visibility.Hidden;
             Cb_Servico.Visibility = Visibility.Visible;
@@ -272,7 +272,7 @@ namespace Trabalhos
             Sld_Desconto.Value = Convert.ToDouble(tarefas[Lst_Tarefas.SelectedIndex].Desconto * 100);
             Tb_Desconto.Text = String.Format("{0:##0.00}%", Math.Round(Sld_Desconto.Value, 2));
 
-            Lbl_Preco.Content = String.Format("{0:###0.00} €", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))));
+            Lbl_Preco.Content = String.Format("{0:###0.00}€", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))));
 
             Lbl_Servico.Visibility = Visibility.Hidden;
             Cb_Servico.Visibility = Visibility.Visible;
@@ -436,7 +436,7 @@ namespace Trabalhos
                 Sld_Desconto.Visibility = Visibility.Visible;
                 Sld_Desconto.Value = Convert.ToDouble(tarefas[Lst_Tarefas.SelectedIndex].Desconto * 100);
                 Tb_Desconto.Text = String.Format("{0:##0.00}%", Math.Round(Sld_Desconto.Value, 2));
-                Lbl_Preco.Content = String.Format("{0:###0.00} €", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))));
+                Lbl_Preco.Content = String.Format("{0:###0.00}€", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))));
 
                 Btn_AtualizarTarefa.IsEnabled = true;
                 Btn_ApagarTarefa.IsEnabled = true;
@@ -460,9 +460,6 @@ namespace Trabalhos
 
                 DataInicio = listaTempo[Lst_Tempo.SelectedIndex].DataInicio.AddMilliseconds(-listaTempo[Lst_Tempo.SelectedIndex].DataInicio.Millisecond);
                 DataFim = listaTempo[Lst_Tempo.SelectedIndex].DataFim.AddMilliseconds(-listaTempo[Lst_Tempo.SelectedIndex].DataFim.Millisecond + 1);
-
-                Console.WriteLine(DataInicio);
-                Console.WriteLine(DataFim);
 
                 if (!Lst_Tempo.HasItems)
                 {
@@ -757,7 +754,7 @@ namespace Trabalhos
                     Btn_AtualizarTarefa.Visibility = Visibility.Visible;
                     Btn_ApagarTarefa.Visibility = Visibility.Visible;
                 }
-                    catch (Exception ex)
+                catch (Exception ex)
                 {
                     Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
                 }
@@ -862,7 +859,7 @@ namespace Trabalhos
                 preco += valor * Convert.ToDecimal(TimeSpan.Parse(Convert.ToString(tempoDecorrido)).TotalHours);
             }
 
-            Lbl_Preco.Content = String.Format("{0:###0.00} €", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))));
+            Lbl_Preco.Content = String.Format("{0:###0.00}€", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))));
 
             bool existe = false;
 
@@ -981,7 +978,7 @@ namespace Trabalhos
                 preco += valor * Convert.ToDecimal(TimeSpan.Parse(Convert.ToString(tempoDecorrido)).TotalHours);
             }
 
-            Lbl_Preco.Content = String.Format("{0:###0.00} €", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))));
+            Lbl_Preco.Content = String.Format("{0:###0.00}€", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))));
 
             if (listaTempo.Count > 0)
             {
@@ -1056,7 +1053,7 @@ namespace Trabalhos
                 preco += valor * Convert.ToDecimal(TimeSpan.Parse(Convert.ToString(tempoDecorrido)).TotalHours);
             }
 
-            Lbl_Preco.Content = String.Format("{0:###0.00} €", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))));
+            Lbl_Preco.Content = String.Format("{0:###0.00}€", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))));
 
             if (listaTempo.Count > 0)
             {
@@ -1187,7 +1184,7 @@ namespace Trabalhos
                     preco += valor * Convert.ToDecimal(TimeSpan.Parse(Convert.ToString(tempoDecorrido)).TotalHours);
                 }
 
-                Lbl_Preco.Content = String.Format("{0:###0.00} €", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))));
+                Lbl_Preco.Content = String.Format("{0:###0.00}€", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))));
 
                 if (ServicoGuardado)
                 {
@@ -1322,7 +1319,7 @@ namespace Trabalhos
                 Tb_Desconto.Text = String.Format("{0:##0.00}%", Math.Round(Sld_Desconto.Value, 2));
             }
 
-            Lbl_Preco.Content = String.Format("{0:###0.00} €", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))));
+            Lbl_Preco.Content = String.Format("{0:###0.00}€", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))));
         }
 
         //Atribuir valor da textbox ao slider

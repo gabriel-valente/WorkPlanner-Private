@@ -77,5 +77,6 @@ namespace Trabalhos
         public static string ChaveCliente;
         public static string Trabalho;
         public static string Descricao;
+        public static string Pago;
     }
 }
