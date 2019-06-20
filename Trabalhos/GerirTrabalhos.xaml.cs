@@ -111,30 +111,42 @@ namespace Trabalhos
         //Botao guardar trabalho
         private void Btn_GuardarTrabalho_Click(object sender, RoutedEventArgs e)
         {
+            Adicionar = false;
+
             GuardarTrabalho();
+
+            InterPages.KeyTrabalho = null;
+            InterPages.NomeTrabalho = null;
+        }
+
+        //Botao atualizar trabalho
+        private void Btn_AtualizarTrabalho_Click(object sender, RoutedEventArgs e)
+        {
+
         }
 
         //Pagina editar tarefas
         private void Btn_EditarTarefas_Click(object sender, RoutedEventArgs e)
         {
             int index = trabalhos.FindIndex(lst => lst.ChaveTrabalho == Lbl_CodigoTrabalho.Content.ToString());
+
+            VoltarPaginaTrabalho.ChaveTrabalho = Lbl_CodigoTrabalho.Content.ToString();
+            VoltarPaginaTrabalho.Trabalho = Tb_Trabalho.Text;
+            VoltarPaginaTrabalho.Descricao = Tb_Descricao.Text;
+
             if (index == -1)
             {
-                GuardarTrabalho();
-
                 VoltarPaginaTrabalho.ChaveCliente = clientes.Find(lst => lst.Nome == Cb_Cliente.Text).ChaveCliente;
+
+                GuardarTrabalho();
             }
             else
             {
                 VoltarPaginaTrabalho.ChaveCliente = clientes.Find(lst => lst.Nome == Lbl_Cliente.Content.ToString()).ChaveCliente;
             }
 
-            VoltarPaginaTrabalho.ChaveTrabalho = Lbl_CodigoTrabalho.Content.ToString();
-            VoltarPaginaTrabalho.Trabalho = Tb_Trabalho.Text;
-            VoltarPaginaTrabalho.Descricao = Tb_Descricao.Text;
-
-            InterPages.KeyTrabalho = Lbl_CodigoTrabalho.Content.ToString();
-            InterPages.NomeTrabalho = Tb_Trabalho.Text;
+            InterPages.KeyTrabalho = VoltarPaginaTrabalho.ChaveTrabalho;
+            InterPages.NomeTrabalho = VoltarPaginaTrabalho.Trabalho;
             ((MainWindow)Application.Current.MainWindow).Frm_Principal.Content = new GerirTarefas();
         }
 
@@ -411,6 +423,26 @@ namespace Trabalhos
 
                 queryInserirTrabalho.ExecuteNonQuery();
                 queryInserirTrabalho.Parameters.Clear();
+
+                tarefas.Clear();
+
+                LimparCampos();
+
+                ClienteValido = false;
+                TrabalhoValido = false;
+                Lbl_Cliente.Visibility = Visibility.Visible;
+                Cb_Cliente.Visibility = Visibility.Hidden;
+                Tb_Trabalho.IsReadOnly = true;
+                Tb_Descricao.IsReadOnly = true;
+                Lst_Tarefas.IsEnabled = false;
+                Btn_EditarTarefas.Visibility = Visibility.Hidden;
+                Lst_Trabalhos.IsEnabled = true;
+                Btn_GuardarTrabalho.Visibility = Visibility.Hidden;
+                Btn_GuardarAlteracoes.Visibility = Visibility.Hidden;
+                Btn_CancelarTrabalho.Visibility = Visibility.Hidden;
+                Btn_AdicionarTrabalho.Visibility = Visibility.Visible;
+                Btn_AtualizarTrabalho.Visibility = Visibility.Visible;
+                Btn_ApagarTrabalho.Visibility = Visibility.Visible;
             }
             catch (Exception ex)
             {
@@ -493,6 +525,8 @@ namespace Trabalhos
 
                 Btn_EditarTarefas.IsEnabled = true;
                 Btn_EditarTarefas.Visibility = Visibility.Visible;
+                Btn_AtualizarTrabalho.IsEnabled = true;
+                Btn_ApagarTrabalho.IsEnabled = true;
             }
             else if (Lst_Tarefas.SelectedIndex == -1)
             {
@@ -518,8 +552,9 @@ namespace Trabalhos
 
                 if (Adicionar)
                 {
+                    Console.WriteLine("Ele entrou á macho!");
                     Lbl_CodigoTrabalho.Content = VoltarPaginaTrabalho.ChaveTrabalho;
-                    Cb_Cliente.Text = clientes.Find(lst => lst.ChaveCliente == VoltarPaginaTrabalho.ChaveCliente).Nome;
+                    Lbl_Cliente.Content = clientes.Find(lst => lst.ChaveCliente == VoltarPaginaTrabalho.ChaveCliente).Nome;
                     Tb_Trabalho.Text = VoltarPaginaTrabalho.Trabalho;
                     Tb_Descricao.Text = VoltarPaginaTrabalho.Descricao;
 

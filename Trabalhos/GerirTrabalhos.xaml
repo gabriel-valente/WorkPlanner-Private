@@ -162,7 +162,7 @@
             </Rectangle.Fill>
         </Rectangle>
         <Button x:Name="Btn_AdicionarTrabalho" Grid.Row="1" Grid.Column="1" Content="Adicionar Novo Trabalho" Margin="10,10,0,0" Width="250" HorizontalAlignment="Left" Height="73" VerticalAlignment="Top" Grid.ColumnSpan="2" Click="Btn_AdicionarTrabalho_Click"/>
-        <Button x:Name="Btn_AtualizarTrabalho" Grid.Row="1" Grid.Column="1" Content="Editar Trabalho Selecionado" Margin="10,80,0,81" Width="250" Height="73" HorizontalAlignment="Left" IsEnabled="False" Grid.ColumnSpan="2"/>
+        <Button x:Name="Btn_AtualizarTrabalho" Grid.Row="1" Grid.Column="1" Content="Editar Trabalho Selecionado" Margin="10,80,0,81" Width="250" Height="73" HorizontalAlignment="Left" IsEnabled="False" Grid.ColumnSpan="2" Click="Btn_AtualizarTrabalho_Click"/>
         <Button x:Name="Btn_ApagarTrabalho" Grid.Row="1" Grid.Column="1" Content="Apagar Trabalho Selecionado" Margin="10,0,0,10" Width="250" Height="73" HorizontalAlignment="Left" IsEnabled="False" VerticalAlignment="Bottom" Grid.ColumnSpan="2"/>
         <Button x:Name="Btn_CancelarTrabalho" Grid.Row="1" Grid.Column="1" Content="Cancelar" Margin="10,0,0,10" Width="250" HorizontalAlignment="Left" Height="73" VerticalAlignment="Bottom" Grid.ColumnSpan="2" Visibility="Hidden" Click="Btn_CancelarTrabalho_Click"/>
         <Button x:Name="Btn_GuardarTrabalho" Grid.Row="1" Grid.Column="1" Content="Guardar Trabalho" Margin="10,10,0,0" Height="73" Width="250" VerticalAlignment="Top" HorizontalAlignment="Left" IsEnabled="False" Grid.ColumnSpan="2" Visibility="Hidden" Click="Btn_GuardarTrabalho_Click"/>

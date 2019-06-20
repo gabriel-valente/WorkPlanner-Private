@@ -111,6 +111,7 @@ namespace Trabalhos
                     listaTarefa.Add(new ListaTarefas { ChaveTarefa = item.ChaveTarefa, Servico = servicos.Find(lst => lst.ChaveServico == item.ChaveServico).Nome, Tempo = TimeSpan.Parse(String.Format("{0:00}:{1:00}:{2:00}", tempoDecorrido.Hours, tempoDecorrido.Minutes, tempoDecorrido.Seconds)) });
                 }
 
+                queryTodosTempos.Connection.Close();
                 DataBase.conexao.Close();
 
                 Lst_Tarefas.ItemsSource = listaTarefa;
@@ -330,6 +331,7 @@ namespace Trabalhos
                 queryApagarTarefa.Parameters.Clear();
 
                 Reader.Close();
+                queryApagarTarefa.Connection.Close();
                 DataBase.conexao.Close();
 
                 tarefas.RemoveAt(Lst_Tarefas.SelectedIndex);
@@ -368,15 +370,13 @@ namespace Trabalhos
                 queryTodosTempos.Connection = DataBase.conexao;
                 queryTodosTempos.Parameters.AddWithValue("@KeyTarefa", tarefas[Lst_Tarefas.SelectedIndex].ChaveTarefa);
                 Reader = queryTodosTempos.ExecuteReader();
-                Console.WriteLine("\\/Devia aparecer aqui a quantidade");
-                Console.WriteLine(Reader.HasRows);
+                queryTodosTempos.Parameters.Clear();
+
                 while (Reader.Read())
                 {
                     tempos.Add(new Tempo { ChaveTempo = Convert.ToString(Reader["Key_Tempo"].ToString()), ChaveTarefa = Convert.ToString(Reader["Key_Tarefa"].ToString()), DataInicio = Convert.ToDateTime(Reader["DataInicio"] as DateTime?), DataFim = Convert.ToDateTime(Reader["DataFim"] as DateTime?) });
-                    Console.WriteLine(tempos.Count);
                 }
 
-                queryTodosTempos.Parameters.Clear();
                 Reader.Close();
                 queryTodosTempos.Connection.Close();
 
@@ -458,28 +458,27 @@ namespace Trabalhos
                 Dp_DataFim.SelectedDate = null;
                 Dp_DataFim.DisplayDate = DateTime.Today;
 
-                DataInicio = listaTempo[Lst_Tempo.SelectedIndex].DataInicio;
-                DataFim = listaTempo[Lst_Tempo.SelectedIndex].DataFim;
+                DataInicio = listaTempo[Lst_Tempo.SelectedIndex].DataInicio.AddMilliseconds(-listaTempo[Lst_Tempo.SelectedIndex].DataInicio.Millisecond);
+                DataFim = listaTempo[Lst_Tempo.SelectedIndex].DataFim.AddMilliseconds(-listaTempo[Lst_Tempo.SelectedIndex].DataFim.Millisecond + 1);
+
+                Console.WriteLine(DataInicio);
+                Console.WriteLine(DataFim);
 
                 if (!Lst_Tempo.HasItems)
                 {
                     TempoValido = false;
-                    Console.WriteLine("Lst_Tempo_SelectionChanged");
                 }
                 else
                 {
                     TempoValido = true;
                 }
 
-                if (Lst_Tempo.SelectedIndex > -1)
-                {
-                    Dp_DataInicio.SelectedDate = listaTempo[Lst_Tempo.SelectedIndex].DataInicio;
-                    Dp_DataFim.SelectedDate = listaTempo[Lst_Tempo.SelectedIndex].DataFim;
+                Dp_DataInicio.SelectedDate = DataInicio;
+                Dp_DataFim.SelectedDate = DataFim;
 
-                    Btn_EditarTempo.Visibility = Visibility.Visible;
-                    Btn_AdicionarTempo.Visibility = Visibility.Hidden;
-                    Btn_ApagarTempo.IsEnabled = true;
-                }
+                Btn_EditarTempo.Visibility = Visibility.Visible;
+                Btn_AdicionarTempo.Visibility = Visibility.Hidden;
+                Btn_ApagarTempo.IsEnabled = true;
             }
             else
             {
@@ -510,6 +509,7 @@ namespace Trabalhos
 
                     queryAtualizarTarefa.ExecuteNonQuery();
                     queryAtualizarTarefa.Parameters.Clear();
+                    queryAtualizarTarefa.Connection.Close();
 
                     queryInserirTempo.Connection = DataBase.conexao;
 
@@ -539,6 +539,7 @@ namespace Trabalhos
                     queryTodosTempos.Connection = DataBase.conexao;
                     queryTodosTempos.Parameters.AddWithValue("@KeyTarefa", Lbl_CodigoTarefa.Content.ToString());
                     Reader = queryTodosTempos.ExecuteReader();
+                    queryTodosTempos.Parameters.Clear();
 
                     while (Reader.Read())
                     {
@@ -556,7 +557,7 @@ namespace Trabalhos
                     int index = tarefas.FindIndex(lst => lst.ChaveTarefa == Lbl_CodigoTarefa.Content.ToString());
 
                     tarefas[index].Desconto = desconto;
-                    listaTarefa[index].Tempo = time;
+                    listaTarefa[index].Tempo = TimeSpan.Parse(String.Format("{0:00}:{1:00}:{2:00}", time.Hours, time.Minutes, time.Seconds));
                 }
                 catch (Exception ex)
                 {
@@ -576,7 +577,6 @@ namespace Trabalhos
 
                     queryInserirTarefa.ExecuteNonQuery();
                     queryInserirTarefa.Parameters.Clear();
-
 
                     queryInserirTempo.Connection = DataBase.conexao;
 
@@ -601,11 +601,12 @@ namespace Trabalhos
                         queryInserirTempo.Parameters.Clear();
                     }
 
+                    queryInserirTempo.Connection.Close();
                     DataBase.conexao.Close();
 
                     tarefas.Add(new Tarefa { ChaveTarefa = Lbl_CodigoTarefa.Content.ToString(), ChaveTrabalho = InterPages.KeyTrabalho, ChaveServico = keyServico, Desconto = desconto });
 
-                    listaTarefa.Add(new ListaTarefas { ChaveTarefa = Lbl_CodigoTarefa.Content.ToString(), Servico = Cb_Servico.Text, Tempo = time }); ;
+                    listaTarefa.Add(new ListaTarefas { ChaveTarefa = Lbl_CodigoTarefa.Content.ToString(), Servico = Cb_Servico.Text, Tempo = TimeSpan.Parse(String.Format("{0:00}:{1:00}:{2:00}", time.Hours, time.Minutes, time.Seconds)) });
                 }
                 catch (Exception ex)
                 {
@@ -1531,6 +1532,8 @@ namespace Trabalhos
                     {
                         break;
                     }
+
+                    queryIndexTarefa.Connection.Close();
                 }
                 else if (Tabela == "Tempo")
                 {
@@ -1560,6 +1563,8 @@ namespace Trabalhos
                             break;
                         }
                     }
+
+                    queryIndexTempo.Connection.Close();
                 }
             }
 
