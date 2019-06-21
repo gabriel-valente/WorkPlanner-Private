@@ -29,6 +29,9 @@ namespace Trabalhos
         SqlCommand queryIndexTrabalho = new SqlCommand("SELECT Key_Trabalho FROM Trabalho WHERE Key_Trabalho = @KeyTrabalho");
         SqlCommand queryInserirTrabalho = new SqlCommand("INSERT INTO Trabalho (Key_Trabalho, Key_Cliente, Nome, Descricao, Pago) VALUES (@KeyTrabalho, @KeyCliente, @Nome, @Descricao, @Pago)");
         SqlCommand queryAtualizarTrabalho = new SqlCommand("UPDATE Trabalho SET Key_Cliente = @KeyCliente, Nome = @Nome, Descricao = @Descricao, Pago = @Pago WHERE Key_Trabalho = @KeyTrabalho");
+        SqlCommand queryApagarTempo = new SqlCommand("DELETE FROM Tempo WHERE Key_Tarefa = @KeyTarefa");
+        SqlCommand queryApagarTarefa = new SqlCommand("DELETE FROM Tarefa WHERE Key_Tarefa = @KeyTarefa");
+        SqlCommand queryApagarTrabalho = new SqlCommand("DELETE FROM Trabalho WHERE Key_Trabalho = @KeyTrabalho");
 
         SqlDataReader Reader;
 
@@ -128,6 +131,76 @@ namespace Trabalhos
             Btn_AdicionarTrabalho.Visibility = Visibility.Hidden;
             Btn_AtualizarTrabalho.Visibility = Visibility.Hidden;
             Btn_ApagarTrabalho.Visibility = Visibility.Hidden;
+        }
+
+        //Botao apagar tarefa selecionada
+        private void Btn_ApagarTrabalho_Click(object sender, RoutedEventArgs e)
+        {
+            BloquearFundo.Visibility = Visibility.Visible;
+            Grd_ValidarApagar.Visibility = Visibility.Visible;
+        }
+
+        //Botao confirmar apagar tarefa
+        private void Btn_ConfirmarApagar_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                DataBase.conexao.Open();
+                queryApagarTempo.Connection = DataBase.conexao;
+                queryApagarTarefa.Connection = DataBase.conexao;
+
+                foreach (TrabalhoTarefas item in tarefas)
+                {
+                    queryApagarTempo.Parameters.AddWithValue("@KeyTarefa", item.ChaveTarefa);
+
+                    Reader = queryApagarTempo.ExecuteReader();
+                    queryApagarTempo.Parameters.Clear();
+
+                    Reader.Close();
+
+                    queryApagarTarefa.Parameters.AddWithValue("@KeyTarefa", item.ChaveTarefa);
+
+                    Reader = queryApagarTarefa.ExecuteReader();
+                    queryApagarTarefa.Parameters.Clear();
+
+                    Reader.Close();
+                }
+
+                tarefas.Clear();
+
+                queryApagarTrabalho.Connection = DataBase.conexao;
+                queryApagarTrabalho.Parameters.AddWithValue("@KeyTrabalho", Lbl_CodigoTrabalho.Content.ToString());
+                Reader = queryApagarTrabalho.ExecuteReader();
+                queryApagarTrabalho.Parameters.Clear();
+
+                Reader.Close();
+
+                queryApagarTempo.Connection.Close();
+                queryApagarTarefa.Connection.Close();
+                queryApagarTrabalho.Connection.Close();
+                DataBase.conexao.Close();
+
+                listaTrabalhos.RemoveAt(Lst_Trabalhos.SelectedIndex);
+                trabalhos.RemoveAt(Lst_Trabalhos.SelectedIndex);
+                Lst_Trabalhos.Items.Refresh();
+
+                LimparCampos();
+                Lbl_Erros.Text = "O trabalho foi apagado com sucesso!";
+
+                BloquearFundo.Visibility = Visibility.Hidden;
+                Grd_ValidarApagar.Visibility = Visibility.Hidden;
+            }
+            catch (Exception ex)
+            {
+                Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
+            }
+        }
+
+        //Botao cancelar apagar tarefa
+        private void Btn_CancelarApagar_Click(object sender, RoutedEventArgs e)
+        {
+            Grd_ValidarApagar.Visibility = Visibility.Hidden;
+            BloquearFundo.Visibility = Visibility.Hidden;
         }
 
         //Lista trabalhos
@@ -340,6 +413,7 @@ namespace Trabalhos
             }
 
             Tb_Trabalho.Text = new string(trabalho);
+            Tb_Trabalho.SelectionStart = Tb_Trabalho.Text.Length;
 
             if (Tb_Trabalho.Text.Length >= 3)
             {
@@ -368,6 +442,7 @@ namespace Trabalhos
             }
 
             Tb_Descricao.Text = new string(descricao);
+            Tb_Descricao.SelectionStart = Tb_Descricao.Text.Length;
         }
 
         //Validar valor pago
@@ -869,10 +944,15 @@ namespace Trabalhos
                             Lbl_Preco.Content = String.Format("{0:###0.00}€", total);
                         }
                     }
-                }
 
-                Btn_AtualizarTrabalho.IsEnabled = false;
-                Btn_ApagarTrabalho.IsEnabled = false;
+                    Btn_AtualizarTrabalho.IsEnabled = true;
+                    Btn_ApagarTrabalho.IsEnabled = true;
+                }
+                else
+                {
+                    Btn_AtualizarTrabalho.IsEnabled = false;
+                    Btn_ApagarTrabalho.IsEnabled = false;
+                }
             }
         }
 

@@ -251,8 +251,9 @@ namespace Trabalhos
                 clientes.RemoveAt(Lst_Clientes.SelectedIndex);
                 Lst_Clientes.Items.Refresh();
 
-                Lbl_Erros.Text = "O cliente foi apagado com sucesso!";
                 LimparCampos();
+                Lbl_Erros.Text = "O cliente foi apagado com sucesso!";
+
                 Lbl_CodPostalDiv.Visibility = Visibility.Hidden;
                 BloquearFundo.Visibility = Visibility.Hidden;
                 Grd_ValidarApagar.Visibility = Visibility.Hidden;

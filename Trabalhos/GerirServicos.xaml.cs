@@ -142,8 +142,9 @@ namespace Trabalhos
                 servicos.RemoveAt(Lst_Servicos.SelectedIndex);
                 Lst_Servicos.Items.Refresh();
 
-                Lbl_Erros.Text = "O serviço foi apagado com sucesso!";
                 LimparCampos();
+                Lbl_Erros.Text = "O serviço foi apagado com sucesso!";
+
                 BloquearFundo.Visibility = Visibility.Hidden;
                 Grd_ValidarApagar.Visibility = Visibility.Hidden;
             }

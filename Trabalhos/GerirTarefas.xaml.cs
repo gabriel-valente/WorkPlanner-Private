@@ -338,8 +338,8 @@ namespace Trabalhos
                 listaTarefa.RemoveAt(Lst_Tarefas.SelectedIndex);
                 Lst_Tarefas.Items.Refresh();
 
-                Lbl_Erros.Text = "A tarefa foi apagada com sucesso!";
                 LimparCampos();
+                Lbl_Erros.Text = "A tarefa foi apagada com sucesso!";
 
                 BloquearFundo.Visibility = Visibility.Hidden;
                 Grd_ValidarApagar.Visibility = Visibility.Hidden;
