@@ -10,5 +10,6 @@
 
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resetclientes.sql")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("workplanner.mdf")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("workplanner_log.ldf")]
 
 
