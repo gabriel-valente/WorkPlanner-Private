@@ -32,7 +32,7 @@
                 <lvc:DefaultTooltip Background="#BF323232" FontFamily="Segoe UI Light"/>
             </lvc:CartesianChart.DataTooltip>
             <lvc:CartesianChart.AxisY>
-                <lvc:Axis Title="Ganhos" LabelFormatter="{Binding YFormatter}"></lvc:Axis>
+                <lvc:Axis Title="Ganhos" LabelFormatter="{Binding YFormatter}" MinValue="0"></lvc:Axis>
             </lvc:CartesianChart.AxisY>
             <lvc:CartesianChart.AxisX>
                 <lvc:Axis Title="Dias" LabelFormatter="{Binding Formatter}"></lvc:Axis>

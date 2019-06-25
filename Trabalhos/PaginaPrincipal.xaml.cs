@@ -79,8 +79,6 @@ namespace Trabalhos
 
         void CarregarCircular()
         {
-            Func<ChartPoint, string> PieLabel = chartPoint => string.Format("{0}, ({1:P})", chartPoint.Y, chartPoint.Participation);
-
             double contagemClientes = 0;
             double contagemTrabalhos = 0;
             double contagemServicos = 0;
@@ -97,7 +95,7 @@ namespace Trabalhos
 
                 if (contagemClientes > 0)
                 {
-                    Chrt_Pie.Series.Add(new PieSeries { Title = "Clientes", StrokeThickness = 1, DataLabels = true, LabelPoint = PieLabel, Values = new ChartValues<double> { contagemClientes } });
+                    Chrt_Pie.Series.Add(new PieSeries { Title = "Clientes", StrokeThickness = 1, Values = new ChartValues<double> { contagemClientes } });
                 }
 
                 Reader.Close();
@@ -110,7 +108,7 @@ namespace Trabalhos
 
                 if (contagemTrabalhos > 0)
                 {
-                    Chrt_Pie.Series.Add(new PieSeries { Title = "Trabalhos", StrokeThickness = 1, DataLabels = true, LabelPoint = PieLabel, Values = new ChartValues<double> { contagemTrabalhos } });
+                    Chrt_Pie.Series.Add(new PieSeries { Title = "Trabalhos", StrokeThickness = 1, Values = new ChartValues<double> { contagemTrabalhos } });
                 }
 
                 Reader.Close();
@@ -123,7 +121,7 @@ namespace Trabalhos
 
                 if (contagemServicos > 0)
                 {
-                    Chrt_Pie.Series.Add(new PieSeries { Title = "Serviços", StrokeThickness = 1, DataLabels = true, LabelPoint = PieLabel, Values = new ChartValues<double> { contagemServicos } });
+                    Chrt_Pie.Series.Add(new PieSeries { Title = "Serviços", StrokeThickness = 1, Values = new ChartValues<double> { contagemServicos } });
                 }
 
                 Reader.Close();
@@ -134,6 +132,8 @@ namespace Trabalhos
             }
             catch (Exception)
             {
+                Chrt_Pie.Visibility = Visibility.Hidden;
+                Lbl_Pie.Visibility = Visibility.Visible;
             }
 
             if (contagemClientes == 0 && contagemTrabalhos == 0 && contagemServicos== 0)
@@ -220,7 +220,6 @@ namespace Trabalhos
                                 if (item.Item4 == Convert.ToDateTime("01/01/0001 00:00:00") || item.Item4 == Convert.ToDateTime(null))
                                 {
                                     valor = 0;
-                                    Console.WriteLine("Zero");
                                 }
                                 else
                                 {
@@ -232,12 +231,10 @@ namespace Trabalhos
 
                                     if (index > -1)
                                     {
-                                        Console.WriteLine("Editou");
                                         listagem[index] = new Tuple<decimal, DateTime> (listagem[index].Item1 + valor, listagem[index].Item2);
                                     }
                                     else
                                     {
-                                        Console.WriteLine("Adicionou");
                                         listagem.Add(new Tuple<decimal, DateTime>(valor, Convert.ToDateTime(item.Item3)));
                                     }
                                 }
@@ -261,7 +258,7 @@ namespace Trabalhos
                                         DataLabels = false,
                                         LabelPoint = LineLabel,
                                         Fill = Brushes.Transparent
-                                    },
+                                    }
                                 };
 
                             YFormatter = value => string.Format("{0:###0.00}€", value);

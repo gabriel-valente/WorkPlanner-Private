@@ -58,6 +58,8 @@ namespace Trabalhos
         DateTime? DataInicio = null;
         DateTime? DataFim = null;
 
+        public Nullable<DateTime> Prop { get; set; }
+
         decimal preco = 0;
 
         string ChaveTarefaServico = null;
@@ -516,13 +518,13 @@ namespace Trabalhos
                         queryInserirTempo.Parameters.AddWithValue("@KeyTarefa", ChaveTarefaServico);
                         queryInserirTempo.Parameters.AddWithValue("@DataInicio", item.DataInicio);
 
-                        if (item.DataFim != Convert.ToDateTime(null))
+                        if (item.DataFim == Convert.ToDateTime("01/01/0001 00:00:00") || item.DataFim == Convert.ToDateTime(null))
                         {
-                            queryInserirTempo.Parameters.AddWithValue("@DataFim", item.DataFim);
+                            queryInserirTempo.Parameters.AddWithValue("@DataFim", DBNull.Value);
                         }
                         else
                         {
-                            queryInserirTempo.Parameters.AddWithValue("@DataFim", DBNull.Value);
+                            queryInserirTempo.Parameters.AddWithValue("@DataFim", item.DataFim);
                         }
 
                         queryInserirTempo.ExecuteNonQuery();
@@ -674,13 +676,13 @@ namespace Trabalhos
                             queryInserirTempo.Parameters.AddWithValue("@KeyTarefa", Lbl_CodigoTarefa.Content.ToString());
                             queryInserirTempo.Parameters.AddWithValue("@DataInicio", tempos.Find(lst => lst.ChaveTempo == item.Item1).DataInicio);
 
-                            if (tempos.Find(lst => lst.ChaveTempo == item.Item1).DataFim != Convert.ToDateTime(null))
+                            if (tempos.Find(lst => lst.ChaveTempo == item.Item1).DataFim == Convert.ToDateTime("01/01/0001 00:00:00") || tempos.Find(lst => lst.ChaveTempo == item.Item1).DataFim == Convert.ToDateTime(null))
                             {
-                                queryInserirTempo.Parameters.AddWithValue("@DataFim", tempos.Find(lst => lst.ChaveTempo == item.Item1).DataFim);
+                                queryInserirTempo.Parameters.AddWithValue("@DataFim", DBNull.Value);
                             }
                             else
                             {
-                                queryInserirTempo.Parameters.AddWithValue("@DataFim", DBNull.Value);
+                                queryInserirTempo.Parameters.AddWithValue("@DataFim", tempos.Find(lst => lst.ChaveTempo == item.Item1).DataFim);
                             }
 
                             queryInserirTempo.ExecuteNonQuery();
@@ -689,7 +691,16 @@ namespace Trabalhos
                         else if (item.Item2 == "Edit")
                         {
                             queryAtualizarTempo.Parameters.AddWithValue("@DataInicio", tempos.Find(lst => lst.ChaveTempo == item.Item1).DataInicio);
-                            queryAtualizarTempo.Parameters.AddWithValue("@DataFim", tempos.Find(lst => lst.ChaveTempo == item.Item1).DataFim);
+
+                            if (tempos.Find(lst => lst.ChaveTempo == item.Item1).DataFim == Convert.ToDateTime("01/01/0001 00:00:00") || tempos.Find(lst => lst.ChaveTempo == item.Item1).DataFim == Convert.ToDateTime(null))
+                            {
+                                queryAtualizarTempo.Parameters.AddWithValue("@DataFim", DBNull.Value);
+                            }
+                            else
+                            {
+                                queryAtualizarTempo.Parameters.AddWithValue("@DataFim", tempos.Find(lst => lst.ChaveTempo == item.Item1).DataFim);
+                            }
+
                             queryAtualizarTempo.Parameters.AddWithValue("@KeyTempo", item.Item1);
 
                             queryAtualizarTempo.ExecuteNonQuery();
