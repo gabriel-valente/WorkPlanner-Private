@@ -174,7 +174,20 @@
         <Button x:Name="Btn_AtualDataInicio" Grid.Row="0" Grid.Column="2" Content="Data atual" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="360,212,0,0" Width="110" Click="Btn_AtualDataInicio_Click" Visibility="Hidden"/>
         <Label Grid.Row="0" Grid.Column="1" Content="Data/hora de fim:" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Margin="10,244,10,0" Height="30"/>
         <Label x:Name="Lbl_DataFim" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="10,244,10,0" Height="30"/>
-        <DatePicker x:Name="Dp_DataFim" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,250,0,0" FontSize="16" Height="20" Width="230" SelectedDate="{Binding Prop}" IsTodayHighlighted="False" BorderThickness="0" Padding="0" BorderBrush="{x:Null}" IsTabStop="True" SelectedDateChanged="Dp_DataFim_SelectedDateChanged" Visibility="Hidden"/>
+        <DatePicker x:Name="Dp_DataFim" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,250,0,0" FontSize="16" Height="20" Width="230" SelectedDate="{Binding Prop}" IsTodayHighlighted="False" BorderThickness="0" Padding="0" BorderBrush="{x:Null}" IsTabStop="True" SelectedDateChanged="Dp_DataFim_SelectedDateChanged" Visibility="Hidden">
+            <DatePicker.Resources>
+                <local:StringToDateTimeConverter x:Key="StringToDateTimeConverter" />
+                <Style TargetType="{x:Type DatePickerTextBox}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <TextBox x:Name="PART_TextBox" Text="{Binding Path=SelectedDate, RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}, Converter={StaticResource StringToDateTimeConverter}}" Background="#FF494949" Foreground="#FFEEEEEE" BorderThickness="0" IsReadOnly="False" OverridesDefaultStyle="False"/>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DatePicker.Resources>
+        </DatePicker>
         <Button x:Name="Btn_LimparDataFim" Grid.Row="0" Grid.Column="2" Content="Data anterior" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="245,248,0,0" Width="110" Click="Btn_LimparDataFim_Click" Visibility="Hidden"/>
         <Button x:Name="Btn_AtualDataFim" Grid.Row="0" Grid.Column="2" Content="Data atual" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="360,248,0,0" Width="110" Click="Btn_AtualDataFim_Click" Visibility="Hidden"/>
         <Rectangle Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Height="1" VerticalAlignment="Top" Margin="0,277,0,0">
