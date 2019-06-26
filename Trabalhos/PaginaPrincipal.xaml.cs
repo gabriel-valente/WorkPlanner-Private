@@ -17,6 +17,7 @@ using LiveCharts;
 using LiveCharts.Defaults;
 using LiveCharts.Configurations;
 using LiveCharts.Wpf;
+using System.Collections;
 
 namespace Trabalhos
 {
@@ -36,14 +37,21 @@ namespace Trabalhos
 
         SqlDataReader Reader;
 
+        decimal valorTotal = 0;
+        double valorRecebido = 0;
+
         public PaginaPrincipal()
         {
             InitializeComponent();
 
             DataBase.conexao = new SqlConnection(DataBase.stringConexao);
+        }
 
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
             CarregarCircular();
             CarregarLinhas();
+            CarregarColunas();
         }
 
         private void Chart_OnDataClick(object sender, ChartPoint chartpoint)
@@ -82,6 +90,8 @@ namespace Trabalhos
             double contagemClientes = 0;
             double contagemTrabalhos = 0;
             double contagemServicos = 0;
+
+            Chrt_Pie.Series.Clear();
 
             try
             {
@@ -160,12 +170,16 @@ namespace Trabalhos
             queryTodosTrabalhos.Connection = DataBase.conexao;
             Reader = queryTodosTrabalhos.ExecuteReader();
 
+            valorTotal = 0;
+            valorRecebido = 0;
 
             if (Reader.HasRows)
             {
                 while (Reader.Read())
                 {
                     trabalhos.Add(new Tuple<string, decimal>(Convert.ToString(Reader["Key_Trabalho"].ToString()), Convert.ToDecimal(Reader["Pago"].ToString())));
+
+                    valorRecebido += Math.Round(Convert.ToDouble(Reader["Pago"].ToString()), 2);
                 }
 
                 Reader.Close();
@@ -227,15 +241,17 @@ namespace Trabalhos
                                     TimeSpan tempo = Convert.ToDateTime(item.Item4) - Convert.ToDateTime(item.Item3);
                                     valor = (precoH * Convert.ToDecimal(tempo.TotalHours)) * (1 - tarefas.Find(lst => lst.Item1 == item.Item2).Item4);
 
+                                    valorTotal += Math.Round(valor, 2);
+
                                     int index = listagem.FindIndex(lst => lst.Item2.ToShortDateString() == Convert.ToDateTime(item.Item3).ToShortDateString());
 
                                     if (index > -1)
                                     {
-                                        listagem[index] = new Tuple<decimal, DateTime> (listagem[index].Item1 + valor, listagem[index].Item2);
+                                        listagem[index] = new Tuple<decimal, DateTime> (listagem[index].Item1 + Math.Round(valor, 2), listagem[index].Item2);
                                     }
                                     else
                                     {
-                                        listagem.Add(new Tuple<decimal, DateTime>(valor, Convert.ToDateTime(item.Item3)));
+                                        listagem.Add(new Tuple<decimal, DateTime>(Math.Round(valor, 2), Convert.ToDateTime(item.Item3)));
                                     }
                                 }
                             }
@@ -249,7 +265,7 @@ namespace Trabalhos
                                 list.Add(new DateModel { DateTime = item.Item2, Value = (double)item.Item1 });
                             }
 
-                            Series = new SeriesCollection(dayConfig)
+                            Chrt_Lines.Series = new SeriesCollection(dayConfig)
                                 {
                                     new LineSeries
                                     {
@@ -261,10 +277,14 @@ namespace Trabalhos
                                     }
                                 };
 
-                            YFormatter = value => string.Format("{0:###0.00}€", value);
-                            Formatter = value => new DateTime((long)(value * TimeSpan.FromDays(1).Ticks)).ToString("d");
-
-                            DataContext = this;
+                            try
+                            {
+                                YFormatter = value => string.Format("{0:###0.00}€", value);
+                                Formatter = value => new DateTime((long)(value * TimeSpan.FromDays(1).Ticks)).ToString("d");
+                            }
+                            catch (Exception)
+                            {
+                            }
                         }
                         else
                         {
@@ -293,6 +313,40 @@ namespace Trabalhos
             DataBase.conexao.Close();
         }
 
+        void CarregarColunas()
+        {
+            double valorReceber = 0;         
+
+            valorReceber = Math.Round(Convert.ToDouble(valorTotal) - valorRecebido, 2);
+
+            Chrt_Column.Series = new SeriesCollection
+            {
+                new StackedColumnSeries
+                {
+                    Title = "Recebido",
+                    Values = new ChartValues<double> { valorRecebido },
+                    DataLabels = true
+                },
+                new StackedColumnSeries
+                {
+                    Title = "Por Receber",
+                    Values = new ChartValues<double> { valorReceber },
+                    DataLabels = true
+                }
+            };
+
+            
+
+            Labels = new[] { "Ganhos" };
+            FormatterCol = value => value + " €";
+        }
+
+        //Colunas
+        public SeriesCollection SeriesCollection { get; set; }
+        public string[] Labels { get; set; }
+        public Func<double, string> FormatterCol { get; set; }
+
+        //Linhas
         public Func<double, string> YFormatter { get; set; }
         public Func<double, string> Formatter { get; set; }
         public SeriesCollection Series { get; set; }

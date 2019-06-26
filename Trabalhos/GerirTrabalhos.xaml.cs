@@ -216,6 +216,12 @@ namespace Trabalhos
 
             GuardarTrabalho();
 
+            VoltarPaginaTrabalho.ChaveTrabalho = null;
+            VoltarPaginaTrabalho.ChaveCliente = null;
+            VoltarPaginaTrabalho.Trabalho = null;
+            VoltarPaginaTrabalho.Descricao = null;
+            VoltarPaginaTrabalho.Pago = null;
+
             InterPages.KeyTrabalho = null;
             InterPages.NomeTrabalho = null;
         }
@@ -342,6 +348,18 @@ namespace Trabalhos
         //Botao voltar para o menu principal
         private void Btn_Voltar_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                VoltarPaginaTrabalho.ChaveTrabalho = Lbl_CodigoTrabalho.Content.ToString();
+                VoltarPaginaTrabalho.ChaveCliente = clientes.Find(lst => lst.Nome == Cb_Cliente.Text).ChaveCliente;
+                VoltarPaginaTrabalho.Trabalho = Tb_Trabalho.Text;
+                VoltarPaginaTrabalho.Descricao = Tb_Descricao.Text;
+                VoltarPaginaTrabalho.Pago = Tb_ValorPago.Text;
+            }
+            catch (Exception)
+            {
+            }          
+
             InterPages.KeyTrabalho = null;
             InterPages.NomeTrabalho = null;
             ((MainWindow)Application.Current.MainWindow).Frm_Principal.GoBack();
@@ -744,6 +762,7 @@ namespace Trabalhos
                 queryInserirTrabalho.Parameters.Clear();
 
                 tarefas.Clear();
+                Lst_Tarefas.Items.Refresh();
 
                 LimparCampos();
 
@@ -838,6 +857,7 @@ namespace Trabalhos
                 Tb_Trabalho.Text = trabalhos[Lst_Trabalhos.SelectedIndex].Nome;
                 Tb_Descricao.Text = trabalhos[Lst_Trabalhos.SelectedIndex].Descricao;
                 Lbl_Preco.Content = String.Format("{0:###0.00}€", total);
+                Tb_ValorPago.Text = null;
                 Tb_ValorPago.Text = String.Format("{0:#####0,00}€", trabalhos[Lst_Trabalhos.SelectedIndex].Pago);
 
                 Lst_Tarefas.ItemsSource = tarefas;
@@ -882,6 +902,7 @@ namespace Trabalhos
                         Lbl_Cliente.Content = clientes.Find(lst => lst.ChaveCliente == VoltarPaginaTrabalho.ChaveCliente).Nome;
                         Tb_Trabalho.Text = VoltarPaginaTrabalho.Trabalho;
                         Tb_Descricao.Text = VoltarPaginaTrabalho.Descricao;
+                        Tb_ValorPago.Text = null;
                         Tb_ValorPago.Text = VoltarPaginaTrabalho.Pago;
                         tarefas.Clear();
 

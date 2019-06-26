@@ -58,7 +58,7 @@ namespace Trabalhos
         DateTime? DataInicio = null;
         DateTime? DataFim = null;
 
-        public Nullable<DateTime> Prop { get; set; }
+        public Nullable<DateTime> DataNull { get; set; }
 
         decimal preco = 0;
 
@@ -185,16 +185,39 @@ namespace Trabalhos
                 listaTempo.Add(new ListaTempo { ChaveTempo = item.ChaveTempo, DataInicio = item.DataInicio, DataFim = data, TempoDecorrido = String.Format("{0:00}:{1:00}:{2:00}", tempo.Hours, tempo.Minutes, tempo.Seconds) });
             }
 
-            Dp_DataInicio.SelectedDate = EditarTarefaCampos.DataInicio;
-            Dp_DataInicio.DisplayDate = Convert.ToDateTime(EditarTarefaCampos.DataInicio);
-            Dp_DataFim.SelectedDate = EditarTarefaCampos.DataFim;
-            Dp_DataFim.DisplayDate = Convert.ToDateTime(EditarTarefaCampos.DataFim);
+            if (EditarTarefaCampos.DataInicio.HasValue)
+            {
+                if (EditarTarefaCampos.DataInicio.Value.AddMilliseconds(-EditarTarefaCampos.DataInicio.Value.Millisecond).Ticks == Convert.ToDateTime("01/01/0001 00:00:00").Ticks || EditarTarefaCampos.DataInicio.Value.AddMilliseconds(-EditarTarefaCampos.DataInicio.Value.Millisecond) == Convert.ToDateTime(null))
+                {
+                    Dp_DataInicio.SelectedDate = null;
+                    Dp_DataInicio.DisplayDate = DateTime.Now;
+                }
+                else
+                {
+                    Dp_DataInicio.SelectedDate = EditarTarefaCampos.DataInicio;
+                    Dp_DataInicio.DisplayDate = Convert.ToDateTime(EditarTarefaCampos.DataInicio);
+                }
+            }
+
+            if (EditarTarefaCampos.DataFim.HasValue)
+            {
+                if (EditarTarefaCampos.DataFim.Value.AddMilliseconds(-EditarTarefaCampos.DataFim.Value.Millisecond).Ticks == Convert.ToDateTime("01/01/0001 00:00:00").Ticks || EditarTarefaCampos.DataFim.Value.AddMilliseconds(-EditarTarefaCampos.DataFim.Value.Millisecond) == Convert.ToDateTime(null))
+                {
+                    Dp_DataFim.SelectedDate = null;
+                    Dp_DataFim.DisplayDate = DateTime.Now;
+                }
+                else
+                {
+                    Dp_DataFim.SelectedDate = EditarTarefaCampos.DataFim;
+                    Dp_DataFim.DisplayDate = Convert.ToDateTime(EditarTarefaCampos.DataFim);
+                }
+            }
 
             Lst_Tempo.ItemsSource = listaTempo;
             Lst_Tempo.Items.Refresh();
 
             Sld_Desconto.Value = EditarTarefaCampos.Desconto;
-            Tb_Desconto.Text = String.Format("{0:##0.00}%", Math.Round(Sld_Desconto.Value, 2));
+            Tb_Desconto.Text = String.Format("{0:##0.00}%", Sld_Desconto.Value);
             Lbl_Preco.Content = String.Format("{0:###0.00}€", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))));
 
             Lbl_Servico.Visibility = Visibility.Hidden;
@@ -272,7 +295,7 @@ namespace Trabalhos
             Lst_Tempo.Items.Refresh();
 
             Sld_Desconto.Value = Convert.ToDouble(tarefas[Lst_Tarefas.SelectedIndex].Desconto * 100);
-            Tb_Desconto.Text = String.Format("{0:##0.00}%", Math.Round(Sld_Desconto.Value, 2));
+            Tb_Desconto.Text = String.Format("{0:##0.00}%", Sld_Desconto.Value);
 
             Lbl_Preco.Content = String.Format("{0:###0.00}€", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))));
 
@@ -437,7 +460,7 @@ namespace Trabalhos
 
                 Sld_Desconto.Visibility = Visibility.Visible;
                 Sld_Desconto.Value = Convert.ToDouble(tarefas[Lst_Tarefas.SelectedIndex].Desconto * 100);
-                Tb_Desconto.Text = String.Format("{0:##0.00}%", Math.Round(Sld_Desconto.Value, 2));
+                Tb_Desconto.Text = String.Format("{0:##0.00}%", Sld_Desconto.Value);
                 Lbl_Preco.Content = String.Format("{0:###0.00}€", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))));
 
                 Btn_AtualizarTarefa.IsEnabled = true;
@@ -473,7 +496,16 @@ namespace Trabalhos
                 }
 
                 Dp_DataInicio.SelectedDate = DataInicio;
-                Dp_DataFim.SelectedDate = DataFim;
+
+                if (DataFim.Value.AddMilliseconds(-DataFim.Value.Millisecond).Ticks == Convert.ToDateTime("01/01/0001 00:00:00").Ticks || DataFim.Value.AddMilliseconds(-DataFim.Value.Millisecond) == Convert.ToDateTime(null))
+                {
+                    Dp_DataFim.SelectedDate = null;
+                    Dp_DataFim.DisplayDate = DateTime.Now;
+                }
+                else
+                {
+                    Dp_DataFim.SelectedDate = DataFim;
+                }
 
                 Btn_EditarTempo.Visibility = Visibility.Visible;
                 Btn_AdicionarTempo.Visibility = Visibility.Hidden;
@@ -493,7 +525,7 @@ namespace Trabalhos
         private void Btn_GuardarTarefa_Click(object sender, RoutedEventArgs e)
         {
             string keyServico = servicos.Find(lst => lst.Nome == Cb_Servico.Text.ToString()).ChaveServico;
-            decimal desconto = Convert.ToDecimal(Math.Round(Sld_Desconto.Value, 2)) / 100;
+            decimal desconto = Convert.ToDecimal(Sld_Desconto.Value) / 100;
             TimeSpan time = new TimeSpan(0);
 
             if (ServicoGuardado)
@@ -650,7 +682,7 @@ namespace Trabalhos
             if (Lst_Tempo.HasItems)
             {
                 string keyServico = servicos.Find(lst => lst.Nome == Cb_Servico.Text.ToString()).ChaveServico;
-                decimal desconto = Convert.ToDecimal(Math.Round(Sld_Desconto.Value, 2)) / 100;
+                decimal desconto = Convert.ToDecimal(Sld_Desconto.Value) / 100;
                 TimeSpan time = new TimeSpan(0);
 
                 try
@@ -1327,7 +1359,7 @@ namespace Trabalhos
         {
             if (Sld_Desconto.IsFocused || !Tb_Desconto.IsFocused)
             {
-                Tb_Desconto.Text = String.Format("{0:##0.00}%", Math.Round(Sld_Desconto.Value, 2));
+                Tb_Desconto.Text = String.Format("{0:##0.00}%", Sld_Desconto.Value);
             }
 
             Lbl_Preco.Content = String.Format("{0:###0.00}€", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))));
