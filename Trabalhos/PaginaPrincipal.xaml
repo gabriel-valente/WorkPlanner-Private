@@ -29,7 +29,7 @@
 
         <lvc:CartesianChart x:Name="Chrt_Column" Grid.Column="2" Series="{Binding SeriesCollection}" Foreground="White" LegendLocation="top">
             <lvc:CartesianChart.DataTooltip>
-                <lvc:DefaultTooltip Background="#BF323232" FontFamily="Segoe UI Light"/>
+                <lvc:DefaultTooltip Background="#BF323232" FontFamily="Segoe UI Light" ShowTitle="False"/>
             </lvc:CartesianChart.DataTooltip>
             <lvc:CartesianChart.AxisX>
                 <lvc:Axis Labels="{Binding Labels}" Separator="{x:Static lvc:DefaultAxes.CleanSeparator}" />
@@ -41,7 +41,7 @@
 
         <lvc:CartesianChart x:Name="Chrt_Lines" Grid.Row="1" Grid.ColumnSpan="2" Series="{Binding Series}" Foreground="White" Zoom="X">
             <lvc:CartesianChart.DataTooltip>
-                <lvc:DefaultTooltip Background="#BF323232" FontFamily="Segoe UI Light"/>
+                <lvc:DefaultTooltip Background="#BF323232" FontFamily="Segoe UI Light" ShowTitle="False"/>
             </lvc:CartesianChart.DataTooltip>
             <lvc:CartesianChart.AxisY>
                 <lvc:Axis Title="Ganhos" LabelFormatter="{Binding YFormatter}" MinValue="0"></lvc:Axis>

@@ -105,7 +105,14 @@ namespace Trabalhos
 
                 if (contagemClientes > 0)
                 {
-                    Chrt_Pie.Series.Add(new PieSeries { Title = "Clientes", StrokeThickness = 1, Values = new ChartValues<double> { contagemClientes } });
+                    Chrt_Pie.Series.Add(new PieSeries
+                    {
+                        Title = "Clientes",
+                        Values = new ChartValues<double>
+                        {
+                            contagemClientes
+                        }
+                    });
                 }
 
                 Reader.Close();
@@ -118,7 +125,14 @@ namespace Trabalhos
 
                 if (contagemTrabalhos > 0)
                 {
-                    Chrt_Pie.Series.Add(new PieSeries { Title = "Trabalhos", StrokeThickness = 1, Values = new ChartValues<double> { contagemTrabalhos } });
+                    Chrt_Pie.Series.Add(new PieSeries
+                    {
+                        Title = "Trabalhos",
+                        Values = new ChartValues<double>
+                        {
+                            contagemTrabalhos
+                        }
+                    });
                 }
 
                 Reader.Close();
@@ -131,7 +145,14 @@ namespace Trabalhos
 
                 if (contagemServicos > 0)
                 {
-                    Chrt_Pie.Series.Add(new PieSeries { Title = "Serviços", StrokeThickness = 1, Values = new ChartValues<double> { contagemServicos } });
+                    Chrt_Pie.Series.Add(new PieSeries
+                    {
+                        Title = "Serviços",
+                        Values = new ChartValues<double>
+                        {
+                            contagemServicos
+                        }
+                    });
                 }
 
                 Reader.Close();
@@ -160,7 +181,7 @@ namespace Trabalhos
             List<Tuple<string, string, string, decimal>> tarefas = new List<Tuple<string, string, string, decimal>>();
             List<Tuple<string, string, DateTime?, DateTime?>> tempos = new List<Tuple<string, string, DateTime?, DateTime?>>();
 
-            Func<ChartPoint, string> LineLabel = chartPoint => string.Format("Ganhos: {0}", string.Format("{0:###0.00}€", chartPoint.Y));
+            Func<ChartPoint, string> LineLabel = chartPoint => string.Format("Dia: {0}, Ganhos: {1}", new DateTime((long)(chartPoint.X * TimeSpan.FromDays(1).Ticks)).ToString("d"), string.Format("{0:###0.00}€", chartPoint.Y));
 
             var dayConfig = Mappers.Xy<DateModel>()
                 .X(dateModel => dateModel.DateTime.Ticks / TimeSpan.FromDays(1).Ticks)
@@ -266,25 +287,33 @@ namespace Trabalhos
                             }
 
                             Chrt_Lines.Series = new SeriesCollection(dayConfig)
+                            {
+                                new LineSeries
                                 {
-                                    new LineSeries
-                                    {
-                                        Values = new ChartValues<DateModel>(list.ToArray()),
-                                        Title = "",
-                                        DataLabels = false,
-                                        LabelPoint = LineLabel,
-                                        Fill = Brushes.Transparent
-                                    }
-                                };
+                                    Values = new ChartValues<DateModel>(list.ToArray()),
+                                    Title = null,
+                                    DataLabels = false,
+                                    LabelPoint = LineLabel,
+                                    Fill = Brushes.Transparent
+                                }
+                            };
 
-                            try
-                            {
-                                YFormatter = value => string.Format("{0:###0.00}€", value);
-                                Formatter = value => new DateTime((long)(value * TimeSpan.FromDays(1).Ticks)).ToString("d");
-                            }
-                            catch (Exception)
-                            {
-                            }
+                            Chrt_Lines.AxisY = new AxesCollection {
+                                new Axis
+                                {
+                                    Title = "Ganhos",
+                                    LabelFormatter = value => string.Format("{0:###0.00}€", value),
+                                    Separator = new LiveCharts.Wpf.Separator()
+                                }
+                            };
+
+                            Chrt_Lines.AxisX = new AxesCollection {
+                                new Axis
+                                {
+                                    LabelFormatter = value => new DateTime((long)(value * TimeSpan.FromDays(1).Ticks)).ToString("d"),
+                                    Separator = new LiveCharts.Wpf.Separator()
+                                }
+                            };
                         }
                         else
                         {
@@ -335,10 +364,23 @@ namespace Trabalhos
                 }
             };
 
-            
+            Chrt_Column.AxisY = new AxesCollection {
+                new Axis
+                {
+                    Title = "Ganhos",
+                    LabelFormatter = value => string.Format("{0:###0.00}€", value),
+                    Separator = new LiveCharts.Wpf.Separator()
+                }
+            };
 
-            Labels = new[] { "Ganhos" };
-            FormatterCol = value => value + " €";
+            Chrt_Column.AxisX = new AxesCollection {
+                new Axis
+                {
+                    Title = null,
+                    LabelFormatter = value => null,
+                    Separator = new LiveCharts.Wpf.Separator()
+                }
+            };
         }
 
         //Colunas

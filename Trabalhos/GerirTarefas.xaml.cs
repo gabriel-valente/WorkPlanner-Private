@@ -540,7 +540,6 @@ namespace Trabalhos
 
                     queryAtualizarTarefa.ExecuteNonQuery();
                     queryAtualizarTarefa.Parameters.Clear();
-                    queryAtualizarTarefa.Connection.Close();
 
                     queryInserirTempo.Connection = DataBase.conexao;
 
@@ -563,8 +562,6 @@ namespace Trabalhos
                         queryInserirTempo.Parameters.Clear();
                     }
 
-                    queryInserirTempo.Connection.Close();
-
                     time = new TimeSpan(0);
 
                     queryTodosTempos.Connection = DataBase.conexao;
@@ -581,17 +578,20 @@ namespace Trabalhos
                     }
 
                     Reader.Close();
+                    queryAtualizarTarefa.Connection.Close();
+                    queryInserirTempo.Connection.Close();
                     queryTodosTempos.Connection.Close();
 
                     DataBase.conexao.Close();
 
-                    int index = tarefas.FindIndex(lst => lst.ChaveTarefa == Lbl_CodigoTarefa.Content.ToString());
+                    int index = tarefas.FindIndex(lst => lst.ChaveTarefa == ChaveTarefaServico);
 
                     tarefas[index].Desconto = desconto;
                     listaTarefa[index].Tempo = TimeSpan.Parse(String.Format("{0:00}:{1:00}:{2:00}", time.Hours, time.Minutes, time.Seconds));
                 }
                 catch (Exception ex)
                 {
+                    Console.WriteLine(ex);
                     Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
                 }
             }
