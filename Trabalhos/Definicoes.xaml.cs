@@ -29,160 +29,196 @@ namespace Trabalhos
         bool ContactoValido = false;
         bool ServicoPrecoMinimoValido = false;
 
+        TimeSpan data; 
+
         public Definicoes()
         {
             InitializeComponent();
 
             LerConfigs();
 
-            //Cmb_TempoCopia.SelectedIndex = Configuracoes.TempoCopia;
-            //Tb_Localbackup.Text = Configuracoes.LocalCopia;
-            //Tb_IdadeMinima.Text = Convert.ToString(Configuracoes.IdadeMinima);
-            //Cmb_Contacto.SelectedIndex = Configuracoes.ContactoPreferivel;
-            //Tb_ServicoPrecoMinimo.Text = Convert.ToString(Configuracoes.ServicoPrecoMinimo);
+            Cmb_TempoCopia.SelectedIndex = Configuracoes.TempoCopia;
+            Tb_Localbackup.Text = Configuracoes.LocalCopia;
+            Tb_IdadeMinima.Text = Convert.ToString(Configuracoes.IdadeMinima);
+            Cmb_Contacto.SelectedIndex = Configuracoes.ContactoPreferivel;
+            Tb_ServicoPrecoMinimo.Text = Convert.ToString(Configuracoes.ServicoPrecoMinimo);
 
             AtivarButao();
         }
 
-        ////Validar tempo de cópia
-        //private void Cmb_TempoCopia_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        //{
-        //    if (Cmb_TempoCopia.SelectedIndex == -1)
-        //    {
-        //        TempoCopiaValido = false;
-        //    }
-        //    else
-        //    {
-        //        TempoCopiaValido = true;
-        //    }
+        //Validar tempo de cópia
+        private void Cmb_TempoCopia_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (Cmb_TempoCopia.SelectedIndex == -1)
+            {
+                TempoCopiaValido = false;
+            }
+            else
+            {
+                TempoCopiaValido = true;
+            }
 
-        //    AtivarButao();
-        //}
+            if (Cmb_TempoCopia.SelectedIndex == 0)
+            {
+                data = new TimeSpan(0, 0, 1);
+            }
+            else if (Cmb_TempoCopia.SelectedIndex == 1)
+            {
+                data = new TimeSpan(0, 0, 3);
+            }
+            else if (Cmb_TempoCopia.SelectedIndex == 2)
+            {
+                data = new TimeSpan(0, 0, 5);
+            }
+            else if (Cmb_TempoCopia.SelectedIndex ==3)
+            {
+                data = new TimeSpan(0, 0, 7);
+            }
+            else if (Cmb_TempoCopia.SelectedIndex == 4)
+            {
+                data = new TimeSpan(0, 0, 14);
+            }
+            else if (Cmb_TempoCopia.SelectedIndex == 5)
+            {
+                data = new TimeSpan(0, 0, 21);
+            }
+            else if (Cmb_TempoCopia.SelectedIndex == 6)
+            {
+                data = new TimeSpan(0, 1, 0);
+            }
+            else if (Cmb_TempoCopia.SelectedIndex == 6)
+            {
+                data = new TimeSpan(0, 0, 0);
+            }
 
-        ////Abrir Folder Dialog
-        //private void Btn_LocalBackup_Click(object sender, RoutedEventArgs e)
-        //{
-        //    try
-        //    {
-        //        var dialog = new CommonOpenFileDialog();
-        //        dialog.IsFolderPicker = true;
-        //        CommonFileDialogResult result = dialog.ShowDialog();
-        //        Tb_Localbackup.Text = dialog.FileName.ToString();
-        //    }
-        //    catch (Exception)
-        //    {
-        //        LocalCopiaValido = false;
-        //    }
-        //}
+            File.Copy(DataBase.stringConexao, Configuracoes.LocalCopia + "WorkPlanner_");
+            AtivarButao();
+        }
 
-        ////Validar local backup
-        //private void Tb_Localbackup_TextChanged(object sender, TextChangedEventArgs e)
-        //{
-        //    Tb_Localbackup.Text = Tb_Localbackup.Text.TrimStart();
+        //Abrir Folder Dialog
+        private void Btn_LocalBackup_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var dialog = new CommonOpenFileDialog();
+                dialog.IsFolderPicker = true;
+                CommonFileDialogResult result = dialog.ShowDialog();
+                Tb_Localbackup.Text = dialog.FileName.ToString();
+            }
+            catch (Exception)
+            {
+                LocalCopiaValido = false;
+            }
+        }
 
-        //    if (!Directory.Exists(Tb_Localbackup.Text.TrimEnd()))
-        //    {
-        //        LocalCopiaValido = false;
-        //    }
-        //    else
-        //    {
-        //        LocalCopiaValido = true;
-        //    }
+        //Validar local backup
+        private void Tb_Localbackup_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Tb_Localbackup.Text = Tb_Localbackup.Text.TrimStart();
 
-        //    AtivarButao();
-        //}
+            if (!Directory.Exists(Tb_Localbackup.Text.TrimEnd()))
+            {
+                LocalCopiaValido = false;
+            }
+            else
+            {
+                LocalCopiaValido = true;
+            }
 
-        ////Validar idade minima
-        //private void Tb_IdadeMinima_TextChanged(object sender, TextChangedEventArgs e)
-        //{
-        //    Tb_IdadeMinima.Text = Tb_IdadeMinima.Text.Trim();
-        //    char[] idade = Tb_IdadeMinima.Text.ToCharArray();
+            AtivarButao();
+        }
 
-        //    for (int i = 0; i < idade.Length; i++)
-        //    {
-        //        if (char.IsWhiteSpace(idade[i]) || !char.IsDigit(idade[i]))
-        //        {
-        //            Tb_IdadeMinima.Text = Tb_IdadeMinima.Text.Remove(i, 1);
-        //            Array.Clear(idade, 0, idade.Length);
-        //            idade = Tb_IdadeMinima.Text.Trim().ToCharArray();
-        //            Tb_IdadeMinima.SelectionStart = i;
-        //        }
-        //    }
+        //Validar idade minima
+        private void Tb_IdadeMinima_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Tb_IdadeMinima.Text = Tb_IdadeMinima.Text.Trim();
+            char[] idade = Tb_IdadeMinima.Text.ToCharArray();
 
-        //    if (string.IsNullOrWhiteSpace(Tb_IdadeMinima.Text))
-        //    {
-        //        IdadeMinimaValido = false;
-        //    }
-        //    else
-        //    {
-        //        IdadeMinimaValido = true;
-        //    }
+            for (int i = 0; i < idade.Length; i++)
+            {
+                if (char.IsWhiteSpace(idade[i]) || !char.IsDigit(idade[i]))
+                {
+                    Tb_IdadeMinima.Text = Tb_IdadeMinima.Text.Remove(i, 1);
+                    Array.Clear(idade, 0, idade.Length);
+                    idade = Tb_IdadeMinima.Text.Trim().ToCharArray();
+                    Tb_IdadeMinima.SelectionStart = i;
+                }
+            }
 
-        //    AtivarButao();
-        //}
+            if (string.IsNullOrWhiteSpace(Tb_IdadeMinima.Text))
+            {
+                IdadeMinimaValido = false;
+            }
+            else
+            {
+                IdadeMinimaValido = true;
+            }
 
-        ////Validar contacto preferivel
-        //private void Cmb_Contacto_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        //{
-        //    if (Cmb_Contacto.SelectedIndex == -1)
-        //    {
-        //        ContactoValido = false;
-        //    }
-        //    else
-        //    {
-        //        ContactoValido = true;
-        //    }
+            AtivarButao();
+        }
 
-        //    AtivarButao();
-        //}
+        //Validar contacto preferivel
+        private void Cmb_Contacto_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (Cmb_Contacto.SelectedIndex == -1)
+            {
+                ContactoValido = false;
+            }
+            else
+            {
+                ContactoValido = true;
+            }
 
-        ////Validar aviso de preço minimo nos servicos
-        //private void Tb_ServicoPrecoMinimo_TextChanged(object sender, TextChangedEventArgs e)
-        //{
-        //    Tb_ServicoPrecoMinimo.Text = Tb_ServicoPrecoMinimo.Text.TrimStart();
-        //    char[] preco = Tb_ServicoPrecoMinimo.Text.ToCharArray();
+            AtivarButao();
+        }
 
-        //    bool comma = false;
+        //Validar aviso de preço minimo nos servicos
+        private void Tb_ServicoPrecoMinimo_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Tb_ServicoPrecoMinimo.Text = Tb_ServicoPrecoMinimo.Text.TrimStart();
+            char[] preco = Tb_ServicoPrecoMinimo.Text.ToCharArray();
 
-        //    for (int i = 0; i < preco.Length; i++)
-        //    {
-        //        if (comma == false && (preco[i] == ',' || preco[i] == '.'))
-        //        {
-        //            comma = true;
-        //            preco[i] = ',';
-        //            Tb_ServicoPrecoMinimo.Text = preco.ToString();
-        //        }
-        //        else if (comma == true && (preco[i] == ',' || preco[i] == '.'))
-        //        {
-        //            Tb_ServicoPrecoMinimo.Text = Tb_ServicoPrecoMinimo.Text.Remove(i, 1);
-        //            Array.Clear(preco, 0, preco.Length);
-        //            preco = Tb_ServicoPrecoMinimo.Text.TrimStart().ToCharArray();
-        //            Tb_ServicoPrecoMinimo.SelectionStart = i;
-        //        }
-        //    }
+            bool comma = false;
 
-        //    for (int i = 0; i < preco.Length; i++)
-        //    {
-        //        if (!char.IsDigit(preco[i]) && preco[i] != ',')
-        //        {
-        //            Tb_ServicoPrecoMinimo.Text = Tb_ServicoPrecoMinimo.Text.Remove(i, 1);
-        //            Array.Clear(preco, 0, preco.Length);
-        //            preco = Tb_ServicoPrecoMinimo.Text.TrimStart().ToCharArray();
-        //            Tb_ServicoPrecoMinimo.SelectionStart = i;
-        //        }
-        //    }
+            for (int i = 0; i < preco.Length; i++)
+            {
+                if (comma == false && (preco[i] == ',' || preco[i] == '.'))
+                {
+                    comma = true;
+                    preco[i] = ',';
+                    Tb_ServicoPrecoMinimo.Text = preco.ToString();
+                }
+                else if (comma == true && (preco[i] == ',' || preco[i] == '.'))
+                {
+                    Tb_ServicoPrecoMinimo.Text = Tb_ServicoPrecoMinimo.Text.Remove(i, 1);
+                    Array.Clear(preco, 0, preco.Length);
+                    preco = Tb_ServicoPrecoMinimo.Text.TrimStart().ToCharArray();
+                    Tb_ServicoPrecoMinimo.SelectionStart = i;
+                }
+            }
 
-        //    if (string.IsNullOrWhiteSpace(Tb_ServicoPrecoMinimo.Text) || Convert.ToDecimal(Tb_ServicoPrecoMinimo.Text) < 0)
-        //    {
-        //        ServicoPrecoMinimoValido = false;
-        //    }
-        //    else
-        //    {
-        //        ServicoPrecoMinimoValido = true;
-        //    }
+            for (int i = 0; i < preco.Length; i++)
+            {
+                if (!char.IsDigit(preco[i]) && preco[i] != ',')
+                {
+                    Tb_ServicoPrecoMinimo.Text = Tb_ServicoPrecoMinimo.Text.Remove(i, 1);
+                    Array.Clear(preco, 0, preco.Length);
+                    preco = Tb_ServicoPrecoMinimo.Text.TrimStart().ToCharArray();
+                    Tb_ServicoPrecoMinimo.SelectionStart = i;
+                }
+            }
 
-        //    AtivarButao();
-        //}
+            if (string.IsNullOrWhiteSpace(Tb_ServicoPrecoMinimo.Text) || Convert.ToDecimal(Tb_ServicoPrecoMinimo.Text) < 0)
+            {
+                ServicoPrecoMinimoValido = false;
+            }
+            else
+            {
+                ServicoPrecoMinimoValido = true;
+            }
+
+            AtivarButao();
+        }
 
         //Botão guardar e voltar ao menu anterior
         private void Btn_Guardar_Click(object sender, RoutedEventArgs e)
@@ -195,11 +231,11 @@ namespace Trabalhos
             config.AppSettings.Settings.Remove("ContactoPreferivel");
             config.AppSettings.Settings.Remove("ServicoPrecoMinimo");
 
-            //config.AppSettings.Settings.Add("CopiaSeguranca", Cmb_TempoCopia.SelectedIndex.ToString());
-            //config.AppSettings.Settings.Add("LocalCopiaSeguranca", Tb_Localbackup.Text.Trim());
-            //config.AppSettings.Settings.Add("IdadeMinima", Tb_IdadeMinima.Text);
-            //config.AppSettings.Settings.Add("ContactoPreferivel", Cmb_Contacto.SelectedIndex.ToString());
-            //config.AppSettings.Settings.Add("ServicoPrecoMinimo", Tb_ServicoPrecoMinimo.Text.Trim());
+            config.AppSettings.Settings.Add("CopiaSeguranca", Cmb_TempoCopia.SelectedIndex.ToString());
+            config.AppSettings.Settings.Add("LocalCopiaSeguranca", Tb_Localbackup.Text.Trim());
+            config.AppSettings.Settings.Add("IdadeMinima", Tb_IdadeMinima.Text);
+            config.AppSettings.Settings.Add("ContactoPreferivel", Cmb_Contacto.SelectedIndex.ToString());
+            config.AppSettings.Settings.Add("ServicoPrecoMinimo", Tb_ServicoPrecoMinimo.Text.Trim());
 
             config.Save(ConfigurationSaveMode.Minimal);
 
@@ -221,6 +257,12 @@ namespace Trabalhos
         private void Btn_Voltar_Click(object sender, RoutedEventArgs e)
         {
             ((MainWindow)Application.Current.MainWindow).Frm_Principal.GoBack();
+        }
+
+        //Botão ajuda
+        private void Btn_Ajuda_Click(object sender, RoutedEventArgs e)
+        {
+
         }
 
         //Função ler as configurações guardadas

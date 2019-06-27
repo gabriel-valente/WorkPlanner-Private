@@ -66,56 +66,52 @@
             </Rectangle.Fill>
         </Rectangle>
 
-        <!--<ScrollViewer Grid.Row="1" Grid.Column="0" Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Auto">
-            <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="10,10,10,10">
-                <Label Content="Cópia de Segurança" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,0,0"/>
-                <ComboBox x:Name="Cmb_TempoCopia" VerticalAlignment="Top" Margin="150,0,0,0" Height="31" ToolTip="Caso o programa seja aberto e já tenha passado a quantidade de dias selecionados, será feita a cópia de segurança.&#x0a;Caso Seja selecionado um local de cópia." SelectionChanged="Cmb_TempoCopia_SelectionChanged">
-                    <ComboBoxItem Content="1 Dia"/>
-                    <ComboBoxItem Content="2 Dias"/>
-                    <ComboBoxItem Content="3 Dias"/>
-                    <ComboBoxItem Content="4 Dias"/>
-                    <ComboBoxItem Content="5 Dias"/>
-                    <ComboBoxItem Content="6 Dias"/>
-                    <ComboBoxItem Content="1 Semana"/>
-                    <ComboBoxItem Content="2 Semanas"/>
-                    <ComboBoxItem Content="3 Semanas"/>
-                    <ComboBoxItem Content="1 Mês"/>
-                    <ComboBoxItem Content="Nunca"/>
-                </ComboBox>
-                <Label Content="Local da Cópia de Segurança" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,36,0,0"/>
-                <Button x:Name="Btn_LocalBackup" Content="Escolher" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="210,36,0,0" Height="31" Click="Btn_LocalBackup_Click"/>
-                <TextBox x:Name="Tb_Localbackup" Text="" HorizontalAlignment="Stretch" VerticalAlignment="Top" VerticalContentAlignment="Center" Margin="0,72,0,0" Height="31" MaxLines="1" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Text}" TextChanged="Tb_Localbackup_TextChanged"/>
-            </Grid>
-        </ScrollViewer>
+        <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="10,10,10,10">
+            <Label Content="Frequência de cópias de segurança" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,0,0"/>
+            <ComboBox x:Name="Cmb_TempoCopia" VerticalAlignment="Top" Margin="251,0,750,0" Height="31" ToolTip="Caso o programa seja aberto e já tenha passado a quantidade de dias selecionados, será feita a cópia de segurança.&#x0a;Caso Seja selecionado um local de cópia." SelectionChanged="Cmb_TempoCopia_SelectionChanged">
+                <ComboBoxItem Content="1 Dia"/>
+                <ComboBoxItem Content="3 Dias"/>
+                <ComboBoxItem Content="5 Dias"/>
+                <ComboBoxItem Content="1 Semana"/>
+                <ComboBoxItem Content="2 Semanas"/>
+                <ComboBoxItem Content="3 Semanas"/>
+                <ComboBoxItem Content="1 Mês"/>
+                <ComboBoxItem Content="Nunca"/>
+            </ComboBox>
+            <Label Content="A cópia é feita ao iniciar o programa, caso tenha passado o tempo determinado." VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="441.897,0,0,0"/>
+            <Label Content="Local da cópia de segurança" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,54,0,0"/>
+            <Button x:Name="Btn_LocalBackup" Content="Escolher" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="210,54,0,0" Height="31" Click="Btn_LocalBackup_Click" Width="122.897"/>
+            <Label Content="O local selecionado não existe." VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="342.897,54,0,0" Visibility="Hidden"/>
+            <TextBox x:Name="Tb_Localbackup" Text="" HorizontalAlignment="Stretch" VerticalAlignment="Top" VerticalContentAlignment="Center" Margin="0,90,0,0" Height="31" MaxLines="1" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Text}" TextChanged="Tb_Localbackup_TextChanged"/>
+            <Label Content="Data da próxima cópia:" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="0,145,0,0" Width="167"/>
+            <Label x:Name="Lbl_DataCópia" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="172,145,10,0" Height="31"/>
+        </Grid>
 
-        <ScrollViewer Grid.Row="1" Grid.Column="1" Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Auto">
-            <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="10,10,10,10">
-                <Label Content="Idade Mínima" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,0,0"/>
-                <TextBox x:Name="Tb_IdadeMinima" VerticalAlignment="Top" Margin="106,0,0,0" VerticalContentAlignment="Center" Height="31" MaxLength="2" MaxLines="1" ToolTip="Valor de 0 significa que não há idade mínima." TextChanged="Tb_IdadeMinima_TextChanged"/>
+        <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="10,10,10,10">
+            <Label Content="Idade mínima" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,0,0"/>
+            <Label Content="Não é possivel adicionar clientes com idade inferior á selecionada. Se a idade for 0, é possivel inserir com qualquer idade." VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="342.897,0,0,0"/>
+            <TextBox x:Name="Tb_IdadeMinima" VerticalAlignment="Top" Margin="106,0,0,0" VerticalContentAlignment="Center" Height="31" MaxLength="2" MaxLines="1" ToolTip="Valor de 0 significa que não há idade mínima." TextChanged="Tb_IdadeMinima_TextChanged" HorizontalAlignment="Left" Width="226.897"/>
 
-                <Label Content="Contacto Preferivel" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,36,0,0"/>
-                <ComboBox x:Name="Cmb_Contacto" VerticalAlignment="Top" Margin="142,36,0,0" IsTextSearchEnabled="False" Height="31" ToolTip="A ordem de preferencia dos contactos é a seguinte:&#x0a;Nenhum: Email, Telemovel, Telefone.&#x0a;Email: Email, Telemovel, Telefone.&#x0a;Telemovel: Telemovel, Email, Telefone.&#x0a;Telefone: Telefone, Email, Telemovel." SelectionChanged="Cmb_Contacto_SelectionChanged">
-                    <ComboBoxItem Content="Nenhum"/>
-                    <ComboBoxItem Content="Email"/>
-                    <ComboBoxItem Content="Telemóvel"/>
-                    <ComboBoxItem Content="Telefone"/>
-                </ComboBox>
-            </Grid>
-        </ScrollViewer>
+            <Label Content="Contacto Preferivel" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="-0.001,56,0,0"/>
+            <ComboBox x:Name="Cmb_Contacto" VerticalAlignment="Top" Margin="142,56,0,0" IsTextSearchEnabled="False" Height="31" ToolTip="A ordem de preferência dos contactos é a seguinte:&#x0a;Nenhum &#x2794; Email, Telemóvel, Telefone.&#x0a;Email &#x2794; Email, Telemóvel, Telefone.&#x0a;Telemóvel &#x2794; Telemóvel, Email, Telefone.&#x0a;Telefone &#x2794; Telefone, Email, Telemóvel." SelectionChanged="Cmb_Contacto_SelectionChanged" HorizontalAlignment="Left" Width="294.897">
+                <ComboBoxItem Content="Nenhum"/>
+                <ComboBoxItem Content="Email"/>
+                <ComboBoxItem Content="Telemóvel"/>
+                <ComboBoxItem Content="Telefone"/>
+            </ComboBox>
+            <Label Content="O contacto que prefere visualizar na listagem dos clientes." VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="446.897,56,0,0"/>
+            <Label Content="Nenhum &#x2794; Email, Telemóvel, Telefone.&#xA;Email &#x2794; Email, Telemóvel, Telefone." VerticalAlignment="Top" VerticalContentAlignment="Center" Margin="10,92.28,0,0" Height="84.053" HorizontalAlignment="Left" Width="277.897"/>
+            <Label Content="Telemóvel &#x2794; Telemóvel, Email, Telefone.&#x0a;Telefone &#x2794; Telefone, Email, Telemóvel." VerticalAlignment="Top" VerticalContentAlignment="Center" Margin="342.897,92.28,0,0" Height="84.053" HorizontalAlignment="Left" Width="277.897"/>
+        </Grid>
 
-        <ScrollViewer Grid.Row="1" Grid.Column="2" Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Auto">
-            <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="10,10,10,10">
+        <Grid Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="10,10,10,10">
+            <Label Content="Aviso de preço mínimo" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,0,0"/>
+            <TextBox x:Name ="Tb_ServicoPrecoMinimo" VerticalAlignment="Top" Margin="168.923,0,0,0" VerticalContentAlignment="Center" Height="31" MaxLength="2" MaxLines="1" ToolTip="Aperece um aviso caso o preço mínimo por hora seja inferior ao selecionado aqui.&#x0a;Nada impede de inserir caso apareça o aviso." TextChanged="Tb_ServicoPrecoMinimo_TextChanged" HorizontalAlignment="Left" Width="163.974"/>
+            <Label Content="Aviso caso o serviço ao inserir tenha o preço hora inferior ao selecionado." VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="342.897,0,0,0"/>
+            <Label Content="Este aviso não impede que o serviço seja inserido com valor inferior." VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="0,36.28,0,0"/>
+        </Grid>
 
-            </Grid>
-        </ScrollViewer>
-
-        <ScrollViewer Grid.Row="1" Grid.Column="3" Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Auto">
-            <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="10,10,10,10">
-                <Label Content="Aviso Preço Mínimo" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,0,0"/>
-                <TextBox x:Name ="Tb_ServicoPrecoMinimo" VerticalAlignment="Top" Margin="147,0,0,0" VerticalContentAlignment="Center" Height="31" MaxLength="2" MaxLines="1" ToolTip="Aperece um aviso caso o preço mínimo por hora seja inferior ao selecionado aqui.&#x0a;Nada impede de inserir caso apareça o aviso." TextChanged="Tb_ServicoPrecoMinimo_TextChanged"/>
-            </Grid>
-        </ScrollViewer>-->
-
+        <Button x:Name="Btn_Ajuda" Grid.Row="3" Grid.ColumnSpan="2" Content="Ajuda" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="10,10,0,10" Width="120" Click="Btn_Ajuda_Click"/>
         <Button x:Name="Btn_Guardar" Grid.Row="3" Grid.Column="2" Content="Guardar" HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin="10,10,115,10" Height="50" Width="188" Click="Btn_Guardar_Click" Grid.ColumnSpan="2"/>
         <Button x:Name="Btn_Voltar" Grid.Row="3" Grid.Column="2" Content="Voltar" HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin="10" Height="50" Width="100" Click="Btn_Voltar_Click"/>
     </Grid>
