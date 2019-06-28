@@ -60,13 +60,13 @@
             <TextBox x:Name="Tb_IdadeMinima" VerticalAlignment="Top" Margin="106,0,0,0" VerticalContentAlignment="Center" Height="31" MaxLength="2" MaxLines="1" ToolTip="Valor de 0 significa que não há idade mínima." TextChanged="Tb_IdadeMinima_TextChanged" HorizontalAlignment="Left" Width="226.897"/>
 
             <Label Content="Contacto Preferivel" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="-0.001,56,0,0"/>
-            <ComboBox x:Name="Cmb_Contacto" VerticalAlignment="Top" Margin="142,56,0,0" IsTextSearchEnabled="False" Height="31" ToolTip="A ordem de preferência dos contactos é a seguinte:&#x0a;Nenhum &#x2794; Email, Telemóvel, Telefone.&#x0a;Email &#x2794; Email, Telemóvel, Telefone.&#x0a;Telemóvel &#x2794; Telemóvel, Email, Telefone.&#x0a;Telefone &#x2794; Telefone, Email, Telemóvel." SelectionChanged="Cmb_Contacto_SelectionChanged" HorizontalAlignment="Left" Width="294.897">
+            <ComboBox x:Name="Cmb_Contacto" VerticalAlignment="Top" Margin="142,56,0,0" IsTextSearchEnabled="False" Height="31" ToolTip="A ordem de preferência dos contactos é a seguinte:&#x0a;Nenhum &#x2794; Email, Telemóvel, Telefone.&#x0a;Email &#x2794; Email, Telemóvel, Telefone.&#x0a;Telemóvel &#x2794; Telemóvel, Email, Telefone.&#x0a;Telefone &#x2794; Telefone, Email, Telemóvel." SelectionChanged="Cmb_Contacto_SelectionChanged" HorizontalAlignment="Left" Width="191">
                 <ComboBoxItem Content="Nenhum"/>
                 <ComboBoxItem Content="Email"/>
                 <ComboBoxItem Content="Telemóvel"/>
                 <ComboBoxItem Content="Telefone"/>
             </ComboBox>
-            <Label Content="O contacto que prefere visualizar na listagem dos clientes." VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="446.897,56,0,0"/>
+            <Label Content="O contacto que prefere visualizar na listagem dos clientes." VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="343,56,0,0"/>
             <Label Content="Nenhum &#x2794; Email, Telemóvel, Telefone.&#xA;Email &#x2794; Email, Telemóvel, Telefone." VerticalAlignment="Top" VerticalContentAlignment="Center" Margin="10,92.28,0,0" Height="84.053" HorizontalAlignment="Left" Width="277.897"/>
             <Label Content="Telemóvel &#x2794; Telemóvel, Email, Telefone.&#x0a;Telefone &#x2794; Telefone, Email, Telemóvel." VerticalAlignment="Top" VerticalContentAlignment="Center" Margin="342.897,92.28,0,0" Height="84.053" HorizontalAlignment="Left" Width="277.897"/>
         </Grid>

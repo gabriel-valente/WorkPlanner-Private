@@ -36,9 +36,7 @@ namespace Trabalhos
         SqlCommand queryTodasTarefas = new SqlCommand("SELECT Key_Tarefa, Key_Trabalho, Key_Servico, Desconto FROM Tarefa");
         SqlCommand queryTodosTempos = new SqlCommand("SELECT Key_Tempo, Key_Tarefa, DataInicio, DataFim FROM Tempo");
 
-        SqlCommand queryQuantidadeServicos = new SqlCommand("SELECT COUNT(Key_Servigos)");
-
-        //Contar o numero de tarefas a ser usados agrupados por chave de serviço
+        SqlCommand queryQuantidadeServicos = new SqlCommand("SELECT TOP 10 COUNT(Tarefa.Key_Servico) AS 'Contagem', Nome FROM Tarefa INNER JOIN Servico On Tarefa.Key_Servico = Servico.Key_Servico GROUP BY Servico.Nome ORDER BY COUNT (Tarefa.Key_Servico) DESC");
 
         SqlDataReader Reader;
 
@@ -54,6 +52,15 @@ namespace Trabalhos
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            Chrt_Pie.Visibility = Visibility.Visible;
+            Lbl_Pie.Visibility = Visibility.Hidden;
+            Chrt_Lines.Visibility = Visibility.Visible;
+            Lbl_Lines.Visibility = Visibility.Hidden;
+            Chrt_Column.Visibility = Visibility.Visible;
+            Lbl_Column.Visibility = Visibility.Hidden;
+            Chrt_Row.Visibility = Visibility.Visible;
+            Lbl_Row.Visibility = Visibility.Hidden;
+
             CarregarCircular();
             CarregarLinhas();
             CarregarColunas();
@@ -401,7 +408,49 @@ namespace Trabalhos
 
         void CarregarBarras()
         {
+            List<Tuple<string, double>> lista = new List<Tuple<string, double>>();
 
+            DataBase.conexao.Open();
+            queryQuantidadeServicos.Connection = DataBase.conexao;
+
+            Reader = queryQuantidadeServicos.ExecuteReader();
+
+            if (Reader.HasRows)
+            {
+                SeriesCollection colecao = new SeriesCollection();
+
+                while (Reader.Read())
+                {
+                    lista.Add(new Tuple<string, double>(Convert.ToString(Reader["Nome"].ToString()), Convert.ToDouble(Reader["Contagem"].ToString())));
+                    colecao.Add(new RowSeries
+                    {
+                        Title = Reader["Nome"].ToString(),
+                        Values = new ChartValues<double> { Convert.ToDouble(Reader["Contagem"].ToString()) },
+                        DataLabels = true
+                    });
+                }
+
+                Chrt_Row.Series = colecao;
+
+                Chrt_Row.AxisY = new AxesCollection
+                {
+                    new Axis
+                    {
+                        Title = null,
+                        LabelFormatter = value => null,
+                        Separator = new LiveCharts.Wpf.Separator()
+                    }
+                };
+            }
+            else
+            {
+                Chrt_Row.Visibility = Visibility.Hidden;
+                Lbl_Row.Visibility = Visibility.Visible;
+            }
+
+            Reader.Close();
+            queryQuantidadeServicos.Connection.Close();
+            DataBase.conexao.Close();
         }
     }
 

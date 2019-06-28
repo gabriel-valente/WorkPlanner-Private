@@ -56,7 +56,6 @@ namespace Trabalhos
         bool PrecoValido = true;
 
         bool Adicionar = false;
-        bool Editar = false;
 
         //Iniciação
         public GerirTrabalhos()
@@ -113,8 +112,6 @@ namespace Trabalhos
         //Botao atualizar trabalho
         private void Btn_AtualizarTrabalho_Click(object sender, RoutedEventArgs e)
         {
-            Editar = true;
-
             Cb_Cliente.Text = Lbl_Cliente.Content.ToString();
 
             Lbl_Cliente.Visibility = Visibility.Hidden;

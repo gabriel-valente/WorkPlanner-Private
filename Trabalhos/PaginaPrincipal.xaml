@@ -27,41 +27,41 @@
         </lvc:PieChart>
         <TextBlock x:Name="Lbl_Pie" Text="Não existem dados suficientes para criar o gráfico." FontSize="40" TextWrapping="Wrap" TextAlignment="Center" Padding="0" VerticalAlignment="Center" Foreground="White" FontFamily="Segoe UI Light" Visibility="Hidden"/>
 
-        <lvc:CartesianChart x:Name="Chrt_Column" Grid.Column="2" Series="{Binding SeriesCollection}" Foreground="White" LegendLocation="top">
+        <lvc:CartesianChart x:Name="Chrt_Column" Grid.Column="2" Foreground="White" LegendLocation="Top">
             <lvc:CartesianChart.DataTooltip>
                 <lvc:DefaultTooltip Background="#BF323232" FontFamily="Segoe UI Light" ShowTitle="False"/>
             </lvc:CartesianChart.DataTooltip>
             <lvc:CartesianChart.AxisX>
-                <lvc:Axis Labels="{Binding Labels}" Separator="{x:Static lvc:DefaultAxes.CleanSeparator}" />
+                <lvc:Axis Separator="{x:Static lvc:DefaultAxes.CleanSeparator}" />
             </lvc:CartesianChart.AxisX>
             <lvc:CartesianChart.AxisY>
-                <lvc:Axis Title="Valor" LabelFormatter="{Binding FormatterCol}"></lvc:Axis>
+                <lvc:Axis Title="Valor"></lvc:Axis>
             </lvc:CartesianChart.AxisY>
         </lvc:CartesianChart>
         <TextBlock x:Name="Lbl_Column" Text="Não existem dados suficientes para criar o gráfico." FontSize="40" TextWrapping="Wrap" TextAlignment="Center" Padding="0" VerticalAlignment="Center" Foreground="White" FontFamily="Segoe UI Light" Visibility="Hidden" Grid.Column="2" Margin="0,76,0,55"/>
 
-        <lvc:CartesianChart x:Name="Chrt_Row" Grid.Column="1" Series="{Binding SeriesCollection}" LegendLocation="Bottom" Foreground="White">
+        <lvc:CartesianChart x:Name="Chrt_Row" Grid.Column="1" LegendLocation="Top" Foreground="White">
             <lvc:CartesianChart.DataTooltip>
                 <lvc:DefaultTooltip SelectionMode="SharedYValues" Background="#BF323232" FontFamily="Segoe UI Light" ShowTitle="False"/>
             </lvc:CartesianChart.DataTooltip>
             <lvc:CartesianChart.AxisX>
-                <lvc:Axis Title="Frequência" LabelFormatter="{Binding Formatter}"/>
+                <lvc:Axis Title="Frequência"/>
             </lvc:CartesianChart.AxisX>
             <lvc:CartesianChart.AxisY>
-                <lvc:Axis Title="Serviços" Labels="{Binding Labels}"></lvc:Axis>
+                <lvc:Axis Title="Serviços"></lvc:Axis>
             </lvc:CartesianChart.AxisY>
         </lvc:CartesianChart>
         <TextBlock x:Name="Lbl_Row" Text="Não existem dados suficientes para criar o gráfico." FontSize="40" TextWrapping="Wrap" TextAlignment="Center" Padding="0" VerticalAlignment="Center" Foreground="White" FontFamily="Segoe UI Light" Visibility="Hidden" Grid.Column="1" Margin="0,76,0,55"/>
 
-        <lvc:CartesianChart x:Name="Chrt_Lines" Grid.Row="1" Grid.ColumnSpan="2" Series="{Binding Series}" Foreground="White" Zoom="X">
+        <lvc:CartesianChart x:Name="Chrt_Lines" Grid.Row="1" Grid.ColumnSpan="2" Foreground="White" Zoom="X">
             <lvc:CartesianChart.DataTooltip>
                 <lvc:DefaultTooltip Background="#BF323232" FontFamily="Segoe UI Light" ShowTitle="False"/>
             </lvc:CartesianChart.DataTooltip>
             <lvc:CartesianChart.AxisY>
-                <lvc:Axis Title="Ganhos" LabelFormatter="{Binding YFormatter}" MinValue="0"></lvc:Axis>
+                <lvc:Axis Title="Ganhos" MinValue="0"></lvc:Axis>
             </lvc:CartesianChart.AxisY>
             <lvc:CartesianChart.AxisX>
-                <lvc:Axis Title="Dias" LabelFormatter="{Binding Formatter}"></lvc:Axis>
+                <lvc:Axis Title="Dias"></lvc:Axis>
             </lvc:CartesianChart.AxisX>
         </lvc:CartesianChart>
         <TextBlock x:Name="Lbl_Lines" Grid.Row="1" Grid.ColumnSpan="2" Text="Não existem dados suficientes para criar o gráfico." FontSize="40" TextWrapping="Wrap" TextAlignment="Center" Padding="0" VerticalAlignment="Center" Foreground="White" FontFamily="Segoe UI Light" Visibility="Hidden"/>
@@ -87,11 +87,9 @@
                 </LinearGradientBrush>
             </Rectangle.Fill>
         </Rectangle>
-        <WrapPanel Grid.Row="1" Grid.Column="2" ScrollViewer.VerticalScrollBarVisibility="Disabled" Orientation="Vertical" VerticalAlignment="Center">
-            <Button x:Name="Btn_GerirClientes" Content="Gerir Clientes" Width="250" Margin="5, 3, 5, 3" Click="Btn_GerirClientes_Click" Height="79" VerticalAlignment="Stretch"/>
-            <Button x:Name="Btn_GerirTrabalhos" Content="Gerir Trabalhos" Width="250" Margin="5, 3, 5, 3" Click="Btn_GerirTrabalhos_Click" Height="79" VerticalAlignment="Stretch"/>
-            <Button x:Name="Btn_GerirServicos" Content="Gerir Serviços" Width="250"  Margin="5, 3, 5, 3" Click="Btn_GerirServicos_Click" Height="79" VerticalAlignment="Stretch"/>
-            <Button x:Name="Btn_Definicoes" Content="Definições" Width="250"  Margin="5, 3, 5, 3" Click="Btn_Definicoes_Click" Height="79" VerticalAlignment="Stretch"/>
-        </WrapPanel>
+        <Button x:Name="Btn_GerirClientes" Grid.Row="1" Grid.Column="2" Content="Gerir Clientes" Width="250" Margin="5,5,5,261" Click="Btn_GerirClientes_Click" Height="79" HorizontalAlignment="Stretch"/>
+        <Button x:Name="Btn_GerirTrabalhos" Grid.Row="1" Grid.Column="2" Content="Gerir Trabalhos" Width="250" Margin="5,88,5,178" Click="Btn_GerirTrabalhos_Click" Height="79" VerticalAlignment="Stretch"/>
+        <Button x:Name="Btn_GerirServicos" Grid.Row="1" Grid.Column="2" Content="Gerir Serviços" Width="250"  Margin="5,172,5,94" Click="Btn_GerirServicos_Click" Height="79" VerticalAlignment="Stretch"/>
+        <Button x:Name="Btn_Definicoes" Grid.Row="1" Grid.Column="2" Content="Definições" Width="250"  Margin="5,256,5,10" Click="Btn_Definicoes_Click" Height="79" VerticalAlignment="Stretch"/>
     </Grid>
 </Page>
