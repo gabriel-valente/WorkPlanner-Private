@@ -25,7 +25,7 @@ namespace Trabalhos
     {
         public static SqlConnection conexao;
 #if DEBUG
-        public static string stringConexao = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=E:\PAP\Trabalhos\Trabalhos\WorkPlanner.mdf;Integrated Security=True"; //E:\PAP\Trabalhos\Trabalhos\WorkPlanner.mdf //C:\Users\Muhdex\source\repos\Muhdo\Trabalhos\Trabalhos\WorkPlanner.mdf
+        public static string stringConexao = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=E:\PAP\Trabalhos\Trabalhos\WorkPlanner.mdf;Integrated Security=True";
 #else
         public static string stringConexao = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\WorkPlanner.mdf;Integrated Security=True";
 #endif
@@ -33,8 +33,6 @@ namespace Trabalhos
 
     public static class Configuracoes
     {
-        public static int TempoCopia;
-        public static string LocalCopia;
         public static int IdadeMinima;
         public static int ContactoPreferivel;
         public static decimal ServicoPrecoMinimo;

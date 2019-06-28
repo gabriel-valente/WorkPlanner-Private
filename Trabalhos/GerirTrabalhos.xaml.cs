@@ -607,9 +607,7 @@ namespace Trabalhos
 
                 while (Reader.Read())
                 {
-                    string contacto = ContactoVisivel(Convert.ToString(Reader["Email"].ToString()), Convert.ToInt64(Reader["Telemovel"].ToString()), Convert.ToInt64(Reader["Telefone"].ToString()));
-
-                    clientes.Add(new Cliente { ChaveCliente = Convert.ToString(Reader["Key_Cliente"].ToString()), Nome = Convert.ToString(Reader["Nome"].ToString()), DataNascimento = Convert.ToDateTime(null), Sexo = null, Morada = null, CodigoPostal = null, Localidade = null, Email = Convert.ToString(Reader["Email"].ToString()), Telemovel = Convert.ToInt64(Reader["Telemovel"].ToString()), Telefone = Convert.ToInt64(Reader["Telefone"].ToString()), Contacto = contacto });
+                    clientes.Add(new Cliente { ChaveCliente = Convert.ToString(Reader["Key_Cliente"].ToString()), Nome = Convert.ToString(Reader["Nome"].ToString()), DataNascimento = Convert.ToDateTime(null), Sexo = null, Morada = null, CodigoPostal = null, Localidade = null, Email = Convert.ToString(Reader["Email"].ToString()), Telemovel = Convert.ToInt64(Reader["Telemovel"].ToString()), Telefone = Convert.ToInt64(Reader["Telefone"].ToString()), Contacto = null });
                 }
 
                 Reader.Close();
@@ -631,110 +629,6 @@ namespace Trabalhos
                 Btn_AdicionarTrabalho.IsEnabled = false;
                 Btn_AtualizarTrabalho.IsEnabled = false;
             }
-        }
-
-        //Selecionar o contacto a mostrar
-        string ContactoVisivel(string email, long telemovel, long telefone)
-        {
-            string contacto = null;
-
-            if (Configuracoes.ContactoPreferivel == 0)
-            {
-                if (email != null)
-                {
-                    contacto = Convert.ToString(email);
-                }
-                else if (telemovel != 0)
-                {
-                    contacto = Convert.ToString(telemovel);
-                }
-                else if (telefone != 0)
-                {
-                    contacto = Convert.ToString(telefone);
-                }
-                else
-                {
-                    contacto = null;
-                }
-            }
-            else if (Configuracoes.ContactoPreferivel == 1)
-            {
-                if (email != null)
-                {
-                    contacto = Convert.ToString(email);
-                }
-                else if (telemovel != 0)
-                {
-                    contacto = Convert.ToString(telemovel);
-                }
-                else if (telefone != 0)
-                {
-                    contacto = Convert.ToString(telefone);
-                }
-                else
-                {
-                    contacto = null;
-                }
-            }
-            else if (Configuracoes.ContactoPreferivel == 2)
-            {
-                if (telemovel != 0)
-                {
-                    contacto = Convert.ToString(telemovel);
-                }
-                else if (email != null)
-                {
-                    contacto = Convert.ToString(email);
-                }
-                else if (telefone != 0)
-                {
-                    contacto = Convert.ToString(telefone);
-                }
-                else
-                {
-                    contacto = null;
-                }
-            }
-            else if (Configuracoes.ContactoPreferivel == 3)
-            {
-                if (telefone != 0)
-                {
-                    contacto = Convert.ToString(telefone);
-                }
-                else if (email != null)
-                {
-                    contacto = Convert.ToString(email);
-                }
-                else if (telemovel != 0)
-                {
-                    contacto = Convert.ToString(telemovel);
-                }
-                else
-                {
-                    contacto = null;
-                }
-            }
-            else
-            {
-                if (email != null)
-                {
-                    contacto = Convert.ToString(email);
-                }
-                else if (telemovel != 0)
-                {
-                    contacto = Convert.ToString(telemovel);
-                }
-                else if (telefone != 0)
-                {
-                    contacto = Convert.ToString(telefone);
-                }
-                else
-                {
-                    contacto = null;
-                }
-            }
-
-            return contacto;
         }
 
         //Guardar Trabalho

@@ -1221,7 +1221,7 @@ namespace Trabalhos
 
             if (Configuracoes.ContactoPreferivel == 0)
             {
-                if (email != null)
+                if (!string.IsNullOrEmpty(email))
                 {
                     contacto = Convert.ToString(email);
                 }
@@ -1240,7 +1240,7 @@ namespace Trabalhos
             }
             else if (Configuracoes.ContactoPreferivel == 1)
             {
-                if (email != null)
+                if (!string.IsNullOrEmpty(email))
                 {
                     contacto = Convert.ToString(email);
                 }
@@ -1263,7 +1263,7 @@ namespace Trabalhos
                 {
                     contacto = Convert.ToString(telemovel);
                 }
-                else if (email != null)
+                else if (!string.IsNullOrEmpty(email))
                 {
                     contacto = Convert.ToString(email);
                 }
@@ -1282,7 +1282,7 @@ namespace Trabalhos
                 {
                     contacto = Convert.ToString(telefone);
                 }
-                else if (email != null)
+                else if (!string.IsNullOrEmpty(email))
                 {
                     contacto = Convert.ToString(email);
                 }
@@ -1297,7 +1297,7 @@ namespace Trabalhos
             }
             else
             {
-                if (email != null)
+                if (!string.IsNullOrEmpty(email))
                 {
                     contacto = Convert.ToString(email);
                 }

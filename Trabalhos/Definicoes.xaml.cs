@@ -13,8 +13,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.IO;
-using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace Trabalhos
 {
@@ -23,13 +21,9 @@ namespace Trabalhos
     /// </summary>
     public partial class Definicoes : Page
     {
-        bool TempoCopiaValido = false;
-        bool LocalCopiaValido = false;
         bool IdadeMinimaValido = false;
         bool ContactoValido = false;
         bool ServicoPrecoMinimoValido = false;
-
-        TimeSpan data; 
 
         public Definicoes()
         {
@@ -37,93 +31,9 @@ namespace Trabalhos
 
             LerConfigs();
 
-            Cmb_TempoCopia.SelectedIndex = Configuracoes.TempoCopia;
-            Tb_Localbackup.Text = Configuracoes.LocalCopia;
             Tb_IdadeMinima.Text = Convert.ToString(Configuracoes.IdadeMinima);
             Cmb_Contacto.SelectedIndex = Configuracoes.ContactoPreferivel;
             Tb_ServicoPrecoMinimo.Text = Convert.ToString(Configuracoes.ServicoPrecoMinimo);
-
-            AtivarButao();
-        }
-
-        //Validar tempo de cópia
-        private void Cmb_TempoCopia_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (Cmb_TempoCopia.SelectedIndex == -1)
-            {
-                TempoCopiaValido = false;
-            }
-            else
-            {
-                TempoCopiaValido = true;
-            }
-
-            if (Cmb_TempoCopia.SelectedIndex == 0)
-            {
-                data = new TimeSpan(0, 0, 1);
-            }
-            else if (Cmb_TempoCopia.SelectedIndex == 1)
-            {
-                data = new TimeSpan(0, 0, 3);
-            }
-            else if (Cmb_TempoCopia.SelectedIndex == 2)
-            {
-                data = new TimeSpan(0, 0, 5);
-            }
-            else if (Cmb_TempoCopia.SelectedIndex ==3)
-            {
-                data = new TimeSpan(0, 0, 7);
-            }
-            else if (Cmb_TempoCopia.SelectedIndex == 4)
-            {
-                data = new TimeSpan(0, 0, 14);
-            }
-            else if (Cmb_TempoCopia.SelectedIndex == 5)
-            {
-                data = new TimeSpan(0, 0, 21);
-            }
-            else if (Cmb_TempoCopia.SelectedIndex == 6)
-            {
-                data = new TimeSpan(0, 1, 0);
-            }
-            else if (Cmb_TempoCopia.SelectedIndex == 6)
-            {
-                data = new TimeSpan(0, 0, 0);
-            }
-
-            File.Copy(DataBase.stringConexao, Configuracoes.LocalCopia + "WorkPlanner_");
-            AtivarButao();
-        }
-
-        //Abrir Folder Dialog
-        private void Btn_LocalBackup_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var dialog = new CommonOpenFileDialog();
-                dialog.IsFolderPicker = true;
-                CommonFileDialogResult result = dialog.ShowDialog();
-                Tb_Localbackup.Text = dialog.FileName.ToString();
-            }
-            catch (Exception)
-            {
-                LocalCopiaValido = false;
-            }
-        }
-
-        //Validar local backup
-        private void Tb_Localbackup_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            Tb_Localbackup.Text = Tb_Localbackup.Text.TrimStart();
-
-            if (!Directory.Exists(Tb_Localbackup.Text.TrimEnd()))
-            {
-                LocalCopiaValido = false;
-            }
-            else
-            {
-                LocalCopiaValido = true;
-            }
 
             AtivarButao();
         }
@@ -225,14 +135,10 @@ namespace Trabalhos
         {
             Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
-            config.AppSettings.Settings.Remove("CopiaSeguranca");
-            config.AppSettings.Settings.Remove("LocalCopiaSeguranca");
             config.AppSettings.Settings.Remove("IdadeMinima");
             config.AppSettings.Settings.Remove("ContactoPreferivel");
             config.AppSettings.Settings.Remove("ServicoPrecoMinimo");
 
-            config.AppSettings.Settings.Add("CopiaSeguranca", Cmb_TempoCopia.SelectedIndex.ToString());
-            config.AppSettings.Settings.Add("LocalCopiaSeguranca", Tb_Localbackup.Text.Trim());
             config.AppSettings.Settings.Add("IdadeMinima", Tb_IdadeMinima.Text);
             config.AppSettings.Settings.Add("ContactoPreferivel", Cmb_Contacto.SelectedIndex.ToString());
             config.AppSettings.Settings.Add("ServicoPrecoMinimo", Tb_ServicoPrecoMinimo.Text.Trim());
@@ -256,7 +162,7 @@ namespace Trabalhos
         //Botão voltar menu anterior
         private void Btn_Voltar_Click(object sender, RoutedEventArgs e)
         {
-            ((MainWindow)Application.Current.MainWindow).Frm_Principal.GoBack();
+            ((MainWindow)Application.Current.MainWindow).Frm_Principal.Content = new PaginaPrincipal();
         }
 
         //Botão ajuda
@@ -270,8 +176,6 @@ namespace Trabalhos
         {
             try
             {
-                Configuracoes.TempoCopia = Convert.ToInt32(ConfigurationManager.AppSettings["CopiaSeguranca"]);
-                Configuracoes.LocalCopia = ConfigurationManager.AppSettings["LocalCopiaSeguranca"];
                 Configuracoes.IdadeMinima = Convert.ToInt32(ConfigurationManager.AppSettings["IdadeMinima"]);
                 Configuracoes.ContactoPreferivel = Convert.ToInt32(ConfigurationManager.AppSettings["ContactoPreferivel"]);
                 Configuracoes.ServicoPrecoMinimo = Convert.ToDecimal(ConfigurationManager.AppSettings["ServicoPrecoMinimo"]);
@@ -285,7 +189,7 @@ namespace Trabalhos
         //Função ativar butão
         void AtivarButao()
         {
-            if (TempoCopiaValido && LocalCopiaValido && IdadeMinimaValido && ContactoValido && ServicoPrecoMinimoValido)
+            if (IdadeMinimaValido && ContactoValido && ServicoPrecoMinimoValido)
             {
                 Btn_Guardar.IsEnabled = true;
             }

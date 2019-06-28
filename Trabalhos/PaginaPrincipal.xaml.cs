@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Configuration; 
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -35,6 +36,10 @@ namespace Trabalhos
         SqlCommand queryTodasTarefas = new SqlCommand("SELECT Key_Tarefa, Key_Trabalho, Key_Servico, Desconto FROM Tarefa");
         SqlCommand queryTodosTempos = new SqlCommand("SELECT Key_Tempo, Key_Tarefa, DataInicio, DataFim FROM Tempo");
 
+        SqlCommand queryQuantidadeServicos = new SqlCommand("SELECT COUNT(Key_Servigos)");
+
+        //Contar o numero de tarefas a ser usados agrupados por chave de serviço
+
         SqlDataReader Reader;
 
         decimal valorTotal = 0;
@@ -52,6 +57,9 @@ namespace Trabalhos
             CarregarCircular();
             CarregarLinhas();
             CarregarColunas();
+            CarregarBarras();
+
+            DataBase.conexao.Close();
         }
 
         private void Chart_OnDataClick(object sender, ChartPoint chartpoint)
@@ -319,24 +327,32 @@ namespace Trabalhos
                         {
                             Chrt_Lines.Visibility = Visibility.Hidden;
                             Lbl_Lines.Visibility = Visibility.Visible;
+                            Chrt_Column.Visibility = Visibility.Hidden;
+                            Lbl_Column.Visibility = Visibility.Visible;
                         }
                     }
                     else
                     {
                         Chrt_Lines.Visibility = Visibility.Hidden;
                         Lbl_Lines.Visibility = Visibility.Visible;
+                        Chrt_Column.Visibility = Visibility.Hidden;
+                        Lbl_Column.Visibility = Visibility.Visible;
                     }
                 }
                 else
                 {
                     Chrt_Lines.Visibility = Visibility.Hidden;
                     Lbl_Lines.Visibility = Visibility.Visible;
+                    Chrt_Column.Visibility = Visibility.Hidden;
+                    Lbl_Column.Visibility = Visibility.Visible;
                 }
             }
             else
             {
                 Chrt_Lines.Visibility = Visibility.Hidden;
                 Lbl_Lines.Visibility = Visibility.Visible;
+                Chrt_Column.Visibility = Visibility.Hidden;
+                Lbl_Column.Visibility = Visibility.Visible;
             }
 
             DataBase.conexao.Close();
@@ -383,15 +399,10 @@ namespace Trabalhos
             };
         }
 
-        //Colunas
-        public SeriesCollection SeriesCollection { get; set; }
-        public string[] Labels { get; set; }
-        public Func<double, string> FormatterCol { get; set; }
+        void CarregarBarras()
+        {
 
-        //Linhas
-        public Func<double, string> YFormatter { get; set; }
-        public Func<double, string> Formatter { get; set; }
-        public SeriesCollection Series { get; set; }
+        }
     }
 
 

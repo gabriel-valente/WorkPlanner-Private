@@ -11,9 +11,9 @@
       Title="PaginaPrincipal" FontFamily="Segoe UI Light" FontSize="16" Loaded="Page_Loaded">
     <Grid Background="#FF1B1B1B">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="4*"/>
-            <ColumnDefinition Width="4*"/>
-            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="253*"/>
+            <ColumnDefinition Width="253*"/>
+            <ColumnDefinition Width="130*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -38,6 +38,20 @@
                 <lvc:Axis Title="Valor" LabelFormatter="{Binding FormatterCol}"></lvc:Axis>
             </lvc:CartesianChart.AxisY>
         </lvc:CartesianChart>
+        <TextBlock x:Name="Lbl_Column" Text="Não existem dados suficientes para criar o gráfico." FontSize="40" TextWrapping="Wrap" TextAlignment="Center" Padding="0" VerticalAlignment="Center" Foreground="White" FontFamily="Segoe UI Light" Visibility="Hidden" Grid.Column="2" Margin="0,76,0,55"/>
+
+        <lvc:CartesianChart x:Name="Chrt_Row" Grid.Column="1" Series="{Binding SeriesCollection}" LegendLocation="Bottom" Foreground="White">
+            <lvc:CartesianChart.DataTooltip>
+                <lvc:DefaultTooltip SelectionMode="SharedYValues" Background="#BF323232" FontFamily="Segoe UI Light" ShowTitle="False"/>
+            </lvc:CartesianChart.DataTooltip>
+            <lvc:CartesianChart.AxisX>
+                <lvc:Axis Title="Frequência" LabelFormatter="{Binding Formatter}"/>
+            </lvc:CartesianChart.AxisX>
+            <lvc:CartesianChart.AxisY>
+                <lvc:Axis Title="Serviços" Labels="{Binding Labels}"></lvc:Axis>
+            </lvc:CartesianChart.AxisY>
+        </lvc:CartesianChart>
+        <TextBlock x:Name="Lbl_Row" Text="Não existem dados suficientes para criar o gráfico." FontSize="40" TextWrapping="Wrap" TextAlignment="Center" Padding="0" VerticalAlignment="Center" Foreground="White" FontFamily="Segoe UI Light" Visibility="Hidden" Grid.Column="1" Margin="0,76,0,55"/>
 
         <lvc:CartesianChart x:Name="Chrt_Lines" Grid.Row="1" Grid.ColumnSpan="2" Series="{Binding Series}" Foreground="White" Zoom="X">
             <lvc:CartesianChart.DataTooltip>

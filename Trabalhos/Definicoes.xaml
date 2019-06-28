@@ -17,15 +17,13 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="1*"/>
-            <RowDefinition Height="1*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Label Grid.Row="0" Grid.Column="0" Content="Gerais" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,0,0"/>
-        <Label Grid.Row="1" Grid.Column="0" Content="Clientes" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,0,0"/>
-        <Label Grid.Row="2" Grid.Column="0" Content="Serviços" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,0,0"/>
+        <Label Grid.Row="0" Grid.Column="0" Content="Clientes" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,0,0"/>
+        <Label Grid.Row="1" Grid.Column="0" Content="Serviços" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,0,0"/>
 
-        <Rectangle Grid.Row="0" Grid.Column="1" Grid.RowSpan="4" Width="1" HorizontalAlignment="Left">
+        <Rectangle Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Width="1" HorizontalAlignment="Left">
             <Rectangle.Fill>
                 <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
                     <GradientStop Color="#00000000" Offset="0"/>
@@ -55,39 +53,8 @@
                 </LinearGradientBrush>
             </Rectangle.Fill>
         </Rectangle>
-        <Rectangle Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Height="1" VerticalAlignment="Bottom">
-            <Rectangle.Fill>
-                <LinearGradientBrush EndPoint="0,0.5" StartPoint="1,0.5">
-                    <GradientStop Color="#00000000" Offset="0"/>
-                    <GradientStop Color="#00000000" Offset="1"/>
-                    <GradientStop Color="White" Offset="0.4"/>
-                    <GradientStop Color="White" Offset="0.6"/>
-                </LinearGradientBrush>
-            </Rectangle.Fill>
-        </Rectangle>
 
         <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="10,10,10,10">
-            <Label Content="Frequência de cópias de segurança" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,0,0"/>
-            <ComboBox x:Name="Cmb_TempoCopia" VerticalAlignment="Top" Margin="251,0,750,0" Height="31" ToolTip="Caso o programa seja aberto e já tenha passado a quantidade de dias selecionados, será feita a cópia de segurança.&#x0a;Caso Seja selecionado um local de cópia." SelectionChanged="Cmb_TempoCopia_SelectionChanged">
-                <ComboBoxItem Content="1 Dia"/>
-                <ComboBoxItem Content="3 Dias"/>
-                <ComboBoxItem Content="5 Dias"/>
-                <ComboBoxItem Content="1 Semana"/>
-                <ComboBoxItem Content="2 Semanas"/>
-                <ComboBoxItem Content="3 Semanas"/>
-                <ComboBoxItem Content="1 Mês"/>
-                <ComboBoxItem Content="Nunca"/>
-            </ComboBox>
-            <Label Content="A cópia é feita ao iniciar o programa, caso tenha passado o tempo determinado." VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="441.897,0,0,0"/>
-            <Label Content="Local da cópia de segurança" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,54,0,0"/>
-            <Button x:Name="Btn_LocalBackup" Content="Escolher" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="210,54,0,0" Height="31" Click="Btn_LocalBackup_Click" Width="122.897"/>
-            <Label Content="O local selecionado não existe." VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="342.897,54,0,0" Visibility="Hidden"/>
-            <TextBox x:Name="Tb_Localbackup" Text="" HorizontalAlignment="Stretch" VerticalAlignment="Top" VerticalContentAlignment="Center" Margin="0,90,0,0" Height="31" MaxLines="1" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Text}" TextChanged="Tb_Localbackup_TextChanged"/>
-            <Label Content="Data da próxima cópia:" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="0,145,0,0" Width="167"/>
-            <Label x:Name="Lbl_DataCópia" VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="172,145,10,0" Height="31"/>
-        </Grid>
-
-        <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="10,10,10,10">
             <Label Content="Idade mínima" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,0,0"/>
             <Label Content="Não é possivel adicionar clientes com idade inferior á selecionada. Se a idade for 0, é possivel inserir com qualquer idade." VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="342.897,0,0,0"/>
             <TextBox x:Name="Tb_IdadeMinima" VerticalAlignment="Top" Margin="106,0,0,0" VerticalContentAlignment="Center" Height="31" MaxLength="2" MaxLines="1" ToolTip="Valor de 0 significa que não há idade mínima." TextChanged="Tb_IdadeMinima_TextChanged" HorizontalAlignment="Left" Width="226.897"/>
@@ -104,7 +71,7 @@
             <Label Content="Telemóvel &#x2794; Telemóvel, Email, Telefone.&#x0a;Telefone &#x2794; Telefone, Email, Telemóvel." VerticalAlignment="Top" VerticalContentAlignment="Center" Margin="342.897,92.28,0,0" Height="84.053" HorizontalAlignment="Left" Width="277.897"/>
         </Grid>
 
-        <Grid Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="10,10,10,10">
+        <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="10,10,10,10">
             <Label Content="Aviso de preço mínimo" HorizontalAlignment="Left" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,0,0"/>
             <TextBox x:Name ="Tb_ServicoPrecoMinimo" VerticalAlignment="Top" Margin="168.923,0,0,0" VerticalContentAlignment="Center" Height="31" MaxLength="2" MaxLines="1" ToolTip="Aperece um aviso caso o preço mínimo por hora seja inferior ao selecionado aqui.&#x0a;Nada impede de inserir caso apareça o aviso." TextChanged="Tb_ServicoPrecoMinimo_TextChanged" HorizontalAlignment="Left" Width="163.974"/>
             <Label Content="Aviso caso o serviço ao inserir tenha o preço hora inferior ao selecionado." VerticalAlignment="Top" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="342.897,0,0,0"/>
