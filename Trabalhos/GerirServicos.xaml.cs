@@ -150,9 +150,9 @@ namespace Trabalhos
                 BloquearFundo.Visibility = Visibility.Hidden;
                 Grd_ValidarApagar.Visibility = Visibility.Hidden;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
+                Lbl_Erros.Text = "Erro Inesperado!\nVá às definições e carregue em \"Ajuda\". Na página aberta descreva como aconteceu o problema.";
             }
         }
 
@@ -210,9 +210,9 @@ namespace Trabalhos
                     Btn_AtualizarServico.Visibility = Visibility.Visible;
                     Btn_ApagarServico.Visibility = Visibility.Visible;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
+                    Lbl_Erros.Text = "Erro Inesperado!\nVá às definições e carregue em \"Ajuda\". Na página aberta descreva como aconteceu o problema.";
                 }
             }
 
@@ -267,9 +267,9 @@ namespace Trabalhos
                     Btn_AtualizarServico.Visibility = Visibility.Visible;
                     Btn_ApagarServico.Visibility = Visibility.Visible;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
+                    Lbl_Erros.Text = "Erro Inesperado!\nVá às definições e carregue em \"Ajuda\". Na página aberta descreva como aconteceu o problema.";
                 }
             }
         }
@@ -316,9 +316,9 @@ namespace Trabalhos
                         Btn_ApagarServico.IsEnabled = true;
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
+                    Lbl_Erros.Text = "Erro Inesperado!\nVá às definições e carregue em \"Ajuda\". Na página aberta descreva como aconteceu o problema.";
                 }
 
                 Reader.Close();
@@ -561,9 +561,9 @@ namespace Trabalhos
                     listaServicos.Add(new ListaServicos { ChaveServico = Convert.ToString(Reader["Key_Servico"].ToString()), Nome = Convert.ToString(Reader["Nome"].ToString()), Preco = Convert.ToString(Reader["Preco"].ToString()) + "€" });
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
+                Lbl_Erros.Text = "Erro Inesperado!\nVá às definições e carregue em \"Ajuda\". Na página aberta descreva como aconteceu o problema.";
                 Btn_AdicionarServico.IsEnabled = false;
                 Btn_AtualizarServico.IsEnabled = false;
             }
@@ -671,10 +671,9 @@ namespace Trabalhos
                         NomeValido = true;
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
-                    Console.WriteLine(ex.ToString());
+                    Lbl_Erros.Text = "Erro Inesperado!\nVá às definições e carregue em \"Ajuda\". Na página aberta descreva como aconteceu o problema.";
                     NomeValido = false;
                 }
                 Reader.Close();

@@ -258,9 +258,9 @@ namespace Trabalhos
                 BloquearFundo.Visibility = Visibility.Hidden;
                 Grd_ValidarApagar.Visibility = Visibility.Hidden;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
+                Lbl_Erros.Text = "Erro Inesperado!\nVá às definições e carregue em \"Ajuda\". Na página aberta descreva como aconteceu o problema.";
             }
         }
 
@@ -411,9 +411,9 @@ namespace Trabalhos
                         Btn_AtualizarCliente.Visibility = Visibility.Visible;
                         Btn_ApagarCliente.Visibility = Visibility.Visible;
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-                        Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
+                        Lbl_Erros.Text = "Erro Inesperado!\nVá às definições e carregue em \"Ajuda\". Na página aberta descreva como aconteceu o problema.";
                     }
                 }               
             }
@@ -586,9 +586,9 @@ namespace Trabalhos
                         Btn_AtualizarCliente.Visibility = Visibility.Visible;
                         Btn_ApagarCliente.Visibility = Visibility.Visible;
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-                        Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
+                        Lbl_Erros.Text = "Erro Inesperado!\nVá às definições e carregue em \"Ajuda\". Na página aberta descreva como aconteceu o problema.";
                     }
                 }
             }
@@ -706,9 +706,9 @@ namespace Trabalhos
                         Btn_ApagarCliente.IsEnabled = true;
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
+                    Lbl_Erros.Text = "Erro Inesperado!\nVá às definições e carregue em \"Ajuda\". Na página aberta descreva como aconteceu o problema.";
                 }
 
                 Reader.Close();
@@ -1180,9 +1180,9 @@ namespace Trabalhos
                 Reader.Close();
                 DataBase.conexao.Close();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
+                Lbl_Erros.Text = "Erro Inesperado!\nVá às definições e carregue em \"Ajuda\". Na página aberta descreva como aconteceu o problema.";
                 Btn_AdicionarCliente.IsEnabled = false;
                 Btn_AtualizarCliente.IsEnabled = false;
             }
@@ -1378,9 +1378,9 @@ namespace Trabalhos
                 Reader.Close();
                 DataBase.conexao.Close();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
+                Lbl_Erros.Text = "Erro Inesperado!\nVá às definições e carregue em \"Ajuda\". Na página aberta descreva como aconteceu o problema.";
                 CodigoValido = false;
                 keyCodigo = null;
             }
@@ -1490,9 +1490,9 @@ namespace Trabalhos
                     Reader.Close();
                     DataBase.conexao.Close();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
+                    Lbl_Erros.Text = "Erro Inesperado!\nVá às definições e carregue em \"Ajuda\". Na página aberta descreva como aconteceu o problema.";
                     NomeValido = false;
                 }
             }

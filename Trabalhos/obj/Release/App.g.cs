@@ -74,6 +74,8 @@ namespace Trabalhos {
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "4.0.0.0")]
         public static void Main() {
+            SplashScreen splashScreen = new SplashScreen("startup.png");
+            splashScreen.Show(true);
             Trabalhos.App app = new Trabalhos.App();
             app.InitializeComponent();
             app.Run();

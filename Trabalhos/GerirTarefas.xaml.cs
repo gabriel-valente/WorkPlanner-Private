@@ -369,9 +369,9 @@ namespace Trabalhos
                 BloquearFundo.Visibility = Visibility.Hidden;
                 Grd_ValidarApagar.Visibility = Visibility.Hidden;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
+                Lbl_Erros.Text = "Erro Inesperado!\nVá às definições e carregue em \"Ajuda\". Na página aberta descreva como aconteceu o problema.";
             }
         }
 
@@ -589,10 +589,9 @@ namespace Trabalhos
                     tarefas[index].Desconto = desconto;
                     listaTarefa[index].Tempo = TimeSpan.Parse(String.Format("{0:00}:{1:00}:{2:00}", time.Hours, time.Minutes, time.Seconds));
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    Console.WriteLine(ex);
-                    Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
+                    Lbl_Erros.Text = "Erro Inesperado!\nVá às definições e carregue em \"Ajuda\". Na página aberta descreva como aconteceu o problema.";
                 }
             }
             else
@@ -639,9 +638,9 @@ namespace Trabalhos
 
                     listaTarefa.Add(new ListaTarefas { ChaveTarefa = Lbl_CodigoTarefa.Content.ToString(), Servico = Cb_Servico.Text, Tempo = TimeSpan.Parse(String.Format("{0:00}:{1:00}:{2:00}", time.Hours, time.Minutes, time.Seconds)) });
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
+                    Lbl_Erros.Text = "Erro Inesperado!\nVá às definições e carregue em \"Ajuda\". Na página aberta descreva como aconteceu o problema.";
                 }
             }
 
@@ -799,7 +798,7 @@ namespace Trabalhos
                 }
                 catch (Exception ex)
                 {
-                    Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
+                    Lbl_Erros.Text = "Erro Inesperado!\nVá às definições e carregue em \"Ajuda\". Na página aberta descreva como aconteceu o problema.";
                 }
             }
             else
@@ -1504,9 +1503,9 @@ namespace Trabalhos
                 Reader.Close();
                 DataBase.conexao.Close();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
+                Lbl_Erros.Text = "Erro Inesperado!\nVá às definições e carregue em \"Ajuda\". Na página aberta descreva como aconteceu o problema.";
                 Btn_AdicionarTarefa.IsEnabled = false;
                 Btn_AtualizarTarefa.IsEnabled = false;
             }

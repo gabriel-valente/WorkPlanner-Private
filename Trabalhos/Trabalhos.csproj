@@ -14,10 +14,10 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>E:\PAP\teste\</PublishUrl>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <PublishUrl>E:\PAP\Trabalhos\Publishing\</PublishUrl>
     <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
+    <InstallFrom>Web</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateMode>Foreground</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
@@ -25,9 +25,12 @@
     <UpdatePeriodically>true</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
+    <InstallUrl>https://github.com/Muhdo/Trabalhos/</InstallUrl>
     <UpdateUrl>https://github.com/Muhdo/Trabalhos/</UpdateUrl>
     <TargetCulture>pt-PT</TargetCulture>
-    <ApplicationRevision>2</ApplicationRevision>
+    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
+    <WebPage>publish.htm</WebPage>
+    <ApplicationRevision>4</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -258,6 +261,7 @@
   <ItemGroup>
     <Resource Include="logo.ico" />
     <Content Include="ResetClientes.sql" />
+    <SplashScreen Include="StartUp.png" />
     <Content Include="WorkPlanner.mdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

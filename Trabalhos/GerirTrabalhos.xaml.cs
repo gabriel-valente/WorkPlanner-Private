@@ -192,9 +192,9 @@ namespace Trabalhos
                 BloquearFundo.Visibility = Visibility.Hidden;
                 Grd_ValidarApagar.Visibility = Visibility.Hidden;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
+                Lbl_Erros.Text = "Erro Inesperado!\nVá às definições e carregue em \"Ajuda\". Na página aberta descreva como aconteceu o problema.";
             }
         }
 
@@ -289,9 +289,9 @@ namespace Trabalhos
                 Btn_AtualizarTrabalho.Visibility = Visibility.Visible;
                 Btn_ApagarTrabalho.Visibility = Visibility.Visible;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
+                Lbl_Erros.Text = "Erro Inesperado!\nVá às definições e carregue em \"Ajuda\". Na página aberta descreva como aconteceu o problema.";
             }
         }
 
@@ -629,9 +629,9 @@ namespace Trabalhos
                 Reader.Close();
                 DataBase.conexao.Close();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
+                Lbl_Erros.Text = "Erro Inesperado!\nVá às definições e carregue em \"Ajuda\". Na página aberta descreva como aconteceu o problema.";
                 Btn_AdicionarTrabalho.IsEnabled = false;
                 Btn_AtualizarTrabalho.IsEnabled = false;
             }
@@ -697,9 +697,9 @@ namespace Trabalhos
                 Btn_AtualizarTrabalho.Visibility = Visibility.Visible;
                 Btn_ApagarTrabalho.Visibility = Visibility.Visible;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Lbl_Erros.Text = "Erro Inesperado!\nVerifique a lista de erros conhecidos.\nErro: " + ex;
+                Lbl_Erros.Text = "Erro Inesperado!\nVá às definições e carregue em \"Ajuda\". Na página aberta descreva como aconteceu o problema.";
             }
         }
 
