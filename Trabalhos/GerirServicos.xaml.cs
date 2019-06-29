@@ -35,6 +35,7 @@ namespace Trabalhos
         DispatcherTimer temporizador = new DispatcherTimer();
 
         List<Servico> servicos = new List<Servico>();
+        List<ListaServicos> listaServicos = new List<ListaServicos>();
 
         //Gerar chave aleatória 
         public static string RandomString(int length)
@@ -59,7 +60,7 @@ namespace Trabalhos
             temporizador.Interval = new TimeSpan(0, 0, 1);
             temporizador.Tick += new EventHandler(Timer_Tick);
 
-            Lst_Servicos.ItemsSource = servicos;
+            Lst_Servicos.ItemsSource = listaServicos;
             Lst_Servicos.Items.Refresh();
         }
 
@@ -103,9 +104,9 @@ namespace Trabalhos
 
             temporizador.Start();
 
-            Lbl_CodigoServico.Content = servicos[Lst_Servicos.SelectedIndex].ChaveServico;
-            Tb_Servico.Text = servicos[Lst_Servicos.SelectedIndex].Nome;
-            Tb_Preco.Text = servicos[Lst_Servicos.SelectedIndex].Preco.ToString();
+            Lbl_CodigoServico.Content = listaServicos[Lst_Servicos.SelectedIndex].ChaveServico;
+            Tb_Servico.Text = listaServicos[Lst_Servicos.SelectedIndex].Nome;
+            Tb_Preco.Text = listaServicos[Lst_Servicos.SelectedIndex].Preco;
 
             Tb_Servico.IsReadOnly = false;
             Tb_Preco.IsReadOnly = false;
@@ -131,7 +132,7 @@ namespace Trabalhos
             {
                 DataBase.conexao.Open();
                 queryApagarServico.Connection = DataBase.conexao;
-                queryApagarServico.Parameters.AddWithValue("@Key_Servico", servicos[Lst_Servicos.SelectedIndex].ChaveServico);
+                queryApagarServico.Parameters.AddWithValue("@Key_Servico", listaServicos[Lst_Servicos.SelectedIndex].ChaveServico);
 
                 Reader = queryApagarServico.ExecuteReader();
                 queryApagarServico.Parameters.Clear();
@@ -140,6 +141,7 @@ namespace Trabalhos
                 DataBase.conexao.Close();
 
                 servicos.RemoveAt(Lst_Servicos.SelectedIndex);
+                listaServicos.RemoveAt(Lst_Servicos.SelectedIndex);
                 Lst_Servicos.Items.Refresh();
 
                 LimparCampos();
@@ -192,6 +194,7 @@ namespace Trabalhos
                     DataBase.conexao.Close();
 
                     servicos.Add(new Servico { ChaveServico = Convert.ToString(Lbl_CodigoServico.Content), Nome = Convert.ToString(Tb_Servico.Text.Trim()), Preco = valor });
+                    listaServicos.Add(new ListaServicos { ChaveServico = Convert.ToString(Lbl_CodigoServico.Content), Nome = Convert.ToString(Tb_Servico.Text.Trim()), Preco = Convert.ToString(valor) });
 
                     Lst_Servicos.Items.Refresh();
 
@@ -247,6 +250,8 @@ namespace Trabalhos
 
                     servicos[Lst_Servicos.SelectedIndex].Nome = Convert.ToString(Tb_Servico.Text.Trim());
                     servicos[Lst_Servicos.SelectedIndex].Preco = valor;
+                    listaServicos[Lst_Servicos.SelectedIndex].Nome = Convert.ToString(Tb_Servico.Text.Trim());
+                    listaServicos[Lst_Servicos.SelectedIndex].Preco = Convert.ToString(valor);
 
                     Lst_Servicos.Items.Refresh();
 
@@ -276,9 +281,9 @@ namespace Trabalhos
 
             if (Lst_Servicos.SelectedIndex >= 0)
             {
-                Lbl_CodigoServico.Content = servicos[Lst_Servicos.SelectedIndex].ChaveServico;
-                Tb_Servico.Text = servicos[Lst_Servicos.SelectedIndex].Nome;
-                Tb_Preco.Text = servicos[Lst_Servicos.SelectedIndex].Preco.ToString() + " €";
+                Lbl_CodigoServico.Content = listaServicos[Lst_Servicos.SelectedIndex].ChaveServico;
+                Tb_Servico.Text = listaServicos[Lst_Servicos.SelectedIndex].Nome;
+                Tb_Preco.Text = listaServicos[Lst_Servicos.SelectedIndex].Preco;
 
                 Btn_AtualizarServico.IsEnabled = true;
 
@@ -286,7 +291,7 @@ namespace Trabalhos
                 {
                     DataBase.conexao.Open();
                     queryProcurarTrabalhosServico.Connection = DataBase.conexao;
-                    queryProcurarTrabalhosServico.Parameters.AddWithValue("@Key_Servico", servicos[Lst_Servicos.SelectedIndex].ChaveServico);
+                    queryProcurarTrabalhosServico.Parameters.AddWithValue("@Key_Servico", listaServicos[Lst_Servicos.SelectedIndex].ChaveServico);
 
                     Reader = queryProcurarTrabalhosServico.ExecuteReader();
                     queryProcurarTrabalhosServico.Parameters.Clear();
@@ -553,6 +558,7 @@ namespace Trabalhos
                 while (Reader.Read())
                 {
                     servicos.Add(new Servico { ChaveServico = Convert.ToString(Reader["Key_Servico"].ToString()), Nome = Convert.ToString(Reader["Nome"].ToString()), Preco = Convert.ToDecimal(Reader["Preco"].ToString()) });
+                    listaServicos.Add(new ListaServicos { ChaveServico = Convert.ToString(Reader["Key_Servico"].ToString()), Nome = Convert.ToString(Reader["Nome"].ToString()), Preco = Convert.ToString(Reader["Preco"].ToString()) + "€" });
                 }
             }
             catch (Exception ex)
@@ -681,5 +687,12 @@ namespace Trabalhos
 
             AtualizarBotoes();
         }
+    }
+
+    internal class ListaServicos
+    {
+        public string ChaveServico { get; set; }
+        public string Nome { get; set; }
+        public string Preco { get; set; }
     }
 }

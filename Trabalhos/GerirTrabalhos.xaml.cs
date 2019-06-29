@@ -92,6 +92,8 @@ namespace Trabalhos
 
             Lbl_Preco.Content = String.Format("{0:###0.00}€", preco);
 
+            Tb_Trabalho.Text = null;
+            Tb_Descricao.Text = null;
             Lbl_Cliente.Visibility = Visibility.Hidden;
             Cb_Cliente.Visibility = Visibility.Visible;
             Tb_Trabalho.IsReadOnly = false;
@@ -182,6 +184,9 @@ namespace Trabalhos
                 Lst_Trabalhos.Items.Refresh();
 
                 LimparCampos();
+
+                Btn_EditarTarefas.Visibility = Visibility.Hidden;
+                Lbl_Receber.Content = null;
                 Lbl_Erros.Text = "O trabalho foi apagado com sucesso!";
 
                 BloquearFundo.Visibility = Visibility.Hidden;
@@ -233,6 +238,10 @@ namespace Trabalhos
             {
                 pago = pago.Remove(pago.Length - 1);
             }
+            else if (pago.Length == 0)
+            {
+                pago = "0";
+            }
 
             try
             {
@@ -251,7 +260,7 @@ namespace Trabalhos
                 trabalhos[Lst_Trabalhos.SelectedIndex].ChaveCliente = clientes.Find(lst => lst.Nome == Cb_Cliente.Text).ChaveCliente;
                 trabalhos[Lst_Trabalhos.SelectedIndex].Nome = Tb_Trabalho.Text.Trim();
                 trabalhos[Lst_Trabalhos.SelectedIndex].Descricao = Tb_Descricao.Text.Trim();
-                trabalhos[Lst_Trabalhos.SelectedIndex].Pago = Tb_ValorPago.Text.Trim();
+                trabalhos[Lst_Trabalhos.SelectedIndex].Pago = String.Format("{0:###0.00}€", pago);
 
                 listaTrabalhos[Lst_Trabalhos.SelectedIndex].NomeCliente = Cb_Cliente.Text;
                 listaTrabalhos[Lst_Trabalhos.SelectedIndex].NomeTrabalho = Tb_Trabalho.Text;
@@ -638,6 +647,10 @@ namespace Trabalhos
             {
                 pago = pago.Remove(pago.Length - 1);
             }
+            else if (pago.Length == 0)
+            {
+                pago = "0";
+            }
 
             try
             {
@@ -652,8 +665,16 @@ namespace Trabalhos
                 queryInserirTrabalho.ExecuteNonQuery();
                 queryInserirTrabalho.Parameters.Clear();
 
+                queryInserirTrabalho.Connection.Close();
+                DataBase.conexao.Close();
+
+                trabalhos.Add(new Trabalho { ChaveTrabalho = Lbl_CodigoTrabalho.Content.ToString(), ChaveCliente = keyCliente, Nome = Tb_Trabalho.Text.Trim(), Descricao = Tb_Descricao.Text.Trim(), Pago = String.Format("{0:###0.00}€", pago) });
+                listaTrabalhos.Add(new ListaTrabalho { ChaveTrabalho = Lbl_CodigoTrabalho.Content.ToString(), NomeCliente = Cb_Cliente.Text, NomeTrabalho = Tb_Trabalho.Text.Trim() });
+
                 tarefas.Clear();
                 Lst_Tarefas.Items.Refresh();
+
+                Lst_Trabalhos.Items.Refresh();
 
                 LimparCampos();
 

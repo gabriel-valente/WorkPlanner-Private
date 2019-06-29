@@ -1305,7 +1305,14 @@ namespace Trabalhos
             }
             else
             {
-                DataInicioValido = false;
+                if (Dp_DataInicio.SelectedDate == null)
+                {
+                    DataInicioValido = false;
+                }
+                else
+                {
+                    DataInicioValido = true;
+                }
             }
 
             AtualizarBotoes();

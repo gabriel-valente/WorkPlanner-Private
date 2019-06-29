@@ -16,7 +16,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="7*"/>
-            <RowDefinition Height="6*"/>
+            <RowDefinition Height="4*"/>
         </Grid.RowDefinitions>
 
         <Label Grid.Row="0" Grid.Column="0" Content="Clientes atuais" HorizontalAlignment="Stretch" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="10,10,10,0" Height="31"/>
@@ -108,12 +108,12 @@
                 </LinearGradientBrush>
             </Rectangle.Fill>
         </Rectangle>
-        <Button x:Name="Btn_AdicionarCliente" Grid.Row="1" Grid.Column="1" Content="Adicionar Novo Cliente" Margin="10,10,0,0" Width="250" HorizontalAlignment="Left" Height="90" VerticalAlignment="Top" Click="Btn_AdicionarCliente_Click" Grid.ColumnSpan="2"/>
-        <Button x:Name="Btn_AtualizarCliente" Grid.Row="1" Grid.Column="1" Content="Editar Cliente Selecionado" Margin="10,114,0,114" Width="250" Height="90" HorizontalAlignment="Left" IsEnabled="False" Click="Btn_AtualizarCliente_Click" Grid.ColumnSpan="2"/>
-        <Button x:Name="Btn_ApagarCliente" Grid.Row="1" Grid.Column="1" Content="Apagar Cliente Selecionado" Margin="10,0,0,10" Width="250" Height="90" HorizontalAlignment="Left" IsEnabled="False" Click="Btn_ApagarCliente_Click" VerticalAlignment="Bottom" Grid.ColumnSpan="2"/>
-        <Button x:Name="Btn_CancelarCliente" Grid.Row="1" Grid.Column="1" Content="Cancelar" Margin="10,0,0,10" Width="250" HorizontalAlignment="Left" Height="90" VerticalAlignment="Bottom" Click="Btn_CancelarCliente_Click" Grid.ColumnSpan="2" Visibility="Hidden"/>
-        <Button x:Name="Btn_GuardarCliente" Grid.Row="1" Grid.Column="1" Content="Guardar Cliente" Margin="10,10,0,0" Height="90" Width="250" VerticalAlignment="Top" HorizontalAlignment="Left" IsEnabled="False" Click="Btn_GuardarCliente_Click" Grid.ColumnSpan="2" Visibility="Hidden"/>
-        <Button x:Name="Btn_GuardarAlteracoes" Grid.Row="1" Grid.Column="1" Content="Guardar Alterações" Margin="10,10,0,0" Height="90" Width="250" VerticalAlignment="Top" HorizontalAlignment="Left" IsEnabled="True" Click="Btn_GuardarAlteracoes_Click" Grid.ColumnSpan="2" Visibility="Hidden"/>
+        <Button x:Name="Btn_AdicionarCliente" Grid.Row="1" Grid.Column="1" Content="Adicionar Novo Cliente" Margin="10,10,0,0" Width="250" HorizontalAlignment="Left" Height="73" VerticalAlignment="Top" Click="Btn_AdicionarCliente_Click" Grid.ColumnSpan="2"/>
+        <Button x:Name="Btn_AtualizarCliente" Grid.Row="1" Grid.Column="1" Content="Editar Cliente Selecionado" Margin="10,89,0,89" Width="250" Height="73" HorizontalAlignment="Left" IsEnabled="False" Click="Btn_AtualizarCliente_Click" Grid.ColumnSpan="2"/>
+        <Button x:Name="Btn_ApagarCliente" Grid.Row="1" Grid.Column="1" Content="Apagar Cliente Selecionado" Margin="10,0,0,10" Width="250" Height="73" HorizontalAlignment="Left" IsEnabled="False" Click="Btn_ApagarCliente_Click" VerticalAlignment="Bottom" Grid.ColumnSpan="2"/>
+        <Button x:Name="Btn_CancelarCliente" Grid.Row="1" Grid.Column="1" Content="Cancelar" Margin="10,0,0,10" Width="250" HorizontalAlignment="Left" Height="73" VerticalAlignment="Bottom" Click="Btn_CancelarCliente_Click" Grid.ColumnSpan="2" Visibility="Hidden"/>
+        <Button x:Name="Btn_GuardarCliente" Grid.Row="1" Grid.Column="1" Content="Guardar Cliente" Margin="10,10,0,0" Height="73" Width="250" VerticalAlignment="Top" HorizontalAlignment="Left" IsEnabled="False" Click="Btn_GuardarCliente_Click" Grid.ColumnSpan="2" Visibility="Hidden"/>
+        <Button x:Name="Btn_GuardarAlteracoes" Grid.Row="1" Grid.Column="1" Content="Guardar Alterações" Margin="10,10,0,0" Height="73" Width="250" VerticalAlignment="Top" HorizontalAlignment="Left" IsEnabled="True" Click="Btn_GuardarAlteracoes_Click" Grid.ColumnSpan="2" Visibility="Hidden"/>
         <Button x:Name="Btn_Voltar" Grid.Row="1" Grid.Column="2" Content="Voltar" Margin="0,0,10,10" HorizontalAlignment="Right" Width="100" Height="50" VerticalAlignment="Bottom" Click="Btn_Voltar_Click"/>
         <ScrollViewer Grid.Row="1" Grid.Column="2" Margin="98,10,10,65" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Auto">
             <TextBlock x:Name="Lbl_Erros" Style="{StaticResource TextBlock}" TextWrapping="WrapWithOverflow" TextAlignment="Left"/>

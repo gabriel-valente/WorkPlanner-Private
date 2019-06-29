@@ -430,7 +430,7 @@ namespace Trabalhos
                     });
                 }
 
-                Chrt_Row.Series = colecao;
+                Chrt_Row.Series = colecao; 
 
                 Chrt_Row.AxisY = new AxesCollection
                 {

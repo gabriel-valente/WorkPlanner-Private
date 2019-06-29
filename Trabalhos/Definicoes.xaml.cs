@@ -168,7 +168,7 @@ namespace Trabalhos
         //Botão ajuda
         private void Btn_Ajuda_Click(object sender, RoutedEventArgs e)
         {
-
+            System.Diagnostics.Process.Start("https://github.com/Muhdo/Trabalhos");
         }
 
         //Função ler as configurações guardadas

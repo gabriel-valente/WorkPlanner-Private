@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Trabalhos"
         mc:Ignorable="d"
-        Title="Trabalhos" Height="720" Width="1280" MinHeight="720" MinWidth="1280" WindowStartupLocation="CenterScreen" FontFamily="Segoe UI Light" FontSize="18">
+        Title="WorkPlanner" Height="720" Width="1280" MinHeight="720" MinWidth="1280" WindowStartupLocation="CenterScreen" FontFamily="Segoe UI Light" FontSize="18">
     <Grid Background="#FF1B1B1B">
         <Frame x:Name="Frm_Principal" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" NavigationUIVisibility="Hidden"/>
         <Grid x:Name="Grd_PrimeiroLogin" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="3" Height="500" Width="1083" Background="#FFAAAAAA" Visibility="Hidden">
