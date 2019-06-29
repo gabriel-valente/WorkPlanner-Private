@@ -12,17 +12,16 @@
             <TextBlock Style="{StaticResource TextBlock}" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="WrapWithOverflow" TextAlignment="Center" Height="400">
                 <Run FontFamily="Segoe UI SemiBold" FontSize="50" Text="Bem-Vindo!"/>
                 <LineBreak/>
-                <Run FontSize="30" Text="Não tens nenhumas definições guardadas, temos de tratar dessas coisas chatas &#x1f615;"/>
+                <Run FontSize="30" Text="Não existem configurações guardadas!"/>
                 <LineBreak/>
-                <Run FontSize="30" Text="Não te preocupes que depois estás á vontade! &#x1f604; "/>
+                <Run FontSize="30" Text="Se não é a primeira vez a iniciar o programa, apenas as configurações não foram salvas."/>
                 <LineBreak/>
-                <Run FontSize="30" Text="Depois disso aconcelho que adiciones serviços antes de tudo, depois podes adicionar os teus clientes e trabalhos."/>
+                <Run FontSize="30" Text="Todos os restantes dados estão guardados!"/>
                 <LineBreak/>
-                <Run FontSize="30" Text="Com o resto não tens de te preocupar! &#x1f604;"/>
+                <Run FontSize="30" Text="Após preencher as configurações, pode utilizar o programa normalmente."/>
             </TextBlock>
             <Button x:Name="Btn_EditarConfiguracao" Content="Editar Configuração" Margin="552,0,355,10" HorizontalAlignment="Center" Width="176" Height="75" VerticalAlignment="Bottom" Click="Btn_EditarConfiguracao_Click"/>
             <Button x:Name="Btn_FecharPrograma" Content="Fechar Programa" Margin="355,0,552,10" HorizontalAlignment="Center" Width="176" Height="75" VerticalAlignment="Bottom" Click="Btn_FecharPrograma_Click"/>
         </Grid>
-        <!--<Button x:Name="Btn_Query" Content="Button" HorizontalAlignment="Center" Height="65" Margin="518,312" VerticalAlignment="Center" Width="236" Click="Btn_Query_Click"/>-->
     </Grid>
 </Window>

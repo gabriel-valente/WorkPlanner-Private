@@ -1,2 +1,0 @@
-﻿DELETE FROM Servico;
-DBCC CHECKIDENT('Servico', RESEED, 0)

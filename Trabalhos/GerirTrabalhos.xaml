@@ -181,7 +181,7 @@
             <TextBlock Style="{StaticResource TextBlock}" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="10,10,10,0" TextWrapping="WrapWithOverflow" TextAlignment="Center">
                 <Run FontSize="40" Text="Tem a certeza que pretende eliminar este trabalho?"/>
                 <LineBreak/>
-                <Run FontSize="30" Text="Esta ação só é possivel pois o trabalho não tem serviços associados!"/>
+                <Run FontSize="30" Text="Todas as tarefas e tempos associados também serão eliminados!"/>
             </TextBlock>
             <TextBlock Style="{StaticResource TextBlock}" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="10,10,10,10" TextWrapping="WrapWithOverflow" TextAlignment="Center">
                 <Run FontFamily="Segoe UI Semibold" FontSize="70" Text="Esta ação é irreversivel!"/>
