@@ -122,7 +122,7 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>lTSiOzR2Qs4X9gW9A2TgFmFCllrvLVXGD3pVPG3N6gA=</dsig:DigestValue>
+        <dsig:DigestValue>4MNVvji5ErlIW6p9J1b6qL3GdXq41zU3p9DWZoxiwUA=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -150,7 +150,7 @@
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>/wtaCg80Sq47gNaXwpJQuUnaERwESfhOyYugGXVgQ5g=</dsig:DigestValue>
+      <dsig:DigestValue>95TLmBsHw0vQfdpWw4vvz2u/b3lPnUMTk+NUaCmfjp0=</dsig:DigestValue>
     </hash>
   </file>
   <file name="WorkPlanner_log.ldf" size="8388608" writeableType="applicationData">
@@ -159,7 +159,7 @@
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>9VGTQm0d+cm9f2zSild+imEpDV3aNEfYyrLOdO5pAco=</dsig:DigestValue>
+      <dsig:DigestValue>A07nkzAtRvjCiorvC4LS3W6bJkZqtydE0RTGfnESzHQ=</dsig:DigestValue>
     </hash>
   </file>
   <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">

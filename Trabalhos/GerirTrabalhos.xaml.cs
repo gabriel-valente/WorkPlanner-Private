@@ -717,7 +717,13 @@ namespace Trabalhos
 
                 while (Reader.Read())
                 {
-                    tarefas.Add(new TrabalhoTarefas { ChaveTarefa = Convert.ToString(Reader["Key_Tarefa"].ToString()), Tarefa = servicos.Find(lst => lst.ChaveServico == Convert.ToString(Reader["Key_Servico"].ToString())).Nome, Tempo = new TimeSpan(0), Preco = Convert.ToString(Reader["Desconto"].ToString()) });
+                    tarefas.Add(new TrabalhoTarefas
+                    {
+                        ChaveTarefa = Convert.ToString(Reader["Key_Tarefa"].ToString()),
+                        Tarefa = servicos.Find(lst => lst.ChaveServico == Convert.ToString(Reader["Key_Servico"].ToString())).Nome,
+                        Tempo = new TimeSpan(0),
+                        Preco = Convert.ToString(Reader["Desconto"].ToString())
+                    });
                 }
 
                 queryTodasTarefas.Parameters.Clear();

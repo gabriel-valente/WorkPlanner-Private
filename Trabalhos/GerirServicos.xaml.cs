@@ -194,7 +194,7 @@ namespace Trabalhos
                     DataBase.conexao.Close();
 
                     servicos.Add(new Servico { ChaveServico = Convert.ToString(Lbl_CodigoServico.Content), Nome = Convert.ToString(Tb_Servico.Text.Trim()), Preco = valor });
-                    listaServicos.Add(new ListaServicos { ChaveServico = Convert.ToString(Lbl_CodigoServico.Content), Nome = Convert.ToString(Tb_Servico.Text.Trim()), Preco = Convert.ToString(valor) });
+                    listaServicos.Add(new ListaServicos { ChaveServico = Convert.ToString(Lbl_CodigoServico.Content), Nome = Convert.ToString(Tb_Servico.Text.Trim()), Preco = String.Format("{0:###0.00}€", valor) });
 
                     Lst_Servicos.Items.Refresh();
 
@@ -251,7 +251,7 @@ namespace Trabalhos
                     servicos[Lst_Servicos.SelectedIndex].Nome = Convert.ToString(Tb_Servico.Text.Trim());
                     servicos[Lst_Servicos.SelectedIndex].Preco = valor;
                     listaServicos[Lst_Servicos.SelectedIndex].Nome = Convert.ToString(Tb_Servico.Text.Trim());
-                    listaServicos[Lst_Servicos.SelectedIndex].Preco = Convert.ToString(valor);
+                    listaServicos[Lst_Servicos.SelectedIndex].Preco = String.Format("{0:###0.00}€", valor);
 
                     Lst_Servicos.Items.Refresh();
 
