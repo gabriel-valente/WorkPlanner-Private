@@ -38,7 +38,7 @@
                 <lvc:Axis Title="Valor"></lvc:Axis>
             </lvc:CartesianChart.AxisY>
         </lvc:CartesianChart>
-        <TextBlock x:Name="Lbl_Column" Text="Não existem dados suficientes para criar o gráfico." FontSize="40" TextWrapping="Wrap" TextAlignment="Center" Padding="0" VerticalAlignment="Center" Foreground="White" FontFamily="Segoe UI Light" Visibility="Hidden" Grid.Column="2" Margin="0,76,0,55"/>
+        <TextBlock x:Name="Lbl_Column" Text="Não existem dados suficientes para criar o gráfico." FontSize="40" TextWrapping="Wrap" TextAlignment="Center" Padding="0" VerticalAlignment="Center" Foreground="White" FontFamily="Segoe UI Light" Grid.Column="2" Visibility="Hidden"/>
 
         <lvc:CartesianChart x:Name="Chrt_Row" Grid.Column="1" LegendLocation="Top" Foreground="White">
             <lvc:CartesianChart.DataTooltip>
@@ -51,7 +51,7 @@
                 <lvc:Axis Title="Serviços"></lvc:Axis>
             </lvc:CartesianChart.AxisY>
         </lvc:CartesianChart>
-        <TextBlock x:Name="Lbl_Row" Text="Não existem dados suficientes para criar o gráfico." FontSize="40" TextWrapping="Wrap" TextAlignment="Center" Padding="0" VerticalAlignment="Center" Foreground="White" FontFamily="Segoe UI Light" Visibility="Hidden" Grid.Column="1" Margin="0,76,0,55"/>
+        <TextBlock x:Name="Lbl_Row" Text="Não existem dados suficientes para criar o gráfico." FontSize="40" TextWrapping="Wrap" TextAlignment="Center" Padding="0" VerticalAlignment="Center" Foreground="White" FontFamily="Segoe UI Light" Grid.Column="1" Visibility="Hidden"/>
 
         <lvc:CartesianChart x:Name="Chrt_Lines" Grid.Row="1" Grid.ColumnSpan="2" Foreground="White" Zoom="X">
             <lvc:CartesianChart.DataTooltip>

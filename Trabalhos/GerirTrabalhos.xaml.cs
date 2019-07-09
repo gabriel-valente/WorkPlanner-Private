@@ -21,13 +21,13 @@ namespace Trabalhos
     /// </summary>
     public partial class GerirTrabalhos : Page
     {
-        SqlCommand queryTodosTrabalhos = new SqlCommand("SELECT Key_Trabalho, Trabalho.Key_Cliente AS 'Cliente', Trabalho.Nome AS 'Trabalho', Descricao, Pago FROM Trabalho INNER JOIN Cliente ON Trabalho.Key_Cliente = Cliente.Key_Cliente ORDER BY Trabalho.Nome, Cliente.Nome");
+        SqlCommand queryTodosTrabalhos = new SqlCommand("SELECT Key_Trabalho, Trabalho.Key_Cliente AS 'Cliente', Trabalho.Nome AS 'Trabalho', Descricao, Pago, DataCriacao FROM Trabalho INNER JOIN Cliente ON Trabalho.Key_Cliente = Cliente.Key_Cliente ORDER BY Trabalho.Nome, Cliente.Nome");
         SqlCommand queryTodosClientes = new SqlCommand("SELECT Key_Cliente, Nome, Email, Telemovel, Telefone FROM Cliente ORDER BY Nome");
         SqlCommand queryTodosServicos = new SqlCommand("SELECT Key_Servico, Nome, Preco FROM Servico ORDER BY Nome");
         SqlCommand queryTodasTarefas = new SqlCommand("SELECT Key_Tarefa, Key_Servico, Desconto FROM Tarefa WHERE Key_Trabalho = @KeyTrabalho");
         SqlCommand queryTodosTempos = new SqlCommand("SELECT Key_Tempo, DataInicio, DataFim FROM Tempo WHERE Key_Tarefa = @KeyTarefa ORDER BY DataInicio, DataFim");
         SqlCommand queryIndexTrabalho = new SqlCommand("SELECT Key_Trabalho FROM Trabalho WHERE Key_Trabalho = @KeyTrabalho");
-        SqlCommand queryInserirTrabalho = new SqlCommand("INSERT INTO Trabalho (Key_Trabalho, Key_Cliente, Nome, Descricao, Pago) VALUES (@KeyTrabalho, @KeyCliente, @Nome, @Descricao, @Pago)");
+        SqlCommand queryInserirTrabalho = new SqlCommand("INSERT INTO Trabalho (Key_Trabalho, Key_Cliente, Nome, Descricao, Pago, DataCriacao) VALUES (@KeyTrabalho, @KeyCliente, @Nome, @Descricao, @Pago, @DataCriacao)");
         SqlCommand queryAtualizarTrabalho = new SqlCommand("UPDATE Trabalho SET Key_Cliente = @KeyCliente, Nome = @Nome, Descricao = @Descricao, Pago = @Pago WHERE Key_Trabalho = @KeyTrabalho");
         SqlCommand queryApagarTempo = new SqlCommand("DELETE FROM Tempo WHERE Key_Tarefa = @KeyTarefa");
         SqlCommand queryApagarTarefa = new SqlCommand("DELETE FROM Tarefa WHERE Key_Tarefa = @KeyTarefa");
@@ -603,7 +603,7 @@ namespace Trabalhos
 
                 while (Reader.Read())
                 {
-                    trabalhos.Add(new Trabalho { ChaveTrabalho = Convert.ToString(Reader["Key_Trabalho"].ToString()), ChaveCliente = Convert.ToString(Reader["Cliente"].ToString()), Nome = Convert.ToString(Reader["Trabalho"].ToString()), Descricao = Convert.ToString(Reader["Descricao"].ToString()), Pago = Convert.ToString(Reader["Pago"].ToString()) });
+                    trabalhos.Add(new Trabalho { ChaveTrabalho = Convert.ToString(Reader["Key_Trabalho"].ToString()), ChaveCliente = Convert.ToString(Reader["Cliente"].ToString()), Nome = Convert.ToString(Reader["Trabalho"].ToString()), Descricao = Convert.ToString(Reader["Descricao"].ToString()), Pago = Convert.ToString(Reader["Pago"].ToString()), DataCriacao = Convert.ToInt64(Reader["DataCriacao"].ToString()) });
                 }
 
                 Reader.Close();
@@ -661,6 +661,7 @@ namespace Trabalhos
                 queryInserirTrabalho.Parameters.AddWithValue("@Nome", Tb_Trabalho.Text.Trim());
                 queryInserirTrabalho.Parameters.AddWithValue("@Descricao", Tb_Descricao.Text.Trim());
                 queryInserirTrabalho.Parameters.AddWithValue("@Pago", Convert.ToDecimal(pago));
+                queryInserirTrabalho.Parameters.AddWithValue("@DataCriacao", DateTime.Now.ToString("yyyyMMddHHmmssffff"));
 
                 queryInserirTrabalho.ExecuteNonQuery();
                 queryInserirTrabalho.Parameters.Clear();
@@ -668,8 +669,8 @@ namespace Trabalhos
                 queryInserirTrabalho.Connection.Close();
                 DataBase.conexao.Close();
 
-                trabalhos.Add(new Trabalho { ChaveTrabalho = Lbl_CodigoTrabalho.Content.ToString(), ChaveCliente = keyCliente, Nome = Tb_Trabalho.Text.Trim(), Descricao = Tb_Descricao.Text.Trim(), Pago = String.Format("{0:###0.00}€", pago) });
-                listaTrabalhos.Add(new ListaTrabalho { ChaveTrabalho = Lbl_CodigoTrabalho.Content.ToString(), NomeCliente = Cb_Cliente.Text, NomeTrabalho = Tb_Trabalho.Text.Trim() });
+                trabalhos.Insert(0, new Trabalho { ChaveTrabalho = Lbl_CodigoTrabalho.Content.ToString(), ChaveCliente = keyCliente, Nome = Tb_Trabalho.Text.Trim(), Descricao = Tb_Descricao.Text.Trim(), Pago = String.Format("{0:###0.00}€", pago), DataCriacao = Convert.ToInt64(DateTime.Now.ToString("yyyyMMddHHmmssffff")) });
+                listaTrabalhos.Insert(0, new ListaTrabalho { ChaveTrabalho = Lbl_CodigoTrabalho.Content.ToString(), NomeCliente = Cb_Cliente.Text, NomeTrabalho = Tb_Trabalho.Text.Trim() });
 
                 tarefas.Clear();
                 Lst_Tarefas.Items.Refresh();
@@ -798,6 +799,8 @@ namespace Trabalhos
                 tarefas.Clear();
 
                 LigarBaseDados();
+
+                trabalhos = trabalhos.OrderByDescending(o => o.DataCriacao).ToList();
 
                 foreach (Trabalho item in trabalhos)
                 {

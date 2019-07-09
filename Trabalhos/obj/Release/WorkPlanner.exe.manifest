@@ -115,14 +115,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="WorkPlanner.exe" size="2385320">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="WorkPlanner.exe" size="2385832">
       <assemblyIdentity name="WorkPlanner" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>4MNVvji5ErlIW6p9J1b6qL3GdXq41zU3p9DWZoxiwUA=</dsig:DigestValue>
+        <dsig:DigestValue>8OPAET9kucE8fn0YG1TN3xfJnF5YoCkYwtukCy0EmfU=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -150,7 +150,7 @@
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>95TLmBsHw0vQfdpWw4vvz2u/b3lPnUMTk+NUaCmfjp0=</dsig:DigestValue>
+      <dsig:DigestValue>FKieRo0NMm801hi3g90R3r71gS76ahqQC2CipXeJ7Wc=</dsig:DigestValue>
     </hash>
   </file>
   <file name="WorkPlanner_log.ldf" size="8388608" writeableType="applicationData">
@@ -159,7 +159,7 @@
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>A07nkzAtRvjCiorvC4LS3W6bJkZqtydE0RTGfnESzHQ=</dsig:DigestValue>
+      <dsig:DigestValue>+BXMITjNYIr7kmd2iu5cE3ZzNegsu+GcvKRA8EfMWdc=</dsig:DigestValue>
     </hash>
   </file>
   <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">

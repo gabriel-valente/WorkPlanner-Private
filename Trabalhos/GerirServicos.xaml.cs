@@ -99,8 +99,8 @@ namespace Trabalhos
         {
             Adicionar = false;
 
-            NomeValido = false;
-            PrecoValido = false;
+            NomeValido = true;
+            PrecoValido = true;
 
             temporizador.Start();
 
@@ -261,7 +261,7 @@ namespace Trabalhos
                     Tb_Preco.IsReadOnly = true;
                     Lst_Servicos.IsEnabled = true;
                     Lbl_AvisoPreco.Visibility = Visibility.Hidden;
-                    Btn_GuardarServico.Visibility = Visibility.Hidden;
+                    Btn_GuardarAlteracoes.Visibility = Visibility.Hidden;
                     Btn_CancelarServico.Visibility = Visibility.Hidden;
                     Btn_AdicionarServico.Visibility = Visibility.Visible;
                     Btn_AtualizarServico.Visibility = Visibility.Visible;

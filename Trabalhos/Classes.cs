@@ -13,6 +13,7 @@ namespace Trabalhos
         public string Nome { get; set; }
         public string Descricao { get; set; }
         public string Pago { get; set; }
+        public long DataCriacao { get; set; }
     }
 
     public class TrabalhoTarefas

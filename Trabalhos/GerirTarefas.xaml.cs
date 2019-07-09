@@ -414,57 +414,63 @@ namespace Trabalhos
                 decimal valor = servicos.Find(lst => lst.ChaveServico == tarefas[Lst_Tarefas.SelectedIndex].ChaveServico).Preco;
                 preco = 0;
 
-                DateTime inicio = tempos.First().DataInicio;
-                DateTime? fim = tempos.First().DataFim;
-
-                foreach (Tempo item in tempos)
+                try
                 {
-                    TimeSpan tempoDecorrido = new TimeSpan(0);
+                    DateTime inicio = tempos.First().DataInicio;
+                    DateTime? fim = tempos.First().DataFim;
 
-                    try
+                    foreach (Tempo item in tempos)
                     {
-                        if (item.DataInicio < inicio)
+                        TimeSpan tempoDecorrido = new TimeSpan(0);
+
+                        try
                         {
-                            inicio = item.DataInicio;
+                            if (item.DataInicio < inicio)
+                            {
+                                inicio = item.DataInicio;
+                            }
+
+                            if (item.DataFim > fim)
+                            {
+                                fim = item.DataFim;
+                            }
+
+                            if (item.DataFim == Convert.ToDateTime("01/01/0001 00:00:00") || item.DataFim == Convert.ToDateTime(null))
+                            {
+                                tempoDecorrido = new TimeSpan(0);
+                            }
+                            else
+                            {
+                                tempoDecorrido = Convert.ToDateTime(item.DataFim as DateTime?) - item.DataInicio;
+                            }
+
+                            preco += valor * Convert.ToDecimal(TimeSpan.Parse(Convert.ToString(tempoDecorrido)).TotalHours);
+                        }
+                        catch (Exception)
+                        {
+                            tempoDecorrido = new TimeSpan(0, 0, 0);
                         }
 
-                        if (item.DataFim > fim)
-                        {
-                            fim = item.DataFim;
-                        }
-
-                        if (item.DataFim == Convert.ToDateTime("01/01/0001 00:00:00") || item.DataFim == Convert.ToDateTime(null))
-                        {
-                            tempoDecorrido = new TimeSpan(0);
-                        }
-                        else
-                        {
-                            tempoDecorrido = Convert.ToDateTime(item.DataFim as DateTime?) - item.DataInicio;
-                        }
-
-                        preco += valor * Convert.ToDecimal(TimeSpan.Parse(Convert.ToString(tempoDecorrido)).TotalHours);
+                        listaTempo.Add(new ListaTempo { ChaveTempo = item.ChaveTempo, DataInicio = item.DataInicio, DataFim = Convert.ToDateTime(item.DataFim as DateTime?), TempoDecorrido = String.Format("{0:00}:{1:00}:{2:00}", tempoDecorrido.Hours, tempoDecorrido.Minutes, tempoDecorrido.Seconds) });
                     }
-                    catch (Exception)
-                    {
-                        tempoDecorrido = new TimeSpan(0, 0, 0);
-                    }
 
-                    listaTempo.Add(new ListaTempo { ChaveTempo = item.ChaveTempo, DataInicio = item.DataInicio, DataFim = Convert.ToDateTime(item.DataFim as DateTime?), TempoDecorrido = String.Format("{0:00}:{1:00}:{2:00}", tempoDecorrido.Hours, tempoDecorrido.Minutes, tempoDecorrido.Seconds) });
+                    Lst_Tempo.ItemsSource = listaTempo;
+                    Lst_Tempo.Items.Refresh();
+
+                    Lbl_DataInicio.Content = inicio;
+                    Lbl_DataFim.Content = fim;
+
+                    Sld_Desconto.Visibility = Visibility.Visible;
+                    Sld_Desconto.Value = Convert.ToDouble(tarefas[Lst_Tarefas.SelectedIndex].Desconto * 100);
+                    Tb_Desconto.Text = String.Format("{0:##0.00}%", Sld_Desconto.Value);
+                    Lbl_Preco.Content = String.Format("{0:###0.00}€", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))));
+
                 }
-
-                Lst_Tempo.ItemsSource = listaTempo;
-                Lst_Tempo.Items.Refresh();
-
-                Lbl_DataInicio.Content = inicio;
-                Lbl_DataFim.Content = fim;
-
-                Sld_Desconto.Visibility = Visibility.Visible;
-                Sld_Desconto.Value = Convert.ToDouble(tarefas[Lst_Tarefas.SelectedIndex].Desconto * 100);
-                Tb_Desconto.Text = String.Format("{0:##0.00}%", Sld_Desconto.Value);
-                Lbl_Preco.Content = String.Format("{0:###0.00}€", preco * (1 - Functions.Clamp(Convert.ToDecimal(Sld_Desconto.Value))));
-
-                Btn_AtualizarTarefa.IsEnabled = true;
-                Btn_ApagarTarefa.IsEnabled = true;
+                catch (Exception)
+                {
+                }
+                    Btn_AtualizarTarefa.IsEnabled = true;
+                    Btn_ApagarTarefa.IsEnabled = true;
             }
             else if (Lst_Tarefas.SelectedIndex == -1)
             {
